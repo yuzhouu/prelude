@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "书签 · 新标签页",
+  "version": "1.0.0",
+  "description": "一个专注、清爽并保留 Chrome 书签结构的新标签页。",
+  "permissions": ["bookmarks", "favicon", "tabs"],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  }
+}

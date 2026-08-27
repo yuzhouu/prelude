@@ -1,0 +1,70 @@
+import type { OpenTabWindow } from './model'
+
+export const demoOpenTabWindows: Array<OpenTabWindow> = [
+  {
+    id: 1,
+    focused: true,
+    tabs: [
+      {
+        id: 101,
+        windowId: 1,
+        title: 'Inbox – Linear',
+        url: 'https://linear.app/inbox',
+        active: true,
+        pinned: true,
+        audible: false,
+      },
+      {
+        id: 102,
+        windowId: 1,
+        title: 'Land – Figma',
+        url: 'https://figma.com/design/land',
+        active: false,
+        pinned: false,
+        audible: false,
+      },
+      {
+        id: 103,
+        windowId: 1,
+        title: 'Pull requests · GitHub',
+        url: 'https://github.com/pulls',
+        active: false,
+        pinned: false,
+        audible: false,
+      },
+      {
+        id: 104,
+        windowId: 1,
+        title: 'Ambient focus music',
+        url: 'https://youtube.com/watch?v=focus',
+        active: false,
+        pinned: false,
+        audible: true,
+      },
+    ],
+  },
+  {
+    id: 2,
+    focused: false,
+    tabs: [
+      {
+        id: 201,
+        windowId: 2,
+        title: 'React Reference Overview',
+        url: 'https://react.dev/reference/react',
+        active: true,
+        pinned: false,
+        audible: false,
+      },
+      {
+        id: 202,
+        windowId: 2,
+        title: 'MDN Web Docs',
+        url: 'https://developer.mozilla.org',
+        active: false,
+        pinned: false,
+        audible: false,
+      },
+    ],
+  },
+]
