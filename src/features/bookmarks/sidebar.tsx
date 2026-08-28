@@ -6,6 +6,7 @@ import {
   ExternalLink,
   Folder,
   FolderPlus,
+  PanelLeftClose,
   PanelsTopLeft,
   X,
 } from 'lucide-react'
@@ -140,8 +141,10 @@ interface SidebarProps {
   totalCount: number
   recentCount: number
   tabCount: number
-  isOpen: boolean
-  onClose: () => void
+  isExpanded: boolean
+  isMobileOpen: boolean
+  onCollapse: () => void
+  onMobileClose: () => void
   onSearchOpen: () => void
   onSelect: (id: string) => void
   onToggle: (id: string) => void
@@ -154,8 +157,10 @@ export function Sidebar({
   totalCount,
   recentCount,
   tabCount,
-  isOpen,
-  onClose,
+  isExpanded,
+  isMobileOpen,
+  onCollapse,
+  onMobileClose,
   onSearchOpen,
   onSelect,
   onToggle,
@@ -165,12 +170,14 @@ export function Sidebar({
   return (
     <>
       <button
-        className={`sidebar-scrim${isOpen ? ' is-open' : ''}`}
+        className={`sidebar-scrim${isMobileOpen ? ' is-open' : ''}`}
         type="button"
         aria-label="关闭文件夹导航"
-        onClick={onClose}
+        onClick={onMobileClose}
       />
-      <aside className={`sidebar${isOpen ? ' is-open' : ''}`}>
+      <aside
+        className={`sidebar${isExpanded ? ' is-expanded' : ''}${isMobileOpen ? ' is-mobile-open' : ''}`}
+      >
         <div className="sidebar-brand">
           <div className="app-identity">
             <span className="app-logo" aria-hidden="true">
@@ -190,10 +197,18 @@ export function Sidebar({
           </div>
           <div className="profile-actions">
             <button
+              className="sidebar-collapse-button"
+              type="button"
+              aria-label="收起侧边栏"
+              onClick={onCollapse}
+            >
+              <PanelLeftClose />
+            </button>
+            <button
               className="mobile-close-button"
               type="button"
               aria-label="关闭文件夹导航"
-              onClick={onClose}
+              onClick={onMobileClose}
             >
               <X />
             </button>

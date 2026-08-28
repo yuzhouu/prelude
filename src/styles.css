@@ -91,6 +91,19 @@ input:focus-visible {
   overflow: hidden;
   border-right: 1px solid #efedeb;
   background: var(--sidebar);
+  visibility: hidden;
+  transform: translateX(-101%);
+  pointer-events: none;
+  transition:
+    transform 170ms ease,
+    visibility 0s linear 170ms;
+}
+
+.sidebar.is-expanded {
+  visibility: visible;
+  transform: translateX(0);
+  pointer-events: auto;
+  transition-delay: 0s;
 }
 
 .sidebar-brand {
@@ -439,6 +452,8 @@ input:focus-visible {
 }
 
 .icon-button,
+.sidebar-collapse-button,
+.sidebar-expand-button,
 .mobile-close-button,
 .mobile-menu-button {
   display: grid;
@@ -451,6 +466,8 @@ input:focus-visible {
 }
 
 .icon-button,
+.sidebar-collapse-button,
+.sidebar-expand-button,
 .mobile-close-button {
   width: 32px;
   height: 32px;
@@ -458,6 +475,8 @@ input:focus-visible {
 }
 
 .icon-button:hover,
+.sidebar-collapse-button:hover,
+.sidebar-expand-button:hover,
 .mobile-menu-button:hover,
 .mobile-close-button:hover {
   background: var(--hover);
@@ -465,6 +484,8 @@ input:focus-visible {
 }
 
 .icon-button svg,
+.sidebar-collapse-button svg,
+.sidebar-expand-button svg,
 .mobile-close-button svg,
 .mobile-menu-button svg {
   width: 18px;
@@ -475,6 +496,7 @@ input:focus-visible {
 .mobile-close-button,
 .mobile-menu-button,
 .mobile-topbar,
+.sidebar-expand-button,
 .sidebar-scrim {
   display: none;
 }
@@ -482,8 +504,17 @@ input:focus-visible {
 .main-surface {
   position: relative;
   min-height: 100vh;
-  margin-left: var(--sidebar-width);
+  margin-left: 0;
   background: #ffffff;
+  transition: margin-left 170ms ease;
+}
+
+.app-shell.is-sidebar-expanded .main-surface {
+  margin-left: var(--sidebar-width);
+}
+
+.app-shell:not(.is-sidebar-expanded) .sidebar-expand-button {
+  display: grid;
 }
 
 .content-column {
@@ -1812,11 +1843,20 @@ input:focus-visible {
     width: min(300px, 88vw);
     transform: translateX(-101%);
     box-shadow: 10px 0 36px rgb(34 28 23 / 14%);
-    transition: transform 170ms ease;
   }
 
-  .sidebar.is-open {
+  .sidebar.is-expanded {
+    visibility: hidden;
+    transform: translateX(-101%);
+    pointer-events: none;
+    transition-delay: 0s, 170ms;
+  }
+
+  .sidebar.is-mobile-open {
+    visibility: visible;
     transform: translateX(0);
+    pointer-events: auto;
+    transition-delay: 0s;
   }
 
   .sidebar-scrim {
@@ -1840,7 +1880,11 @@ input:focus-visible {
     display: grid;
   }
 
-  .main-surface {
+  .sidebar-collapse-button {
+    display: none;
+  }
+
+  .app-shell.is-sidebar-expanded .main-surface {
     margin-left: 0;
   }
 

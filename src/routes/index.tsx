@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { Menu } from 'lucide-react'
+import { Menu, PanelLeftOpen } from 'lucide-react'
 
 import {
   AllBookmarkContents,
@@ -28,6 +28,16 @@ import { countOpenTabs } from '../features/tabs/model'
 
 export const Route = createFileRoute('/')({ component: Home })
 
+const SIDEBAR_EXPANDED_STORAGE_KEY = 'supposed:sidebar-expanded:v1'
+
+function getInitialSidebarExpanded() {
+  try {
+    return window.localStorage.getItem(SIDEBAR_EXPANDED_STORAGE_KEY) !== 'false'
+  } catch {
+    return true
+  }
+}
+
 function Home() {
   const { tree, isChromeSource } = useBookmarkTree()
   const { windows: openTabWindows, activateTab } = useOpenTabs()
@@ -47,7 +57,10 @@ function Home() {
   const [expandedIds, setExpandedIds] = useState(
     () => new Set<string>(['1', 'work']),
   )
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(
+    getInitialSidebarExpanded,
+  )
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
 
   const selectedLocation = useMemo(
@@ -87,6 +100,17 @@ function Home() {
     })
   }, [roots])
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        SIDEBAR_EXPANDED_STORAGE_KEY,
+        String(isSidebarExpanded),
+      )
+    } catch {
+      // Keep the in-memory preference when browser storage is unavailable.
+    }
+  }, [isSidebarExpanded])
+
   const toggleFolder = (id: string) => {
     setExpandedIds((current) => {
       const next = new Set(current)
@@ -98,7 +122,7 @@ function Home() {
 
   const selectView = (id: string) => {
     setSelectedId(id)
-    setSidebarOpen(false)
+    setIsMobileSidebarOpen(false)
   }
   const handleSelectedFolderDeleted = () => {
     if (selectedNode?.id === defaultBookmarkContainer?.id) {
@@ -129,7 +153,9 @@ function Home() {
             ? '当前标签页'
             : selectedNode?.title || '书签'
   return (
-    <div className="app-shell">
+    <div
+      className={`app-shell${isSidebarExpanded ? ' is-sidebar-expanded' : ''}`}
+    >
       <Sidebar
         roots={roots}
         selectedId={selectedId}
@@ -137,10 +163,12 @@ function Home() {
         totalCount={totalCount}
         recentCount={recentBookmarks.length}
         tabCount={openTabCount}
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
+        isExpanded={isSidebarExpanded}
+        isMobileOpen={isMobileSidebarOpen}
+        onCollapse={() => setIsSidebarExpanded(false)}
+        onMobileClose={() => setIsMobileSidebarOpen(false)}
         onSearchOpen={() => {
-          setSidebarOpen(false)
+          setIsMobileSidebarOpen(false)
           setSearchOpen(true)
         }}
         onSelect={selectView}
@@ -161,7 +189,7 @@ function Home() {
             className="mobile-menu-button"
             type="button"
             aria-label="打开文件夹导航"
-            onClick={() => setSidebarOpen(true)}
+            onClick={() => setIsMobileSidebarOpen(true)}
           >
             <Menu />
           </button>
@@ -177,6 +205,14 @@ function Home() {
         </div>
 
         <nav className="main-breadcrumb" aria-label="当前位置">
+          <button
+            className="sidebar-expand-button"
+            type="button"
+            aria-label="展开侧边栏"
+            onClick={() => setIsSidebarExpanded(true)}
+          >
+            <PanelLeftOpen />
+          </button>
           <div className="breadcrumb-current">
             <h1 aria-current="page">{viewTitle}</h1>
             <span aria-hidden="true">/</span>
