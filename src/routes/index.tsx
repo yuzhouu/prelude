@@ -66,7 +66,7 @@ function Home() {
   )
   const totalCount = useMemo(() => countTreeBookmarks(roots), [roots])
 
-  const [selectedId, setSelectedId] = useState('work')
+  const [selectedId, setSelectedId] = useState('tabs')
   const [expandedIds, setExpandedIds] = useState(
     () => new Set<string>(['1', 'work']),
   )
