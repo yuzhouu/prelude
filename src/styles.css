@@ -539,6 +539,63 @@ input:focus-visible {
   padding: 0 8px;
 }
 
+.folder-delete-button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+  color: var(--subtle);
+  transition:
+    opacity 90ms ease,
+    background 90ms ease,
+    color 90ms ease;
+}
+
+.bookmark-group-header:hover .folder-delete-button,
+.folder-delete-button:focus-visible,
+.folder-delete-button.is-breadcrumb,
+.folder-delete-button.is-mobile-topbar {
+  opacity: 1;
+}
+
+.folder-delete-button:hover:not(:disabled) {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.folder-delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.folder-delete-button svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.7;
+}
+
+.breadcrumb-actions {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.folder-delete-button.is-breadcrumb {
+  width: 32px;
+  height: 32px;
+}
+
+.folder-delete-button.is-mobile-topbar {
+  display: none;
+}
+
 .group-title-row {
   display: flex;
   min-width: 0;
@@ -989,55 +1046,14 @@ input:focus-visible {
   stroke-width: 1.7;
 }
 
-.bookmark-menu-trigger:disabled {
+.bookmark-direct-action:disabled {
   cursor: not-allowed;
   opacity: 0.35;
 }
 
-.bookmark-menu-positioner {
-  z-index: 70;
-  outline: 0;
-}
-
-.bookmark-menu-popup {
-  display: grid;
-  width: 132px;
-  gap: 2px;
-  border: 1px solid #dedbd8;
-  border-radius: 8px;
-  background: #ffffff;
-  padding: 4px;
-  box-shadow: 0 8px 24px rgb(31 29 28 / 14%);
-  outline: 0;
-}
-
-.bookmark-menu-item {
-  display: flex;
-  min-height: 34px;
-  align-items: center;
-  gap: 9px;
-  border-radius: 5px;
-  padding: 0 9px;
-  cursor: pointer;
-  color: var(--text);
-  font-size: 13px;
-  outline: 0;
-  user-select: none;
-}
-
-.bookmark-menu-item:hover,
-.bookmark-menu-item[data-highlighted] {
-  background: var(--hover);
-}
-
-.bookmark-menu-item.is-danger {
+.bookmark-delete-action:hover:not(:disabled) {
+  background: var(--accent-soft);
   color: var(--accent-strong);
-}
-
-.bookmark-menu-item svg {
-  width: 15px;
-  height: 15px;
-  stroke-width: 1.8;
 }
 
 .bookmark-dialog-backdrop {
@@ -1837,6 +1853,16 @@ input:focus-visible {
     white-space: nowrap;
   }
 
+  .mobile-topbar > span {
+    flex: 1;
+  }
+
+  .folder-delete-button.is-mobile-topbar {
+    display: grid;
+    margin-left: auto;
+    opacity: 1;
+  }
+
   .mobile-menu-button {
     display: grid;
     width: 34px;
@@ -1920,6 +1946,10 @@ input:focus-visible {
     padding-left: 5px;
   }
 
+  .bookmark-group-header .folder-delete-button {
+    opacity: 1;
+  }
+
   .bookmark-main-link {
     grid-template-columns: 26px minmax(0, 1fr);
     padding-right: 5px;
@@ -1931,7 +1961,7 @@ input:focus-visible {
     display: none;
   }
 
-  .bookmark-menu-trigger {
+  .bookmark-direct-action {
     display: grid;
     opacity: 1;
   }

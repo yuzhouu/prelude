@@ -4,6 +4,7 @@ import { Menu, MoreHorizontal } from 'lucide-react'
 
 import {
   AllBookmarkContents,
+  FolderDeleteButton,
   FolderContents,
   MatchList,
 } from '../features/bookmarks/bookmark-content'
@@ -15,7 +16,7 @@ import {
 import { DefaultFoldersSetup } from '../features/bookmarks/default-folders-setup'
 import {
   countTreeBookmarks,
-  findNode,
+  findNodeLocation,
   getBookmarkMatches,
   getRecentBookmarks,
   getVisibleRoots,
@@ -50,16 +51,17 @@ function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
 
-  const selectedNode = useMemo(
+  const selectedLocation = useMemo(
     () =>
       selectedId === 'all' ||
       selectedId === 'recent' ||
       selectedId === 'tabs' ||
       selectedId === 'quick-folders'
         ? undefined
-        : findNode(roots, selectedId),
+        : findNodeLocation(roots, selectedId),
     [roots, selectedId],
   )
+  const selectedNode = selectedLocation?.node
 
   const openTabCount = useMemo(
     () => countOpenTabs(openTabWindows),
@@ -99,6 +101,22 @@ function Home() {
     setSelectedId(id)
     setSidebarOpen(false)
   }
+  const handleSelectedFolderDeleted = () => {
+    if (selectedNode?.id === defaultBookmarkContainer?.id) {
+      setSelectedId('quick-folders')
+      return
+    }
+
+    setSelectedId(selectedLocation?.parentId ?? 'quick-folders')
+  }
+  const selectedFolderDeleteTarget =
+    selectedLocation &&
+    selectedLocation.node.folderType === undefined &&
+    !selectedLocation.isManaged
+      ? selectedLocation
+      : undefined
+  const canDeleteSelectedFolder =
+    isChromeSource && selectedFolderDeleteTarget !== undefined
   const isTabView = selectedId === 'tabs'
   const isQuickFoldersView = selectedId === 'quick-folders'
   const viewTitle =
@@ -149,6 +167,14 @@ function Home() {
             <Menu />
           </button>
           <span>{viewTitle}</span>
+          {selectedFolderDeleteTarget ? (
+            <FolderDeleteButton
+              className="is-mobile-topbar"
+              folder={selectedFolderDeleteTarget.node}
+              canDelete={canDeleteSelectedFolder}
+              onDeleted={handleSelectedFolderDeleted}
+            />
+          ) : null}
         </div>
 
         <nav className="main-breadcrumb" aria-label="当前位置">
@@ -156,17 +182,27 @@ function Home() {
             <h1 aria-current="page">{viewTitle}</h1>
             <span aria-hidden="true">/</span>
           </div>
-          {!isTabView && !isQuickFoldersView ? (
-            <button
-              className="view-menu-button"
-              type="button"
-              aria-label="管理书签"
-              title="管理书签"
-              onClick={openBookmarkManager}
-            >
-              <MoreHorizontal />
-            </button>
-          ) : null}
+          <div className="breadcrumb-actions">
+            {selectedFolderDeleteTarget ? (
+              <FolderDeleteButton
+                className="is-breadcrumb"
+                folder={selectedFolderDeleteTarget.node}
+                canDelete={canDeleteSelectedFolder}
+                onDeleted={handleSelectedFolderDeleted}
+              />
+            ) : null}
+            {!isTabView && !isQuickFoldersView ? (
+              <button
+                className="view-menu-button"
+                type="button"
+                aria-label="管理书签"
+                title="管理书签"
+                onClick={openBookmarkManager}
+              >
+                <MoreHorizontal />
+              </button>
+            ) : null}
+          </div>
         </nav>
 
         <div className="content-column">
@@ -193,6 +229,7 @@ function Home() {
               <FolderContents
                 folder={selectedNode}
                 canCreate={isChromeSource}
+                isInsideManagedTree={selectedLocation.isManaged}
               />
             ) : null}
           </div>

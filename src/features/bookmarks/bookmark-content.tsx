@@ -1,6 +1,5 @@
 import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { Dialog } from '@base-ui/react/dialog'
-import { Menu } from '@base-ui/react/menu'
 import { useId, useState } from 'react'
 import {
   Check,
@@ -9,7 +8,6 @@ import {
   ExternalLink,
   FolderOpen,
   LoaderCircle,
-  MoreHorizontal,
   Pencil,
   Plus,
   Trash2,
@@ -19,10 +17,16 @@ import {
   createBookmark,
   createBookmarkFolder,
   deleteBookmark,
+  deleteBookmarkFolder,
   updateBookmark,
 } from './chrome-bookmarks'
 import { BookmarkFavicon } from './bookmark-favicon'
-import { countBookmarks, getChildFolders, getDirectBookmarks } from './model'
+import {
+  countBookmarks,
+  countChildFolders,
+  getChildFolders,
+  getDirectBookmarks,
+} from './model'
 import type { BookmarkMatch, BookmarkNode } from './model'
 
 function getHostname(url: string) {
@@ -388,42 +392,29 @@ export function BookmarkRow({
         >
           <ExternalLink />
         </a>
-        <Menu.Root>
-          <Menu.Trigger
-            className="bookmark-action bookmark-menu-trigger"
-            type="button"
-            disabled={!canMutate}
-            aria-label={`编辑或删除 ${node.title}`}
-            title={canMutate ? '更多操作' : '加载为 Chrome 扩展后即可修改'}
-          >
-            <MoreHorizontal />
-          </Menu.Trigger>
-          <Menu.Portal>
-            <Menu.Positioner
-              className="bookmark-menu-positioner"
-              side="bottom"
-              align="end"
-              sideOffset={4}
-            >
-              <Menu.Popup className="bookmark-menu-popup">
-                <Menu.Item className="bookmark-menu-item" onClick={openEditor}>
-                  <Pencil />
-                  编辑
-                </Menu.Item>
-                <Menu.Item
-                  className="bookmark-menu-item is-danger"
-                  onClick={() => {
-                    setDeleteError(undefined)
-                    setIsDeleteOpen(true)
-                  }}
-                >
-                  <Trash2 />
-                  删除
-                </Menu.Item>
-              </Menu.Popup>
-            </Menu.Positioner>
-          </Menu.Portal>
-        </Menu.Root>
+        <button
+          className="bookmark-action bookmark-direct-action"
+          type="button"
+          disabled={!canMutate}
+          aria-label={`编辑 ${node.title}`}
+          title={canMutate ? '编辑' : '加载为 Chrome 扩展后即可修改'}
+          onClick={openEditor}
+        >
+          <Pencil />
+        </button>
+        <button
+          className="bookmark-action bookmark-direct-action bookmark-delete-action"
+          type="button"
+          disabled={!canMutate}
+          aria-label={`删除 ${node.title}`}
+          title={canMutate ? '删除' : '加载为 Chrome 扩展后即可修改'}
+          onClick={() => {
+            setDeleteError(undefined)
+            setIsDeleteOpen(true)
+          }}
+        >
+          <Trash2 />
+        </button>
       </div>
 
       <Dialog.Root
@@ -525,17 +516,118 @@ export function BookmarkRow({
   )
 }
 
+export function FolderDeleteButton({
+  canDelete,
+  className,
+  folder,
+  onDeleted,
+}: {
+  canDelete: boolean
+  className?: string
+  folder: BookmarkNode
+  onDeleted?: () => void
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [error, setError] = useState<string>()
+  const folderTitle = folder.title || '未命名文件夹'
+  const bookmarkCount = countBookmarks(folder)
+  const childFolderCount = countChildFolders(folder)
+  const hasContents = bookmarkCount > 0 || childFolderCount > 0
+  const contentSummary = [
+    childFolderCount > 0 ? `${childFolderCount} 个子文件夹` : undefined,
+    bookmarkCount > 0 ? `${bookmarkCount} 个书签` : undefined,
+  ]
+    .filter(Boolean)
+    .join('和')
+
+  const handleDelete = async () => {
+    if (!canDelete || isDeleting) return
+
+    setIsDeleting(true)
+    setError(undefined)
+    try {
+      await deleteBookmarkFolder(folder.id)
+      setIsOpen(false)
+      onDeleted?.()
+    } catch {
+      setError('删除文件夹失败，请重试')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  return (
+    <AlertDialog.Root
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!isDeleting) setIsOpen(open)
+      }}
+    >
+      <AlertDialog.Trigger
+        className={`folder-delete-button${className ? ` ${className}` : ''}`}
+        type="button"
+        disabled={!canDelete}
+        aria-label={`删除文件夹 ${folderTitle}`}
+        title={canDelete ? '删除文件夹' : '加载为 Chrome 扩展后即可删除'}
+        onClick={() => setError(undefined)}
+      >
+        <Trash2 />
+      </AlertDialog.Trigger>
+      <AlertDialog.Portal>
+        <AlertDialog.Backdrop className="bookmark-dialog-backdrop" />
+        <AlertDialog.Viewport className="bookmark-dialog-viewport">
+          <AlertDialog.Popup className="bookmark-dialog-popup is-compact">
+            <AlertDialog.Title className="bookmark-dialog-title">
+              删除文件夹“{folderTitle}”？
+            </AlertDialog.Title>
+            <AlertDialog.Description className="bookmark-dialog-description">
+              {hasContents
+                ? `将同时删除其中的${contentSummary}。此操作无法撤销。`
+                : '该文件夹为空。删除后将无法恢复。'}
+            </AlertDialog.Description>
+            {error ? (
+              <p className="bookmark-dialog-error" role="alert">
+                {error}
+              </p>
+            ) : null}
+            <div className="bookmark-dialog-actions">
+              <AlertDialog.Close type="button" disabled={isDeleting}>
+                取消
+              </AlertDialog.Close>
+              <button
+                className="is-danger"
+                type="button"
+                disabled={isDeleting}
+                onClick={() => void handleDelete()}
+              >
+                {isDeleting ? <LoaderCircle className="is-spinning" /> : null}
+                {hasContents ? '删除文件夹及其中内容' : '删除文件夹'}
+              </button>
+            </div>
+          </AlertDialog.Popup>
+        </AlertDialog.Viewport>
+      </AlertDialog.Portal>
+    </AlertDialog.Root>
+  )
+}
+
 function FolderSection({
   folder,
   level = 0,
   canCreate,
+  isInsideManagedTree = false,
 }: {
   folder: BookmarkNode
   level?: number
   canCreate: boolean
+  isInsideManagedTree?: boolean
 }) {
   const directBookmarks = getDirectBookmarks(folder)
   const childFolders = getChildFolders(folder)
+  const isManagedTree = isInsideManagedTree || folder.folderType === 'managed'
+  const canMutateContents = canCreate && !isManagedTree
+  const canDeleteFolder = canCreate && !isManagedTree
   const [isExpanded, setIsExpanded] = useState(true)
   const folderContentId = useId()
   const folderTitle = folder.title || '未命名文件夹'
@@ -563,6 +655,9 @@ function FolderSection({
           <h2>{folderTitle}</h2>
           <span>{countBookmarks(folder)} 个书签</span>
         </div>
+        {folder.folderType === undefined && !isManagedTree ? (
+          <FolderDeleteButton folder={folder} canDelete={canDeleteFolder} />
+        ) : null}
       </header>
       <div id={folderContentId} hidden={!isExpanded}>
         {childFolders.map((child) => (
@@ -571,6 +666,7 @@ function FolderSection({
             folder={child}
             level={level + 1}
             canCreate={canCreate}
+            isInsideManagedTree={isManagedTree}
           />
         ))}
         <div className="bookmark-list">
@@ -578,19 +674,19 @@ function FolderSection({
             <BookmarkRow
               key={bookmark.id}
               node={bookmark}
-              canMutate={canCreate}
+              canMutate={canMutateContents}
             />
           ))}
           <QuickAddBookmarkRow
             folderId={folder.id}
             folderTitle={folderTitle}
-            canCreate={canCreate}
+            canCreate={canMutateContents}
           />
         </div>
         <QuickAddFolderRow
           parentId={folder.id}
           parentTitle={folderTitle}
-          canCreate={canCreate}
+          canCreate={canMutateContents}
         />
       </div>
     </section>
@@ -600,9 +696,11 @@ function FolderSection({
 export function FolderContents({
   folder,
   canCreate,
+  isInsideManagedTree = false,
 }: {
   folder: BookmarkNode
   canCreate: boolean
+  isInsideManagedTree?: boolean
 }) {
   const directBookmarks = getDirectBookmarks(folder)
   const childFolders = getChildFolders(folder)
@@ -611,7 +709,12 @@ export function FolderContents({
   return (
     <div className="bookmark-sections">
       {childFolders.map((child) => (
-        <FolderSection key={child.id} folder={child} canCreate={canCreate} />
+        <FolderSection
+          key={child.id}
+          folder={child}
+          canCreate={canCreate}
+          isInsideManagedTree={isInsideManagedTree}
+        />
       ))}
       <section className="bookmark-group root-bookmarks">
         <div className="bookmark-list">
@@ -619,20 +722,20 @@ export function FolderContents({
             <BookmarkRow
               key={bookmark.id}
               node={bookmark}
-              canMutate={canCreate}
+              canMutate={canCreate && !isInsideManagedTree}
             />
           ))}
           <QuickAddBookmarkRow
             folderId={folder.id}
             folderTitle={folderTitle}
-            canCreate={canCreate}
+            canCreate={canCreate && !isInsideManagedTree}
           />
         </div>
       </section>
       <QuickAddFolderRow
         parentId={folder.id}
         parentTitle={folderTitle}
-        canCreate={canCreate}
+        canCreate={canCreate && !isInsideManagedTree}
       />
     </div>
   )
@@ -648,7 +751,12 @@ export function AllBookmarkContents({
   return (
     <div className="bookmark-sections">
       {roots.map((root) => (
-        <FolderSection key={root.id} folder={root} canCreate={canCreate} />
+        <FolderSection
+          key={root.id}
+          folder={root}
+          canCreate={canCreate}
+          isInsideManagedTree={root.folderType === 'managed'}
+        />
       ))}
     </div>
   )

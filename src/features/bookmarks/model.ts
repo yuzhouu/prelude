@@ -13,6 +13,12 @@ export interface BookmarkMatch {
   path: Array<string>
 }
 
+export interface BookmarkNodeLocation {
+  node: BookmarkNode
+  parentId?: string
+  isManaged: boolean
+}
+
 export function isFolder(node: BookmarkNode) {
   return node.url === undefined
 }
@@ -38,6 +44,13 @@ export function countTreeBookmarks(tree: Array<BookmarkNode>) {
   return tree.reduce((total, node) => total + countBookmarks(node), 0)
 }
 
+export function countChildFolders(node: BookmarkNode): number {
+  return (node.children ?? []).reduce((total, child) => {
+    if (!isFolder(child)) return total
+    return total + 1 + countChildFolders(child)
+  }, 0)
+}
+
 export function findNode(
   tree: Array<BookmarkNode>,
   id: string,
@@ -50,6 +63,31 @@ export function findNode(
   }
 
   return undefined
+}
+
+export function findNodeLocation(
+  tree: Array<BookmarkNode>,
+  id: string,
+): BookmarkNodeLocation | undefined {
+  function visit(
+    nodes: Array<BookmarkNode>,
+    parentId: string | undefined,
+    isInsideManagedTree: boolean,
+  ): BookmarkNodeLocation | undefined {
+    for (const node of nodes) {
+      const isManaged = isInsideManagedTree || node.folderType === 'managed'
+      if (node.id === id) return { node, parentId, isManaged }
+
+      const found = node.children
+        ? visit(node.children, node.id, isManaged)
+        : undefined
+      if (found) return found
+    }
+
+    return undefined
+  }
+
+  return visit(tree, undefined, false)
 }
 
 export function getBookmarkMatches(tree: Array<BookmarkNode>) {

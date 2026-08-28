@@ -6,11 +6,13 @@ import {
   FolderPlus,
   LoaderCircle,
   Pin,
+  Star,
 } from 'lucide-react'
 
 import {
   createDefaultBookmarkFolders,
   DEFAULT_BOOKMARK_CONTAINER_TITLE,
+  DEFAULT_FAVORITES_FOLDER_TITLE,
   DEFAULT_PINNED_FOLDER_TITLE,
   DEFAULT_READ_LATER_FOLDER_TITLE,
   openBookmarkManager,
@@ -76,6 +78,13 @@ export function DefaultFoldersSetup({
             <div>
               <strong>{DEFAULT_READ_LATER_FOLDER_TITLE}</strong>
               <span>收纳准备稍后阅读的内容</span>
+            </div>
+          </div>
+          <div className="default-folder-preview-row is-child">
+            <Star />
+            <div>
+              <strong>{DEFAULT_FAVORITES_FOLDER_TITLE}</strong>
+              <span>收纳值得长期保留的页面</span>
             </div>
           </div>
         </div>

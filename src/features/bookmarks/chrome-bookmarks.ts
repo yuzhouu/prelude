@@ -22,6 +22,7 @@ interface ChromeApi {
     }) => Promise<BookmarkNode>
     getTree: () => Promise<Array<BookmarkNode>>
     remove: (id: string) => Promise<void>
+    removeTree: (id: string) => Promise<void>
     update: (
       id: string,
       changes: { title?: string; url?: string },
@@ -58,6 +59,7 @@ interface ChromeApi {
 export const DEFAULT_BOOKMARK_CONTAINER_TITLE = '书签 · 新标签页'
 export const DEFAULT_PINNED_FOLDER_TITLE = '置顶'
 export const DEFAULT_READ_LATER_FOLDER_TITLE = '待读'
+export const DEFAULT_FAVORITES_FOLDER_TITLE = '收藏'
 
 let defaultFolderCreationPromise: Promise<BookmarkNode> | undefined
 
@@ -105,6 +107,10 @@ async function createFolders() {
     bookmarksApi.create({
       parentId: container.id,
       title: DEFAULT_READ_LATER_FOLDER_TITLE,
+    }),
+    bookmarksApi.create({
+      parentId: container.id,
+      title: DEFAULT_FAVORITES_FOLDER_TITLE,
     }),
   ])
 
@@ -215,6 +221,13 @@ export async function deleteBookmark(id: string) {
   await chromeApi.storage?.local
     .remove(getAutoTitleStorageKey(id))
     .catch(() => undefined)
+}
+
+export async function deleteBookmarkFolder(id: string) {
+  const bookmarksApi = getChromeApi()?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  await bookmarksApi.removeTree(id)
 }
 
 export function useBookmarkTree() {
