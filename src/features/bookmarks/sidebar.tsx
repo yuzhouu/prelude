@@ -1,4 +1,4 @@
-import type { CSSProperties, FormEvent, RefObject } from 'react'
+import type { CSSProperties } from 'react'
 import {
   Bookmark,
   ChevronRight,
@@ -6,11 +6,11 @@ import {
   Folder,
   FolderPlus,
   PanelsTopLeft,
-  Search,
   Settings2,
   X,
 } from 'lucide-react'
 
+import { SearchTrigger } from '../search/search-trigger'
 import { openBookmarkManager } from './chrome-bookmarks'
 import { countBookmarks, isFolder } from './model'
 import type { BookmarkNode } from './model'
@@ -137,16 +137,12 @@ interface SidebarProps {
   roots: Array<BookmarkNode>
   selectedId: string
   expandedIds: Set<string>
-  query: string
   totalCount: number
   recentCount: number
   tabCount: number
   isOpen: boolean
-  isTabView: boolean
-  searchInputRef: RefObject<HTMLInputElement | null>
   onClose: () => void
-  onQueryChange: (query: string) => void
-  onSearchSubmit: (event: FormEvent<HTMLFormElement>) => void
+  onSearchOpen: () => void
   onSelect: (id: string) => void
   onToggle: (id: string) => void
 }
@@ -155,16 +151,12 @@ export function Sidebar({
   roots,
   selectedId,
   expandedIds,
-  query,
   totalCount,
   recentCount,
   tabCount,
   isOpen,
-  isTabView,
-  searchInputRef,
   onClose,
-  onQueryChange,
-  onSearchSubmit,
+  onSearchOpen,
   onSelect,
   onToggle,
 }: SidebarProps) {
@@ -208,19 +200,7 @@ export function Sidebar({
           </div>
         </div>
 
-        <form className="sidebar-search" onSubmit={onSearchSubmit}>
-          <Search />
-          <input
-            ref={searchInputRef}
-            type="search"
-            value={query}
-            placeholder={isTabView ? '搜索当前标签页' : '搜索'}
-            aria-label={isTabView ? '搜索当前标签页' : '搜索书签或输入网址'}
-            autoComplete="off"
-            onChange={(event) => onQueryChange(event.target.value)}
-          />
-          <kbd>⌘ K</kbd>
-        </form>
+        <SearchTrigger onOpen={onSearchOpen} />
 
         <nav className="sidebar-nav" aria-label="书签导航">
           <button

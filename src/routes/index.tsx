@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Menu, MoreHorizontal } from 'lucide-react'
 
@@ -19,23 +19,14 @@ import {
   getBookmarkMatches,
   getRecentBookmarks,
   getVisibleRoots,
-  searchBookmarks,
 } from '../features/bookmarks/model'
 import { Sidebar } from '../features/bookmarks/sidebar'
+import { BookmarkSearchDialog } from '../features/search/bookmark-search-dialog'
 import { useOpenTabs } from '../features/tabs/chrome-tabs'
 import { OpenTabsContents } from '../features/tabs/tab-content'
-import { countOpenTabs, filterOpenTabs } from '../features/tabs/model'
+import { countOpenTabs } from '../features/tabs/model'
 
 export const Route = createFileRoute('/')({ component: Home })
-
-function getNavigableUrl(value: string) {
-  const query = value.trim()
-  if (/^(https?:|chrome:|file:)/i.test(query)) return query
-  if (/^[\w-]+(?:\.[\w-]+)+(?:[/#?].*)?$/i.test(query)) {
-    return `https://${query}`
-  }
-  return undefined
-}
 
 function Home() {
   const { tree, isChromeSource } = useBookmarkTree()
@@ -56,10 +47,8 @@ function Home() {
   const [expandedIds, setExpandedIds] = useState(
     () => new Set<string>(['1', 'work']),
   )
-  const [query, setQuery] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const deferredQuery = useDeferredValue(query)
-  const searchInputRef = useRef<HTMLInputElement>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
 
   const selectedNode = useMemo(
     () =>
@@ -72,14 +61,6 @@ function Home() {
     [roots, selectedId],
   )
 
-  const searchMatches = useMemo(
-    () => searchBookmarks(bookmarks, deferredQuery),
-    [bookmarks, deferredQuery],
-  )
-  const filteredTabWindows = useMemo(
-    () => filterOpenTabs(openTabWindows, deferredQuery),
-    [deferredQuery, openTabWindows],
-  )
   const openTabCount = useMemo(
     () => countOpenTabs(openTabWindows),
     [openTabWindows],
@@ -105,18 +86,6 @@ function Home() {
     })
   }, [roots])
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
-        event.preventDefault()
-        searchInputRef.current?.focus()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
-
   const toggleFolder = (id: string) => {
     setExpandedIds((current) => {
       const next = new Set(current)
@@ -128,22 +97,12 @@ function Home() {
 
   const selectView = (id: string) => {
     setSelectedId(id)
-    setQuery('')
     setSidebarOpen(false)
   }
-
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const url = getNavigableUrl(query)
-    if (url) window.location.assign(url)
-  }
-
-  const isSearching = deferredQuery.trim().length > 0
   const isTabView = selectedId === 'tabs'
   const isQuickFoldersView = selectedId === 'quick-folders'
-  const viewTitle = isSearching
-    ? '搜索结果'
-    : selectedId === 'all'
+  const viewTitle =
+    selectedId === 'all'
       ? '全部书签'
       : selectedId === 'recent'
         ? '最近添加'
@@ -158,18 +117,25 @@ function Home() {
         roots={roots}
         selectedId={selectedId}
         expandedIds={expandedIds}
-        query={query}
         totalCount={totalCount}
         recentCount={recentBookmarks.length}
         tabCount={openTabCount}
         isOpen={sidebarOpen}
-        isTabView={isTabView}
-        searchInputRef={searchInputRef}
         onClose={() => setSidebarOpen(false)}
-        onQueryChange={setQuery}
-        onSearchSubmit={handleSearchSubmit}
+        onSearchOpen={() => {
+          setSidebarOpen(false)
+          setSearchOpen(true)
+        }}
         onSelect={selectView}
         onToggle={toggleFolder}
+      />
+
+      <BookmarkSearchDialog
+        bookmarks={bookmarks}
+        openTabWindows={openTabWindows}
+        isOpen={searchOpen}
+        onActivateTab={activateTab}
+        onOpenChange={setSearchOpen}
       />
 
       <main className="main-surface">
@@ -205,16 +171,7 @@ function Home() {
 
         <div className="content-column">
           <div className="view-content">
-            {isSearching ? (
-              isTabView ? (
-                <OpenTabsContents
-                  windows={filteredTabWindows}
-                  onActivate={activateTab}
-                />
-              ) : (
-                <MatchList matches={searchMatches} canMutate={isChromeSource} />
-              )
-            ) : isTabView ? (
+            {isTabView ? (
               <OpenTabsContents
                 windows={openTabWindows}
                 onActivate={activateTab}

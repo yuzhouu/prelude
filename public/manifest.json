@@ -3,7 +3,14 @@
   "name": "书签 · 新标签页",
   "version": "1.0.0",
   "description": "一个专注、清爽并保留 Chrome 书签结构的新标签页。",
-  "permissions": ["bookmarks", "favicon", "storage", "tabs", "webNavigation"],
+  "permissions": [
+    "bookmarks",
+    "favicon",
+    "search",
+    "storage",
+    "tabs",
+    "webNavigation"
+  ],
   "background": {
     "service_worker": "auto-title-background.js",
     "type": "module"

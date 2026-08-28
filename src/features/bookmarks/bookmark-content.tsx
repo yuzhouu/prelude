@@ -19,9 +19,9 @@ import {
   createBookmark,
   createBookmarkFolder,
   deleteBookmark,
-  getFaviconUrl,
   updateBookmark,
 } from './chrome-bookmarks'
+import { BookmarkFavicon } from './bookmark-favicon'
 import { countBookmarks, getChildFolders, getDirectBookmarks } from './model'
 import type { BookmarkMatch, BookmarkNode } from './model'
 
@@ -276,29 +276,6 @@ function QuickAddBookmarkRow({
         {error ? <span className="is-error">{error}</span> : null}
       </div>
     </form>
-  )
-}
-
-function BookmarkFavicon({ title, url }: { title: string; url: string }) {
-  const [hasError, setHasError] = useState(false)
-  const faviconUrl = getFaviconUrl(url)
-
-  return (
-    <span className="bookmark-favicon">
-      {faviconUrl && !hasError ? (
-        <img
-          src={faviconUrl}
-          alt=""
-          width="20"
-          height="20"
-          onError={() => setHasError(true)}
-        />
-      ) : (
-        <span aria-hidden="true">
-          {title.trim().charAt(0).toUpperCase() || '•'}
-        </span>
-      )}
-    </span>
   )
 }
 
