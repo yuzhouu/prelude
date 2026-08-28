@@ -577,6 +577,52 @@ input:focus-visible {
   margin-left: calc(var(--group-level) * 20px);
 }
 
+.bookmark-group.is-sortable > .bookmark-group-header,
+.bookmark-row.is-sortable {
+  cursor: grab;
+}
+
+.bookmark-group.is-sortable > .bookmark-group-header:active,
+.bookmark-row.is-sortable:active {
+  cursor: grabbing;
+}
+
+.bookmark-group.is-dragging,
+.bookmark-row.is-dragging {
+  opacity: 0.24;
+}
+
+.bookmark-sort-placeholder {
+  display: grid;
+  height: 42px;
+  place-items: center;
+  border: 1px dashed color-mix(in srgb, var(--accent) 56%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent-soft) 52%, white);
+  color: var(--accent-strong);
+}
+
+.bookmark-sort-placeholder.is-folder {
+  height: 35px;
+  margin-top: 17px;
+  margin-left: calc(var(--group-level) * 20px);
+}
+
+.bookmark-sort-placeholder.is-bookmark.is-nested {
+  margin-left: 26px;
+}
+
+.bookmark-sort-placeholder span {
+  font-size: 11.5px;
+  font-weight: 550;
+}
+
+.bookmark-sort-error {
+  margin: 8px 8px 0;
+  color: var(--accent-strong);
+  font-size: 12px;
+}
+
 .bookmark-group:first-child,
 .bookmark-group.root-bookmarks {
   margin-top: 0;
@@ -715,6 +761,10 @@ input:focus-visible {
   margin-left: 26px;
 }
 
+.bookmark-list.nested-bookmark-actions {
+  border-top: 0;
+}
+
 .bookmark-row {
   position: relative;
   display: flex;
@@ -722,6 +772,15 @@ input:focus-visible {
   align-items: stretch;
   border-bottom: 1px solid var(--line);
   transition: background 100ms ease;
+}
+
+.bookmark-children > .bookmark-row:first-child,
+.bookmark-children > :not(.bookmark-row) + .bookmark-row {
+  border-top: 1px solid var(--line);
+}
+
+.bookmark-row.is-nested {
+  margin-left: 26px;
 }
 
 .bookmark-row:hover {

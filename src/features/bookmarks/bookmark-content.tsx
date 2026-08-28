@@ -1,6 +1,7 @@
 import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { Dialog } from '@base-ui/react/dialog'
-import { useId, useState } from 'react'
+import { Fragment, useId, useState } from 'react'
+import type { CSSProperties, DragEvent } from 'react'
 import {
   Check,
   ChevronRight,
@@ -18,15 +19,11 @@ import {
   createBookmarkFolder,
   deleteBookmark,
   deleteBookmarkFolder,
+  moveBookmarkNode,
   updateBookmark,
 } from './chrome-bookmarks'
 import { BookmarkFavicon } from './bookmark-favicon'
-import {
-  countBookmarks,
-  countChildFolders,
-  getChildFolders,
-  getDirectBookmarks,
-} from './model'
+import { countBookmarks, countChildFolders } from './model'
 import type { BookmarkMatch, BookmarkNode } from './model'
 
 function getHostname(url: string) {
@@ -285,12 +282,18 @@ function QuickAddBookmarkRow({
 
 export function BookmarkRow({
   canMutate,
+  isDragging = false,
+  isNested = false,
   node,
   path,
+  sortableProps,
 }: {
   canMutate: boolean
+  isDragging?: boolean
+  isNested?: boolean
   node: BookmarkNode
   path?: Array<string>
+  sortableProps?: SortableElementProps
 }) {
   const [copied, setCopied] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
@@ -362,8 +365,17 @@ export function BookmarkRow({
 
   return (
     <>
-      <div className="bookmark-row">
-        <a className="bookmark-main-link" href={url}>
+      <div
+        className={`bookmark-row${sortableProps ? ' is-sortable' : ''}${isDragging ? ' is-dragging' : ''}${isNested ? ' is-nested' : ''}`}
+        draggable={sortableProps?.draggable}
+        data-sortable-id={sortableProps?.['data-sortable-id']}
+        data-sortable-kind={sortableProps?.['data-sortable-kind']}
+        onDragStart={sortableProps?.onDragStart}
+        onDragOver={sortableProps?.onDragOver}
+        onDrop={sortableProps?.onDrop}
+        onDragEnd={sortableProps?.onDragEnd}
+      >
+        <a className="bookmark-main-link" href={url} draggable={false}>
           <BookmarkFavicon title={node.title} url={url} />
           <span className="bookmark-copy">
             <strong>{node.title || getHostname(url)}</strong>
@@ -617,14 +629,16 @@ function FolderSection({
   level = 0,
   canCreate,
   isInsideManagedTree = false,
+  isDragging = false,
+  sortableProps,
 }: {
   folder: BookmarkNode
   level?: number
   canCreate: boolean
   isInsideManagedTree?: boolean
+  isDragging?: boolean
+  sortableProps?: SortableElementProps
 }) {
-  const directBookmarks = getDirectBookmarks(folder)
-  const childFolders = getChildFolders(folder)
   const isManagedTree = isInsideManagedTree || folder.folderType === 'managed'
   const canMutateContents = canCreate && !isManagedTree
   const canDeleteFolder = canCreate && !isManagedTree
@@ -635,10 +649,23 @@ function FolderSection({
 
   return (
     <section
-      className="bookmark-group"
+      className={`bookmark-group${sortableProps ? ' is-sortable' : ''}${isDragging ? ' is-dragging' : ''}`}
       style={{ '--group-level': level } as React.CSSProperties}
+      data-sortable-id={sortableProps?.['data-sortable-id']}
+      data-sortable-kind={sortableProps?.['data-sortable-kind']}
+      onDragOver={sortableProps?.onDragOver}
+      onDrop={sortableProps?.onDrop}
     >
-      <header className="bookmark-group-header">
+      <header
+        className="bookmark-group-header"
+        draggable={sortableProps?.draggable}
+        onDragStart={(event) => {
+          if (!sortableProps) return
+          setIsExpanded(false)
+          sortableProps.onDragStart(event)
+        }}
+        onDragEnd={sortableProps?.onDragEnd}
+      >
         <div className="group-title-row">
           <button
             className="bookmark-group-toggle"
@@ -660,23 +687,14 @@ function FolderSection({
         ) : null}
       </header>
       <div id={folderContentId} hidden={!isExpanded}>
-        {childFolders.map((child) => (
-          <FolderSection
-            key={child.id}
-            folder={child}
-            level={level + 1}
-            canCreate={canCreate}
-            isInsideManagedTree={isManagedTree}
-          />
-        ))}
-        <div className="bookmark-list">
-          {directBookmarks.map((bookmark) => (
-            <BookmarkRow
-              key={bookmark.id}
-              node={bookmark}
-              canMutate={canMutateContents}
-            />
-          ))}
+        <SortableFolderChildren
+          parent={folder}
+          folderLevel={level + 1}
+          canCreate={canCreate}
+          isInsideManagedTree={isManagedTree}
+          indentBookmarks
+        />
+        <div className="bookmark-list nested-bookmark-actions">
           <QuickAddBookmarkRow
             folderId={folder.id}
             folderTitle={folderTitle}
@@ -693,6 +711,200 @@ function FolderSection({
   )
 }
 
+type SortableItemKind = 'bookmark' | 'folder'
+
+interface SortableElementProps {
+  draggable: true
+  'data-sortable-id': string
+  'data-sortable-kind': SortableItemKind
+  onDragStart: (event: DragEvent<HTMLElement>) => void
+  onDragOver: (event: DragEvent<HTMLElement>) => void
+  onDrop: (event: DragEvent<HTMLElement>) => void
+  onDragEnd: () => void
+}
+
+interface DraggedBookmarkItem {
+  id: string
+  index: number
+  kind: SortableItemKind
+}
+
+function SortPlaceholder({
+  folderLevel,
+  indentBookmarks,
+  kind,
+  onDragOver,
+  onDrop,
+}: {
+  folderLevel: number
+  indentBookmarks: boolean
+  kind: SortableItemKind
+  onDragOver: (event: DragEvent<HTMLDivElement>) => void
+  onDrop: (event: DragEvent<HTMLDivElement>) => void
+}) {
+  return (
+    <div
+      className={`bookmark-sort-placeholder is-${kind}${kind === 'bookmark' && indentBookmarks ? ' is-nested' : ''}`}
+      style={{ '--group-level': folderLevel } as CSSProperties}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+    >
+      <span>{kind === 'folder' ? '移动文件夹到这里' : '移动网址到这里'}</span>
+    </div>
+  )
+}
+
+function SortableFolderChildren({
+  canCreate,
+  folderLevel,
+  indentBookmarks = false,
+  isInsideManagedTree = false,
+  parent,
+}: {
+  canCreate: boolean
+  folderLevel: number
+  indentBookmarks?: boolean
+  isInsideManagedTree?: boolean
+  parent: BookmarkNode
+}) {
+  const children = parent.children ?? []
+  const canReorder = canCreate && !isInsideManagedTree
+  const [draggedItem, setDraggedItem] = useState<DraggedBookmarkItem>()
+  const [placeholderIndex, setPlaceholderIndex] = useState<number>()
+  const [moveError, setMoveError] = useState<string>()
+
+  const clearDragState = () => {
+    setDraggedItem(undefined)
+    setPlaceholderIndex(undefined)
+  }
+
+  const handleDrop = async (event: DragEvent<HTMLElement>) => {
+    if (!draggedItem || placeholderIndex === undefined) return
+
+    event.preventDefault()
+    event.stopPropagation()
+
+    const destinationIndex = placeholderIndex
+    const isSamePosition =
+      destinationIndex === draggedItem.index ||
+      destinationIndex === draggedItem.index + 1
+
+    clearDragState()
+    if (isSamePosition) return
+
+    setMoveError(undefined)
+    try {
+      await moveBookmarkNode({
+        id: draggedItem.id,
+        index: destinationIndex,
+        parentId: parent.id,
+      })
+    } catch {
+      setMoveError('排序失败，请重试')
+    }
+  }
+
+  const getSortableProps = (
+    child: BookmarkNode,
+    index: number,
+  ): SortableElementProps | undefined => {
+    if (!canReorder) return undefined
+
+    const kind = child.url === undefined ? 'folder' : 'bookmark'
+    return {
+      draggable: true,
+      'data-sortable-id': child.id,
+      'data-sortable-kind': kind,
+      onDragStart: (event) => {
+        event.stopPropagation()
+        event.dataTransfer.effectAllowed = 'move'
+        event.dataTransfer.setData('text/plain', child.id)
+        setMoveError(undefined)
+        setDraggedItem({ id: child.id, index, kind })
+        setPlaceholderIndex(index)
+      },
+      onDragOver: (event) => {
+        if (!draggedItem) return
+
+        event.preventDefault()
+        event.stopPropagation()
+        event.dataTransfer.dropEffect = 'move'
+
+        const itemElement = event.currentTarget
+        const folderHeader =
+          kind === 'folder'
+            ? itemElement.querySelector<HTMLElement>(
+                ':scope > .bookmark-group-header',
+              )
+            : undefined
+        const rect = (folderHeader ?? itemElement).getBoundingClientRect()
+        const nextIndex =
+          event.clientY < rect.top + rect.height / 2 ? index : index + 1
+        setPlaceholderIndex((current) =>
+          current === nextIndex ? current : nextIndex,
+        )
+      },
+      onDrop: (event) => void handleDrop(event),
+      onDragEnd: clearDragState,
+    }
+  }
+
+  const renderPlaceholder = (index: number) =>
+    draggedItem && placeholderIndex === index ? (
+      <SortPlaceholder
+        folderLevel={folderLevel}
+        indentBookmarks={indentBookmarks}
+        kind={draggedItem.kind}
+        onDragOver={(event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          event.dataTransfer.dropEffect = 'move'
+        }}
+        onDrop={(event) => void handleDrop(event)}
+      />
+    ) : null
+
+  return (
+    <div className="bookmark-children">
+      {children.map((child, index) => {
+        const isFolderNode = child.url === undefined
+        const isDragging = draggedItem?.id === child.id
+        const sortableProps = getSortableProps(child, index)
+
+        return (
+          <Fragment key={child.id}>
+            {renderPlaceholder(index)}
+            {isFolderNode ? (
+              <FolderSection
+                folder={child}
+                level={folderLevel}
+                canCreate={canCreate}
+                isInsideManagedTree={isInsideManagedTree}
+                isDragging={isDragging}
+                sortableProps={sortableProps}
+              />
+            ) : (
+              <BookmarkRow
+                node={child}
+                canMutate={canReorder}
+                isDragging={isDragging}
+                isNested={indentBookmarks}
+                sortableProps={sortableProps}
+              />
+            )}
+          </Fragment>
+        )
+      })}
+      {renderPlaceholder(children.length)}
+      {moveError ? (
+        <p className="bookmark-sort-error" role="alert">
+          {moveError}
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
 export function FolderContents({
   folder,
   canCreate,
@@ -702,29 +914,18 @@ export function FolderContents({
   canCreate: boolean
   isInsideManagedTree?: boolean
 }) {
-  const directBookmarks = getDirectBookmarks(folder)
-  const childFolders = getChildFolders(folder)
   const folderTitle = folder.title || '未命名文件夹'
 
   return (
     <div className="bookmark-sections">
-      {childFolders.map((child) => (
-        <FolderSection
-          key={child.id}
-          folder={child}
-          canCreate={canCreate}
-          isInsideManagedTree={isInsideManagedTree}
-        />
-      ))}
+      <SortableFolderChildren
+        parent={folder}
+        folderLevel={0}
+        canCreate={canCreate}
+        isInsideManagedTree={isInsideManagedTree}
+      />
       <section className="bookmark-group root-bookmarks">
         <div className="bookmark-list">
-          {directBookmarks.map((bookmark) => (
-            <BookmarkRow
-              key={bookmark.id}
-              node={bookmark}
-              canMutate={canCreate && !isInsideManagedTree}
-            />
-          ))}
           <QuickAddBookmarkRow
             folderId={folder.id}
             folderTitle={folderTitle}
