@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "书签 · 新标签页",
+  "name": "今巡",
   "version": "1.0.0",
-  "description": "一个专注、清爽并保留 Chrome 书签结构的新标签页。",
+  "description": "每日想看的，都在这里",
   "permissions": [
     "bookmarks",
     "favicon",

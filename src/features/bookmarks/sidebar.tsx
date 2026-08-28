@@ -16,7 +16,7 @@ import { openBookmarkManager } from './chrome-bookmarks'
 import { countBookmarks, isFolder } from './model'
 import type { BookmarkNode } from './model'
 
-const APP_NAME = '书签 · 新标签页'
+const APP_NAME = '今巡'
 
 function getBookmarkSyncSummary(roots: Array<BookmarkNode>) {
   const topLevelFolders = roots.filter(
