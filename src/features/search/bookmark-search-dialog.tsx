@@ -158,7 +158,7 @@ export function BookmarkSearchDialog({
                   <span className="search-dialog-hint-icon">
                     <Search aria-hidden="true" />
                   </span>
-                  <strong>像 Chrome 地址栏一样使用</strong>
+                  <strong>搜索书签、标签页或网页</strong>
                   <p>输入网址直接访问，其他内容使用默认搜索引擎搜索。</p>
                 </div>
               ) : (
