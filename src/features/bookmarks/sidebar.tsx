@@ -1,7 +1,6 @@
 import type { CSSProperties, FormEvent, RefObject } from 'react'
 import {
   Bookmark,
-  ChevronDown,
   ChevronRight,
   Clock3,
   Folder,
@@ -15,7 +14,52 @@ import {
 import { openBookmarkManager } from './chrome-bookmarks'
 import { countBookmarks, isFolder } from './model'
 import type { BookmarkNode } from './model'
-import { USER_INITIAL, USER_NAME } from '../../user-profile'
+
+const APP_NAME = '书签 · 新标签页'
+
+function getBookmarkSyncSummary(roots: Array<BookmarkNode>) {
+  const topLevelFolders = roots.filter(
+    (node) => isFolder(node) && node.folderType !== undefined,
+  )
+  const foldersWithBookmarks = topLevelFolders.filter(
+    (node) => countBookmarks(node) > 0,
+  )
+  const foldersToSummarize =
+    foldersWithBookmarks.length > 0 ? foldersWithBookmarks : topLevelFolders
+
+  if (
+    foldersToSummarize.length === 0 ||
+    foldersToSummarize.some((node) => node.syncing === undefined)
+  ) {
+    return {
+      className: 'is-unknown',
+      label: '状态未知',
+      title: '当前 Chrome 版本未提供全部书签的同步状态',
+    }
+  }
+
+  if (foldersToSummarize.every((node) => node.syncing)) {
+    return {
+      className: 'is-synced',
+      label: '全部已同步',
+      title: '全部书签均使用 Chrome 账号同步',
+    }
+  }
+
+  if (foldersToSummarize.some((node) => node.syncing)) {
+    return {
+      className: 'is-partial',
+      label: '部分同步',
+      title: '部分书签使用 Chrome 账号同步，部分仅保存在本地',
+    }
+  }
+
+  return {
+    className: 'is-local',
+    label: '仅本地',
+    title: '全部书签均未使用 Chrome 账号同步',
+  }
+}
 
 interface FolderTreeRowProps {
   node: BookmarkNode
@@ -98,7 +142,6 @@ interface SidebarProps {
   recentCount: number
   tabCount: number
   isOpen: boolean
-  isChromeSource: boolean
   isTabView: boolean
   searchInputRef: RefObject<HTMLInputElement | null>
   onClose: () => void
@@ -117,7 +160,6 @@ export function Sidebar({
   recentCount,
   tabCount,
   isOpen,
-  isChromeSource,
   isTabView,
   searchInputRef,
   onClose,
@@ -126,6 +168,8 @@ export function Sidebar({
   onSelect,
   onToggle,
 }: SidebarProps) {
+  const syncSummary = getBookmarkSyncSummary(roots)
+
   return (
     <>
       <button
@@ -135,17 +179,22 @@ export function Sidebar({
         onClick={onClose}
       />
       <aside className={`sidebar${isOpen ? ' is-open' : ''}`}>
-        <div className="sidebar-profile">
-          <div className="account-avatar">{USER_INITIAL}</div>
-          <div
-            className="profile-switcher"
-            title={isChromeSource ? '已同步 Chrome' : '预览数据'}
-          >
-            <strong>{USER_NAME}</strong>
-            <ChevronDown />
-            <span className="sr-only">
-              {isChromeSource ? '已同步 Chrome' : '预览数据'}
+        <div className="sidebar-brand">
+          <div className="app-identity">
+            <span className="app-logo" aria-hidden="true">
+              <FolderPlus />
             </span>
+            <div className="app-brand-copy">
+              <strong className="app-name">{APP_NAME}</strong>
+              <span
+                className={`bookmark-sync-summary ${syncSummary.className}`}
+                title={syncSummary.title}
+                aria-label={`全部书签同步状态：${syncSummary.label}`}
+              >
+                <span className="bookmark-sync-dot" aria-hidden="true" />
+                {syncSummary.label}
+              </span>
+            </div>
           </div>
           <div className="profile-actions">
             <button

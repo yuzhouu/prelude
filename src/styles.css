@@ -90,56 +90,96 @@ input:focus-visible {
   background: var(--sidebar);
 }
 
-.sidebar-profile {
+.sidebar-brand {
+  position: relative;
   display: flex;
-  min-height: 58px;
+  min-height: 68px;
   flex: 0 0 auto;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px 6px;
+  gap: 8px;
+  padding: 10px 14px 14px;
 }
 
-.account-avatar {
+.sidebar-brand::after {
+  position: absolute;
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  height: 1px;
+  background: var(--line);
+  content: '';
+}
+
+.app-identity {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-brand-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.app-logo {
   display: grid;
   width: 32px;
   height: 32px;
   flex: 0 0 auto;
   place-items: center;
-  border-radius: 50%;
+  border-radius: 8px;
   background: var(--accent);
   color: #ffffff;
-  font-size: 13px;
-  font-weight: 650;
 }
 
-.profile-switcher {
-  display: flex;
-  min-width: 0;
-  height: 32px;
-  flex: 1;
-  align-items: center;
-  gap: 4px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  padding: 0 6px;
-  text-align: left;
+.app-logo svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.8;
 }
 
-.profile-switcher strong {
+.app-name {
   overflow: hidden;
+  min-width: 0;
+  color: var(--text);
   text-overflow: ellipsis;
   font-size: 14px;
-  font-weight: 590;
+  font-weight: 610;
+  line-height: 1.25;
   white-space: nowrap;
 }
 
-.profile-switcher svg {
-  width: 14px;
-  height: 14px;
-  flex: 0 0 auto;
+.bookmark-sync-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: var(--muted);
-  stroke-width: 1.8;
+  font-size: 11px;
+  font-weight: 470;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.bookmark-sync-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #a29e9a;
+}
+
+.bookmark-sync-summary.is-synced .bookmark-sync-dot {
+  background: #5f8d72;
+}
+
+.bookmark-sync-summary.is-partial .bookmark-sync-dot {
+  background: #c08a42;
 }
 
 .profile-actions {
@@ -156,7 +196,7 @@ input:focus-visible {
   gap: 8px;
   border: 1px solid #dedbd8;
   border-radius: 6px;
-  margin: 4px 12px 12px;
+  margin: 12px 12px 12px;
   background: #ffffff;
   padding: 0 9px 0 10px;
   transition:
@@ -430,6 +470,7 @@ input:focus-visible {
 }
 
 .main-surface {
+  position: relative;
   min-height: 100vh;
   margin-left: var(--sidebar-width);
   background: #ffffff;
@@ -441,69 +482,36 @@ input:focus-visible {
   padding: 56px 0 100px;
 }
 
-.greeting-block {
+.main-breadcrumb {
+  position: absolute;
+  top: 18px;
+  left: 20px;
   display: flex;
-  min-height: 38px;
+  max-width: calc(100% - 40px);
+  min-height: 32px;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 0 8px 31px;
-}
-
-.greeting-title-row {
-  display: flex;
-  min-width: 0;
-  align-items: baseline;
-  gap: 14px;
-}
-
-.greeting-block h1 {
-  overflow: hidden;
-  margin: 0;
-  color: #202020;
-  text-overflow: ellipsis;
-  font-size: 22px;
-  font-weight: 650;
-  letter-spacing: -0.025em;
-  line-height: 1.3;
-  white-space: nowrap;
-}
-
-.greeting-block p {
-  margin: 0;
+  gap: 4px;
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 400;
-  white-space: nowrap;
 }
 
-.view-header {
-  display: flex;
-  min-height: 36px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 8px;
-}
-
-.view-title-row {
+.breadcrumb-current {
   display: flex;
   min-width: 0;
-  align-items: baseline;
-  gap: 10px;
+  align-items: center;
+  gap: 7px;
 }
 
-.view-title-row h2 {
+.breadcrumb-current h1 {
   overflow: hidden;
   margin: 0;
-  color: #303030;
+  color: #5f5b57;
   text-overflow: ellipsis;
-  font-size: 14px;
-  font-weight: 620;
-  letter-spacing: -0.005em;
+  font-size: 12.5px;
+  font-weight: 560;
   white-space: nowrap;
 }
 
-.view-title-row span,
+.breadcrumb-current span,
 .bookmark-group-header span {
   color: var(--subtle);
   font-size: 12px;
@@ -623,6 +631,151 @@ input:focus-visible {
   background: var(--row-hover);
 }
 
+.bookmark-group:not(.root-bookmarks) > div > .folder-quick-add-trigger,
+.bookmark-group:not(.root-bookmarks) > div > .folder-quick-add-form {
+  margin-left: 26px;
+}
+
+.folder-quick-add-trigger {
+  display: flex;
+  width: calc(100% - 26px);
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  padding: 0 8px;
+  cursor: pointer;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 100ms ease;
+}
+
+.bookmark-sections > .folder-quick-add-trigger {
+  width: 100%;
+}
+
+.folder-quick-add-trigger:hover,
+.folder-quick-add-trigger:focus-visible {
+  color: var(--accent-strong);
+  opacity: 1;
+}
+
+.folder-quick-add-trigger svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  stroke-width: 1.8;
+}
+
+.folder-quick-add-trigger > span:not(.folder-quick-add-line) {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 540;
+}
+
+.folder-quick-add-line {
+  height: 1px;
+  flex: 1;
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+  transition: background 100ms ease;
+}
+
+.folder-quick-add-trigger:hover .folder-quick-add-line {
+  background: color-mix(in srgb, var(--accent) 52%, transparent);
+}
+
+.folder-quick-add-form {
+  display: grid;
+  width: calc(100% - 26px);
+  gap: 8px;
+  padding: 6px 8px 10px;
+}
+
+.bookmark-sections > .folder-quick-add-form {
+  width: 100%;
+}
+
+.folder-quick-add-form input {
+  width: 100%;
+  height: 34px;
+  border: 1px solid #d7d3d0;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 0 10px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.folder-quick-add-actions {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+}
+
+.folder-quick-add-actions button {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid #dedbd8;
+  border-radius: 5px;
+  background: #ffffff;
+  padding: 0 11px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 570;
+}
+
+.folder-quick-add-actions button[type='submit'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.folder-quick-add-actions button:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.folder-quick-add-actions button[type='submit']:hover:not(:disabled) {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+}
+
+.folder-quick-add-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.folder-quick-add-actions svg {
+  width: 13px;
+  height: 13px;
+}
+
+.folder-quick-add-actions svg.is-spinning {
+  animation: default-folders-spin 800ms linear infinite;
+}
+
+.folder-quick-add-actions > span {
+  overflow: hidden;
+  color: var(--subtle);
+  text-overflow: ellipsis;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.folder-quick-add-actions > span.is-error {
+  color: var(--accent-strong);
+}
+
+@media (hover: none) {
+  .folder-quick-add-trigger {
+    opacity: 1;
+  }
+}
+
 .bookmark-quick-add-trigger {
   display: flex;
   width: 100%;
@@ -630,7 +783,6 @@ input:focus-visible {
   align-items: center;
   gap: 10px;
   border: 0;
-  border-bottom: 1px solid var(--line);
   background: transparent;
   padding: 0 12px;
   cursor: pointer;
@@ -660,7 +812,6 @@ input:focus-visible {
 .bookmark-quick-add-form {
   display: grid;
   gap: 9px;
-  border-bottom: 1px solid var(--line);
   padding: 10px 8px 12px;
 }
 
@@ -1476,6 +1627,10 @@ input:focus-visible {
     flex: 0 0 auto;
   }
 
+  .main-breadcrumb {
+    display: none;
+  }
+
   .content-column {
     width: min(calc(100% - 40px), 760px);
     padding-top: 30px;
@@ -1517,21 +1672,6 @@ input:focus-visible {
     white-space: normal;
   }
 
-  .greeting-block {
-    align-items: flex-start;
-    padding: 0 5px 24px;
-  }
-
-  .greeting-title-row {
-    display: grid;
-    gap: 3px;
-  }
-
-  .greeting-block h1 {
-    font-size: 20px;
-  }
-
-  .view-header,
   .bookmark-group-header,
   .tab-window-header {
     padding-right: 5px;
@@ -1556,6 +1696,16 @@ input:focus-visible {
 
   .bookmark-group {
     margin-left: calc(var(--group-level) * 10px);
+  }
+
+  .bookmark-group:not(.root-bookmarks) > div > .folder-quick-add-trigger,
+  .bookmark-group:not(.root-bookmarks) > div > .folder-quick-add-form {
+    width: calc(100% - 16px);
+    margin-left: 16px;
+  }
+
+  .folder-quick-add-trigger {
+    opacity: 1;
   }
 
   .open-tab-row {

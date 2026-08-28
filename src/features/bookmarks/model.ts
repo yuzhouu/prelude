@@ -3,6 +3,8 @@ export interface BookmarkNode {
   title: string
   url?: string
   dateAdded?: number
+  folderType?: 'bookmarks-bar' | 'managed' | 'mobile' | 'other'
+  syncing?: boolean
   children?: Array<BookmarkNode>
 }
 

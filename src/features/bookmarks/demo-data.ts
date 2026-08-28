@@ -11,6 +11,8 @@ export const demoBookmarkTree: Array<BookmarkNode> = [
       {
         id: '1',
         title: '书签栏',
+        folderType: 'bookmarks-bar',
+        syncing: true,
         children: [
           {
             id: 'work',
@@ -101,6 +103,8 @@ export const demoBookmarkTree: Array<BookmarkNode> = [
       {
         id: '2',
         title: '其他书签',
+        folderType: 'other',
+        syncing: false,
         children: [
           {
             id: 'reading',

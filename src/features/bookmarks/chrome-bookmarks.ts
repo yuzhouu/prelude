@@ -173,6 +173,19 @@ export async function createBookmark({
   return bookmark
 }
 
+export async function createBookmarkFolder({
+  parentId,
+  title,
+}: {
+  parentId: string
+  title: string
+}) {
+  const bookmarksApi = getChromeApi()?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  return bookmarksApi.create({ parentId, title })
+}
+
 export async function updateBookmark({
   id,
   title,

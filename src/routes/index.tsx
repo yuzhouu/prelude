@@ -14,7 +14,6 @@ import {
 } from '../features/bookmarks/chrome-bookmarks'
 import { DefaultFoldersSetup } from '../features/bookmarks/default-folders-setup'
 import {
-  countBookmarks,
   countTreeBookmarks,
   findNode,
   getBookmarkMatches,
@@ -26,27 +25,8 @@ import { Sidebar } from '../features/bookmarks/sidebar'
 import { useOpenTabs } from '../features/tabs/chrome-tabs'
 import { OpenTabsContents } from '../features/tabs/tab-content'
 import { countOpenTabs, filterOpenTabs } from '../features/tabs/model'
-import { USER_NAME } from '../user-profile'
 
 export const Route = createFileRoute('/')({ component: Home })
-
-function getDateLabel(date: Date) {
-  return new Intl.DateTimeFormat('zh-CN', {
-    month: 'long',
-    day: 'numeric',
-    weekday: 'long',
-  })
-    .format(date)
-    .replace('星期', ' · 星期')
-}
-
-function getGreeting(date: Date) {
-  const hour = date.getHours()
-  if (hour < 11) return `早上好，${USER_NAME}`
-  if (hour < 14) return `中午好，${USER_NAME}`
-  if (hour < 18) return `下午好，${USER_NAME}`
-  return `晚上好，${USER_NAME}`
-}
 
 function getNavigableUrl(value: string) {
   const query = value.trim()
@@ -172,32 +152,6 @@ function Home() {
           : isTabView
             ? '当前标签页'
             : selectedNode?.title || '书签'
-  const viewCount = isSearching
-    ? isTabView
-      ? countOpenTabs(filteredTabWindows)
-      : searchMatches.length
-    : selectedId === 'all'
-      ? totalCount
-      : selectedId === 'recent'
-        ? recentBookmarks.length
-        : isQuickFoldersView
-          ? defaultBookmarkContainer
-            ? countBookmarks(defaultBookmarkContainer)
-            : undefined
-          : isTabView
-            ? openTabCount
-            : selectedNode
-              ? countBookmarks(selectedNode)
-              : 0
-  const viewCountLabel =
-    viewCount === undefined
-      ? undefined
-      : isTabView
-        ? `${viewCount} 个标签页`
-        : `${viewCount} 个书签`
-
-  const today = new Date()
-
   return (
     <div className="app-shell">
       <Sidebar
@@ -209,7 +163,6 @@ function Home() {
         recentCount={recentBookmarks.length}
         tabCount={openTabCount}
         isOpen={sidebarOpen}
-        isChromeSource={isChromeSource}
         isTabView={isTabView}
         searchInputRef={searchInputRef}
         onClose={() => setSidebarOpen(false)}
@@ -232,32 +185,25 @@ function Home() {
           <span>{viewTitle}</span>
         </div>
 
-        <div className="content-column">
-          <header className="greeting-block">
-            <div className="greeting-title-row">
-              <h1>{getGreeting(today)}</h1>
-              <p>{getDateLabel(today)}</p>
-            </div>
-            {!isTabView && !isQuickFoldersView ? (
-              <button
-                className="view-menu-button"
-                type="button"
-                aria-label="管理书签"
-                title="管理书签"
-                onClick={openBookmarkManager}
-              >
-                <MoreHorizontal />
-              </button>
-            ) : null}
-          </header>
-
-          <div className="view-header">
-            <div className="view-title-row">
-              <h2>{viewTitle}</h2>
-              {viewCountLabel ? <span>{viewCountLabel}</span> : null}
-            </div>
+        <nav className="main-breadcrumb" aria-label="当前位置">
+          <div className="breadcrumb-current">
+            <h1 aria-current="page">{viewTitle}</h1>
+            <span aria-hidden="true">/</span>
           </div>
+          {!isTabView && !isQuickFoldersView ? (
+            <button
+              className="view-menu-button"
+              type="button"
+              aria-label="管理书签"
+              title="管理书签"
+              onClick={openBookmarkManager}
+            >
+              <MoreHorizontal />
+            </button>
+          ) : null}
+        </nav>
 
+        <div className="content-column">
           <div className="view-content">
             {isSearching ? (
               isTabView ? (

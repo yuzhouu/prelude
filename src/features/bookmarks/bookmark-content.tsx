@@ -17,6 +17,7 @@ import {
 
 import {
   createBookmark,
+  createBookmarkFolder,
   deleteBookmark,
   getFaviconUrl,
   updateBookmark,
@@ -62,6 +63,104 @@ function getDefaultBookmarkTitle(url: string) {
   } catch {
     return url
   }
+}
+
+function QuickAddFolderRow({
+  canCreate,
+  parentId,
+  parentTitle,
+}: {
+  canCreate: boolean
+  parentId: string
+  parentTitle: string
+}) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [title, setTitle] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string>()
+  const titleInputId = useId()
+
+  const closeEditor = () => {
+    setIsEditing(false)
+    setTitle('')
+    setError(undefined)
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!canCreate || isSubmitting) return
+
+    const nextTitle = title.trim()
+    if (!nextTitle) {
+      setError('请输入分类名称')
+      return
+    }
+
+    setIsSubmitting(true)
+    setError(undefined)
+    try {
+      await createBookmarkFolder({ parentId, title: nextTitle })
+      closeEditor()
+    } catch {
+      setError('添加失败，请重试')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (!isEditing) {
+    return (
+      <button
+        className="folder-quick-add-trigger"
+        type="button"
+        aria-label={`在${parentTitle}中添加分类`}
+        onClick={() => setIsEditing(true)}
+      >
+        <span className="folder-quick-add-line" aria-hidden="true" />
+        <Plus />
+        <span>添加分类</span>
+        <span className="folder-quick-add-line" aria-hidden="true" />
+      </button>
+    )
+  }
+
+  return (
+    <form
+      className="folder-quick-add-form"
+      onSubmit={handleSubmit}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && !isSubmitting) closeEditor()
+        if (event.key === 'Enter' && !isSubmitting) {
+          event.preventDefault()
+          event.currentTarget.requestSubmit()
+        }
+      }}
+    >
+      <label className="sr-only" htmlFor={titleInputId}>
+        分类名称
+      </label>
+      <input
+        id={titleInputId}
+        type="text"
+        autoFocus
+        autoComplete="off"
+        placeholder="分类名称"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+      />
+      <div className="folder-quick-add-actions">
+        <button type="submit" disabled={!canCreate || isSubmitting}>
+          {isSubmitting ? <LoaderCircle className="is-spinning" /> : null}
+          添加分类
+        </button>
+        <button type="button" disabled={isSubmitting} onClick={closeEditor}>
+          取消
+        </button>
+        {!canCreate ? <span>加载为 Chrome 扩展后即可添加</span> : null}
+        {error ? <span className="is-error">{error}</span> : null}
+      </div>
+    </form>
+  )
 }
 
 function QuickAddBookmarkRow({
@@ -511,6 +610,11 @@ function FolderSection({
             canCreate={canCreate}
           />
         </div>
+        <QuickAddFolderRow
+          parentId={folder.id}
+          parentTitle={folderTitle}
+          canCreate={canCreate}
+        />
       </div>
     </section>
   )
@@ -548,6 +652,11 @@ export function FolderContents({
           />
         </div>
       </section>
+      <QuickAddFolderRow
+        parentId={folder.id}
+        parentTitle={folderTitle}
+        canCreate={canCreate}
+      />
     </div>
   )
 }
