@@ -552,6 +552,41 @@ input:focus-visible {
   gap: 8px;
 }
 
+.bookmark-group-toggle {
+  display: grid;
+  width: 18px;
+  height: 26px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  color: var(--subtle);
+}
+
+.bookmark-group-toggle:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.bookmark-group-toggle svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 1.8;
+  transition: transform 130ms ease;
+}
+
+.bookmark-group-toggle svg.is-expanded {
+  transform: rotate(90deg);
+}
+
+.bookmark-group-toggle-spacer {
+  width: 18px;
+  flex: 0 0 auto;
+}
+
 .group-title-row > svg {
   width: 16px;
   height: 16px;

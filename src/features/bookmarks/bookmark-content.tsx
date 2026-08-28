@@ -1,5 +1,11 @@
-import { useState } from 'react'
-import { Check, Copy, ExternalLink, FolderOpen } from 'lucide-react'
+import { useId, useState } from 'react'
+import {
+  Check,
+  ChevronRight,
+  Copy,
+  ExternalLink,
+  FolderOpen,
+} from 'lucide-react'
 
 import { getFaviconUrl } from './chrome-bookmarks'
 import { countBookmarks, getChildFolders, getDirectBookmarks } from './model'
@@ -97,6 +103,13 @@ function FolderSection({
 }) {
   const directBookmarks = getDirectBookmarks(folder)
   const childFolders = getChildFolders(folder)
+  const hasDirectBookmarks = directBookmarks.length > 0
+  const [areBookmarksExpanded, setAreBookmarksExpanded] = useState(true)
+  const bookmarkContentId = useId()
+  const folderTitle = folder.title || '未命名文件夹'
+  const toggleLabel = areBookmarksExpanded
+    ? `收起${folderTitle}的直属书签`
+    : `展开${folderTitle}的直属书签`
 
   return (
     <section
@@ -105,18 +118,37 @@ function FolderSection({
     >
       <header className="bookmark-group-header">
         <div className="group-title-row">
+          {hasDirectBookmarks ? (
+            <button
+              className="bookmark-group-toggle"
+              type="button"
+              aria-label={toggleLabel}
+              aria-expanded={areBookmarksExpanded}
+              aria-controls={bookmarkContentId}
+              title={toggleLabel}
+              onClick={() => setAreBookmarksExpanded((current) => !current)}
+            >
+              <ChevronRight
+                className={areBookmarksExpanded ? 'is-expanded' : ''}
+              />
+            </button>
+          ) : (
+            <span className="bookmark-group-toggle-spacer" />
+          )}
           <FolderOpen />
-          <h2>{folder.title || '未命名文件夹'}</h2>
+          <h2>{folderTitle}</h2>
           <span>{countBookmarks(folder)} 个书签</span>
         </div>
       </header>
-      {directBookmarks.length ? (
-        <div className="bookmark-list">
-          {directBookmarks.map((bookmark) => (
-            <BookmarkRow key={bookmark.id} node={bookmark} />
-          ))}
-        </div>
-      ) : null}
+      <div id={bookmarkContentId} hidden={!areBookmarksExpanded}>
+        {hasDirectBookmarks ? (
+          <div className="bookmark-list">
+            {directBookmarks.map((bookmark) => (
+              <BookmarkRow key={bookmark.id} node={bookmark} />
+            ))}
+          </div>
+        ) : null}
+      </div>
       {childFolders.map((child) => (
         <FolderSection key={child.id} folder={child} level={level + 1} />
       ))}
