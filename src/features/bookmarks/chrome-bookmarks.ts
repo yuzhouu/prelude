@@ -10,6 +10,11 @@ interface ChromeEvent {
 
 interface ChromeApi {
   bookmarks?: {
+    create: (details: {
+      parentId?: string
+      title: string
+      url?: string
+    }) => Promise<BookmarkNode>
     getTree: () => Promise<Array<BookmarkNode>>
     onChanged: ChromeEvent
     onChildrenReordered: ChromeEvent
@@ -26,8 +31,86 @@ interface ChromeApi {
   }
 }
 
+export const DEFAULT_BOOKMARK_CONTAINER_TITLE = '书签 · 新标签页'
+export const DEFAULT_PINNED_FOLDER_TITLE = '置顶'
+export const DEFAULT_READ_LATER_FOLDER_TITLE = '待读'
+
+let defaultFolderCreationPromise: Promise<BookmarkNode> | undefined
+
 function getChromeApi() {
   return (globalThis as typeof globalThis & { chrome?: ChromeApi }).chrome
+}
+
+function findFolderByTitle(
+  nodes: Array<BookmarkNode>,
+  title: string,
+): BookmarkNode | undefined {
+  for (const node of nodes) {
+    if (!node.url && node.title === title) return node
+
+    const match = node.children
+      ? findFolderByTitle(node.children, title)
+      : undefined
+    if (match) return match
+  }
+
+  return undefined
+}
+
+export function hasDefaultBookmarkContainer(nodes: Array<BookmarkNode>) {
+  return Boolean(findFolderByTitle(nodes, DEFAULT_BOOKMARK_CONTAINER_TITLE))
+}
+
+async function createFolders() {
+  const bookmarksApi = getChromeApi()?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  const tree = await bookmarksApi.getTree()
+  const existing = findFolderByTitle(tree, DEFAULT_BOOKMARK_CONTAINER_TITLE)
+  if (existing) return existing
+
+  const container = await bookmarksApi.create({
+    title: DEFAULT_BOOKMARK_CONTAINER_TITLE,
+  })
+
+  await Promise.all([
+    bookmarksApi.create({
+      parentId: container.id,
+      title: DEFAULT_PINNED_FOLDER_TITLE,
+    }),
+    bookmarksApi.create({
+      parentId: container.id,
+      title: DEFAULT_READ_LATER_FOLDER_TITLE,
+    }),
+  ])
+
+  return container
+}
+
+export async function createDefaultBookmarkFolders() {
+  defaultFolderCreationPromise ??= createFolders()
+
+  try {
+    return await defaultFolderCreationPromise
+  } catch (error) {
+    defaultFolderCreationPromise = undefined
+    throw error
+  }
+}
+
+export async function createBookmark({
+  parentId,
+  title,
+  url,
+}: {
+  parentId: string
+  title: string
+  url: string
+}) {
+  const bookmarksApi = getChromeApi()?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  return bookmarksApi.create({ parentId, title, url })
 }
 
 export function useBookmarkTree() {

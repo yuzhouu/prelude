@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Clock3,
   Folder,
+  FolderPlus,
   PanelsTopLeft,
   Search,
   Settings2,
@@ -174,13 +175,13 @@ export function Sidebar({
 
         <nav className="sidebar-nav" aria-label="书签导航">
           <button
-            className={`utility-row${selectedId === 'all' ? ' is-selected' : ''}`}
+            className={`utility-row${selectedId === 'tabs' ? ' is-selected' : ''}`}
             type="button"
-            onClick={() => onSelect('all')}
+            onClick={() => onSelect('tabs')}
           >
-            <Bookmark />
-            <span>全部书签</span>
-            <span className="utility-count">{totalCount}</span>
+            <PanelsTopLeft />
+            <span>当前标签页</span>
+            <span className="utility-count">{tabCount}</span>
           </button>
           <button
             className={`utility-row${selectedId === 'recent' ? ' is-selected' : ''}`}
@@ -192,13 +193,21 @@ export function Sidebar({
             <span className="utility-count">{recentCount}</span>
           </button>
           <button
-            className={`utility-row${selectedId === 'tabs' ? ' is-selected' : ''}`}
+            className={`utility-row${selectedId === 'all' ? ' is-selected' : ''}`}
             type="button"
-            onClick={() => onSelect('tabs')}
+            onClick={() => onSelect('all')}
           >
-            <PanelsTopLeft />
-            <span>当前标签页</span>
-            <span className="utility-count">{tabCount}</span>
+            <Bookmark />
+            <span>全部书签</span>
+            <span className="utility-count">{totalCount}</span>
+          </button>
+          <button
+            className={`utility-row${selectedId === 'quick-folders' ? ' is-selected' : ''}`}
+            type="button"
+            onClick={() => onSelect('quick-folders')}
+          >
+            <FolderPlus />
+            <span>快捷文件夹</span>
           </button>
         </nav>
 

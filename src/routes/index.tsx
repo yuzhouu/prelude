@@ -8,9 +8,11 @@ import {
   MatchList,
 } from '../features/bookmarks/bookmark-content'
 import {
+  hasDefaultBookmarkContainer,
   openBookmarkManager,
   useBookmarkTree,
 } from '../features/bookmarks/chrome-bookmarks'
+import { DefaultFoldersSetup } from '../features/bookmarks/default-folders-setup'
 import {
   countBookmarks,
   countTreeBookmarks,
@@ -65,6 +67,10 @@ function Home() {
     [bookmarks],
   )
   const totalCount = useMemo(() => countTreeBookmarks(roots), [roots])
+  const hasDefaultFolders = useMemo(
+    () => hasDefaultBookmarkContainer(roots),
+    [roots],
+  )
 
   const [selectedId, setSelectedId] = useState('tabs')
   const [expandedIds, setExpandedIds] = useState(
@@ -77,7 +83,10 @@ function Home() {
 
   const selectedNode = useMemo(
     () =>
-      selectedId === 'all' || selectedId === 'recent'
+      selectedId === 'all' ||
+      selectedId === 'recent' ||
+      selectedId === 'tabs' ||
+      selectedId === 'quick-folders'
         ? undefined
         : findNode(roots, selectedId),
     [roots, selectedId],
@@ -101,6 +110,7 @@ function Home() {
       selectedId === 'all' ||
       selectedId === 'recent' ||
       selectedId === 'tabs' ||
+      selectedId === 'quick-folders' ||
       selectedNode
     )
       return
@@ -150,15 +160,18 @@ function Home() {
 
   const isSearching = deferredQuery.trim().length > 0
   const isTabView = selectedId === 'tabs'
+  const isQuickFoldersView = selectedId === 'quick-folders'
   const viewTitle = isSearching
     ? '搜索结果'
     : selectedId === 'all'
       ? '全部书签'
       : selectedId === 'recent'
         ? '最近添加'
-        : isTabView
-          ? '当前标签页'
-          : selectedNode?.title || '书签'
+        : isQuickFoldersView
+          ? '快捷文件夹'
+          : isTabView
+            ? '当前标签页'
+            : selectedNode?.title || '书签'
   const viewCount = isSearching
     ? isTabView
       ? countOpenTabs(filteredTabWindows)
@@ -167,14 +180,19 @@ function Home() {
       ? totalCount
       : selectedId === 'recent'
         ? recentBookmarks.length
-        : isTabView
-          ? openTabCount
-          : selectedNode
-            ? countBookmarks(selectedNode)
-            : 0
-  const viewCountLabel = isTabView
-    ? `${viewCount} 个标签页`
-    : `${viewCount} 个书签`
+        : isQuickFoldersView
+          ? undefined
+          : isTabView
+            ? openTabCount
+            : selectedNode
+              ? countBookmarks(selectedNode)
+              : 0
+  const viewCountLabel =
+    viewCount === undefined
+      ? undefined
+      : isTabView
+        ? `${viewCount} 个标签页`
+        : `${viewCount} 个书签`
 
   const today = new Date()
 
@@ -218,7 +236,7 @@ function Home() {
               <h1>{getGreeting(today)}</h1>
               <p>{getDateLabel(today)}</p>
             </div>
-            {!isTabView ? (
+            {!isTabView && !isQuickFoldersView ? (
               <button
                 className="view-menu-button"
                 type="button"
@@ -234,7 +252,7 @@ function Home() {
           <div className="view-header">
             <div className="view-title-row">
               <h2>{viewTitle}</h2>
-              <span>{viewCountLabel}</span>
+              {viewCountLabel ? <span>{viewCountLabel}</span> : null}
             </div>
           </div>
 
@@ -253,12 +271,20 @@ function Home() {
                 windows={openTabWindows}
                 onActivate={activateTab}
               />
+            ) : isQuickFoldersView ? (
+              <DefaultFoldersSetup
+                isChromeSource={isChromeSource}
+                hasDefaultFolders={hasDefaultFolders}
+              />
             ) : selectedId === 'all' ? (
-              <AllBookmarkContents roots={roots} />
+              <AllBookmarkContents roots={roots} canCreate={isChromeSource} />
             ) : selectedId === 'recent' ? (
               <MatchList matches={recentBookmarks} />
             ) : selectedNode ? (
-              <FolderContents folder={selectedNode} />
+              <FolderContents
+                folder={selectedNode}
+                canCreate={isChromeSource}
+              />
             ) : null}
           </div>
         </div>
