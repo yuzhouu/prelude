@@ -20,13 +20,11 @@ type CreationStatus = 'idle' | 'creating' | 'created' | 'error'
 
 export function DefaultFoldersSetup({
   isChromeSource,
-  hasDefaultFolders,
 }: {
   isChromeSource: boolean
-  hasDefaultFolders: boolean
 }) {
   const [status, setStatus] = useState<CreationStatus>('idle')
-  const isCreated = hasDefaultFolders || status === 'created'
+  const isCreated = status === 'created'
 
   const handleConfirm = async () => {
     setStatus('creating')

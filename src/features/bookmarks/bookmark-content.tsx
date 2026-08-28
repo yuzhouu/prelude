@@ -1,3 +1,6 @@
+import { AlertDialog } from '@base-ui/react/alert-dialog'
+import { Dialog } from '@base-ui/react/dialog'
+import { Menu } from '@base-ui/react/menu'
 import { useId, useState } from 'react'
 import {
   Check,
@@ -6,10 +9,18 @@ import {
   ExternalLink,
   FolderOpen,
   LoaderCircle,
+  MoreHorizontal,
+  Pencil,
   Plus,
+  Trash2,
 } from 'lucide-react'
 
-import { createBookmark, getFaviconUrl } from './chrome-bookmarks'
+import {
+  createBookmark,
+  deleteBookmark,
+  getFaviconUrl,
+  updateBookmark,
+} from './chrome-bookmarks'
 import { countBookmarks, getChildFolders, getDirectBookmarks } from './model'
 import type { BookmarkMatch, BookmarkNode } from './model'
 
@@ -91,9 +102,11 @@ function QuickAddBookmarkRow({
     setError(undefined)
 
     try {
+      const explicitTitle = title.trim()
       await createBookmark({
+        autoTitle: explicitTitle.length === 0,
         parentId: folderId,
-        title: title.trim() || getDefaultBookmarkTitle(normalizedUrl),
+        title: explicitTitle || getDefaultBookmarkTitle(normalizedUrl),
         url: normalizedUrl,
       })
       closeEditor()
@@ -147,7 +160,7 @@ function QuickAddBookmarkRow({
           id={titleInputId}
           type="text"
           autoComplete="off"
-          placeholder="标题（可选）"
+          placeholder="标题（留空将自动获取）"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
@@ -191,13 +204,25 @@ function BookmarkFavicon({ title, url }: { title: string; url: string }) {
 }
 
 export function BookmarkRow({
+  canMutate,
   node,
   path,
 }: {
+  canMutate: boolean
   node: BookmarkNode
   path?: Array<string>
 }) {
   const [copied, setCopied] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [editTitle, setEditTitle] = useState(node.title)
+  const [editUrl, setEditUrl] = useState(node.url ?? '')
+  const [isSaving, setIsSaving] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [editError, setEditError] = useState<string>()
+  const [deleteError, setDeleteError] = useState<string>()
+  const editTitleId = useId()
+  const editUrlId = useId()
   const url = node.url ?? '#'
 
   const copyUrl = () => {
@@ -207,38 +232,220 @@ export function BookmarkRow({
     })
   }
 
+  const openEditor = () => {
+    setEditTitle(node.title)
+    setEditUrl(url)
+    setEditError(undefined)
+    setIsEditOpen(true)
+  }
+
+  const handleEditSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!canMutate || isSaving) return
+
+    const normalizedUrl = normalizeBookmarkUrl(editUrl)
+    if (!normalizedUrl) {
+      setEditError('请输入有效的网址')
+      return
+    }
+
+    setIsSaving(true)
+    setEditError(undefined)
+    try {
+      await updateBookmark({
+        id: node.id,
+        title: editTitle.trim() || getDefaultBookmarkTitle(normalizedUrl),
+        url: normalizedUrl,
+      })
+      setIsEditOpen(false)
+    } catch {
+      setEditError('保存失败，请重试')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!canMutate || isDeleting) return
+
+    setIsDeleting(true)
+    setDeleteError(undefined)
+    try {
+      await deleteBookmark(node.id)
+      setIsDeleteOpen(false)
+    } catch {
+      setDeleteError('删除失败，请重试')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   return (
-    <div className="bookmark-row">
-      <a className="bookmark-main-link" href={url}>
-        <BookmarkFavicon title={node.title} url={url} />
-        <span className="bookmark-copy">
-          <strong>{node.title || getHostname(url)}</strong>
-          <span>{getHostname(url)}</span>
-        </span>
-        {path?.length ? (
-          <span className="bookmark-path">{path.join(' / ')}</span>
-        ) : null}
-      </a>
-      <button
-        className="bookmark-action"
-        type="button"
-        aria-label={copied ? '链接已复制' : `复制 ${node.title} 的链接`}
-        title={copied ? '已复制' : '复制链接'}
-        onClick={copyUrl}
+    <>
+      <div className="bookmark-row">
+        <a className="bookmark-main-link" href={url}>
+          <BookmarkFavicon title={node.title} url={url} />
+          <span className="bookmark-copy">
+            <strong>{node.title || getHostname(url)}</strong>
+            <span>{getHostname(url)}</span>
+          </span>
+          {path?.length ? (
+            <span className="bookmark-path">{path.join(' / ')}</span>
+          ) : null}
+        </a>
+        <button
+          className="bookmark-action bookmark-secondary-action"
+          type="button"
+          aria-label={copied ? '链接已复制' : `复制 ${node.title} 的链接`}
+          title={copied ? '已复制' : '复制链接'}
+          onClick={copyUrl}
+        >
+          {copied ? <Check /> : <Copy />}
+        </button>
+        <a
+          className="bookmark-action bookmark-secondary-action"
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`在新标签页打开 ${node.title}`}
+          title="在新标签页打开"
+        >
+          <ExternalLink />
+        </a>
+        <Menu.Root>
+          <Menu.Trigger
+            className="bookmark-action bookmark-menu-trigger"
+            type="button"
+            disabled={!canMutate}
+            aria-label={`编辑或删除 ${node.title}`}
+            title={canMutate ? '更多操作' : '加载为 Chrome 扩展后即可修改'}
+          >
+            <MoreHorizontal />
+          </Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner
+              className="bookmark-menu-positioner"
+              side="bottom"
+              align="end"
+              sideOffset={4}
+            >
+              <Menu.Popup className="bookmark-menu-popup">
+                <Menu.Item className="bookmark-menu-item" onClick={openEditor}>
+                  <Pencil />
+                  编辑
+                </Menu.Item>
+                <Menu.Item
+                  className="bookmark-menu-item is-danger"
+                  onClick={() => {
+                    setDeleteError(undefined)
+                    setIsDeleteOpen(true)
+                  }}
+                >
+                  <Trash2 />
+                  删除
+                </Menu.Item>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
+      </div>
+
+      <Dialog.Root
+        open={isEditOpen}
+        onOpenChange={(open) => {
+          if (!isSaving) setIsEditOpen(open)
+        }}
       >
-        {copied ? <Check /> : <Copy />}
-      </button>
-      <a
-        className="bookmark-action"
-        href={url}
-        target="_blank"
-        rel="noreferrer"
-        aria-label={`在新标签页打开 ${node.title}`}
-        title="在新标签页打开"
+        <Dialog.Portal>
+          <Dialog.Backdrop className="bookmark-dialog-backdrop" />
+          <Dialog.Viewport className="bookmark-dialog-viewport">
+            <Dialog.Popup className="bookmark-dialog-popup">
+              <Dialog.Title className="bookmark-dialog-title">
+                编辑书签
+              </Dialog.Title>
+              <Dialog.Description className="bookmark-dialog-description">
+                修改标题或网址，保存后会同步到 Chrome 书签。
+              </Dialog.Description>
+              <form className="bookmark-edit-form" onSubmit={handleEditSubmit}>
+                <label htmlFor={editTitleId}>标题</label>
+                <input
+                  id={editTitleId}
+                  type="text"
+                  autoFocus
+                  autoComplete="off"
+                  value={editTitle}
+                  onChange={(event) => setEditTitle(event.target.value)}
+                />
+                <label htmlFor={editUrlId}>网址</label>
+                <input
+                  id={editUrlId}
+                  type="text"
+                  inputMode="url"
+                  autoComplete="url"
+                  value={editUrl}
+                  onChange={(event) => setEditUrl(event.target.value)}
+                />
+                {editError ? (
+                  <p className="bookmark-dialog-error" role="alert">
+                    {editError}
+                  </p>
+                ) : null}
+                <div className="bookmark-dialog-actions">
+                  <Dialog.Close type="button" disabled={isSaving}>
+                    取消
+                  </Dialog.Close>
+                  <button type="submit" disabled={isSaving}>
+                    {isSaving ? <LoaderCircle className="is-spinning" /> : null}
+                    保存
+                  </button>
+                </div>
+              </form>
+            </Dialog.Popup>
+          </Dialog.Viewport>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      <AlertDialog.Root
+        open={isDeleteOpen}
+        onOpenChange={(open) => {
+          if (!isDeleting) setIsDeleteOpen(open)
+        }}
       >
-        <ExternalLink />
-      </a>
-    </div>
+        <AlertDialog.Portal>
+          <AlertDialog.Backdrop className="bookmark-dialog-backdrop" />
+          <AlertDialog.Viewport className="bookmark-dialog-viewport">
+            <AlertDialog.Popup className="bookmark-dialog-popup is-compact">
+              <AlertDialog.Title className="bookmark-dialog-title">
+                删除书签？
+              </AlertDialog.Title>
+              <AlertDialog.Description className="bookmark-dialog-description">
+                “{node.title || getHostname(url)}”将从 Chrome
+                书签中删除，此操作无法撤销。
+              </AlertDialog.Description>
+              {deleteError ? (
+                <p className="bookmark-dialog-error" role="alert">
+                  {deleteError}
+                </p>
+              ) : null}
+              <div className="bookmark-dialog-actions">
+                <AlertDialog.Close type="button" disabled={isDeleting}>
+                  取消
+                </AlertDialog.Close>
+                <button
+                  className="is-danger"
+                  type="button"
+                  disabled={isDeleting}
+                  onClick={() => void handleDelete()}
+                >
+                  {isDeleting ? <LoaderCircle className="is-spinning" /> : null}
+                  删除
+                </button>
+              </div>
+            </AlertDialog.Popup>
+          </AlertDialog.Viewport>
+        </AlertDialog.Portal>
+      </AlertDialog.Root>
+    </>
   )
 }
 
@@ -253,13 +460,10 @@ function FolderSection({
 }) {
   const directBookmarks = getDirectBookmarks(folder)
   const childFolders = getChildFolders(folder)
-  const hasDirectBookmarks = directBookmarks.length > 0
-  const [areBookmarksExpanded, setAreBookmarksExpanded] = useState(true)
-  const bookmarkContentId = useId()
+  const [isExpanded, setIsExpanded] = useState(true)
+  const folderContentId = useId()
   const folderTitle = folder.title || '未命名文件夹'
-  const toggleLabel = areBookmarksExpanded
-    ? `收起${folderTitle}的直属书签`
-    : `展开${folderTitle}的直属书签`
+  const toggleLabel = isExpanded ? `收起${folderTitle}` : `展开${folderTitle}`
 
   return (
     <section
@@ -268,35 +472,38 @@ function FolderSection({
     >
       <header className="bookmark-group-header">
         <div className="group-title-row">
-          {hasDirectBookmarks ? (
-            <button
-              className="bookmark-group-toggle"
-              type="button"
-              aria-label={toggleLabel}
-              aria-expanded={areBookmarksExpanded}
-              aria-controls={bookmarkContentId}
-              title={toggleLabel}
-              onClick={() => setAreBookmarksExpanded((current) => !current)}
-            >
-              <ChevronRight
-                className={areBookmarksExpanded ? 'is-expanded' : ''}
-              />
-            </button>
-          ) : (
-            <span className="bookmark-group-toggle-spacer" />
-          )}
+          <button
+            className="bookmark-group-toggle"
+            type="button"
+            aria-label={toggleLabel}
+            aria-expanded={isExpanded}
+            aria-controls={folderContentId}
+            title={toggleLabel}
+            onClick={() => setIsExpanded((current) => !current)}
+          >
+            <ChevronRight className={isExpanded ? 'is-expanded' : ''} />
+          </button>
           <FolderOpen />
           <h2>{folderTitle}</h2>
           <span>{countBookmarks(folder)} 个书签</span>
         </div>
       </header>
-      <div
-        id={bookmarkContentId}
-        hidden={hasDirectBookmarks && !areBookmarksExpanded}
-      >
+      <div id={folderContentId} hidden={!isExpanded}>
+        {childFolders.map((child) => (
+          <FolderSection
+            key={child.id}
+            folder={child}
+            level={level + 1}
+            canCreate={canCreate}
+          />
+        ))}
         <div className="bookmark-list">
           {directBookmarks.map((bookmark) => (
-            <BookmarkRow key={bookmark.id} node={bookmark} />
+            <BookmarkRow
+              key={bookmark.id}
+              node={bookmark}
+              canMutate={canCreate}
+            />
           ))}
           <QuickAddBookmarkRow
             folderId={folder.id}
@@ -305,14 +512,6 @@ function FolderSection({
           />
         </div>
       </div>
-      {childFolders.map((child) => (
-        <FolderSection
-          key={child.id}
-          folder={child}
-          level={level + 1}
-          canCreate={canCreate}
-        />
-      ))}
     </section>
   )
 }
@@ -330,10 +529,17 @@ export function FolderContents({
 
   return (
     <div className="bookmark-sections">
+      {childFolders.map((child) => (
+        <FolderSection key={child.id} folder={child} canCreate={canCreate} />
+      ))}
       <section className="bookmark-group root-bookmarks">
         <div className="bookmark-list">
           {directBookmarks.map((bookmark) => (
-            <BookmarkRow key={bookmark.id} node={bookmark} />
+            <BookmarkRow
+              key={bookmark.id}
+              node={bookmark}
+              canMutate={canCreate}
+            />
           ))}
           <QuickAddBookmarkRow
             folderId={folder.id}
@@ -342,9 +548,6 @@ export function FolderContents({
           />
         </div>
       </section>
-      {childFolders.map((child) => (
-        <FolderSection key={child.id} folder={child} canCreate={canCreate} />
-      ))}
     </div>
   )
 }
@@ -365,7 +568,13 @@ export function AllBookmarkContents({
   )
 }
 
-export function MatchList({ matches }: { matches: Array<BookmarkMatch> }) {
+export function MatchList({
+  canMutate,
+  matches,
+}: {
+  canMutate: boolean
+  matches: Array<BookmarkMatch>
+}) {
   if (!matches.length) {
     return (
       <EmptyState
@@ -378,7 +587,12 @@ export function MatchList({ matches }: { matches: Array<BookmarkMatch> }) {
   return (
     <div className="bookmark-list search-results">
       {matches.map((match) => (
-        <BookmarkRow key={match.node.id} node={match.node} path={match.path} />
+        <BookmarkRow
+          key={match.node.id}
+          node={match.node}
+          path={match.path}
+          canMutate={canMutate}
+        />
       ))}
     </div>
   )

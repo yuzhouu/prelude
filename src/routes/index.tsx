@@ -8,7 +8,7 @@ import {
   MatchList,
 } from '../features/bookmarks/bookmark-content'
 import {
-  hasDefaultBookmarkContainer,
+  findDefaultBookmarkContainer,
   openBookmarkManager,
   useBookmarkTree,
 } from '../features/bookmarks/chrome-bookmarks'
@@ -67,12 +67,12 @@ function Home() {
     [bookmarks],
   )
   const totalCount = useMemo(() => countTreeBookmarks(roots), [roots])
-  const hasDefaultFolders = useMemo(
-    () => hasDefaultBookmarkContainer(roots),
+  const defaultBookmarkContainer = useMemo(
+    () => findDefaultBookmarkContainer(roots),
     [roots],
   )
 
-  const [selectedId, setSelectedId] = useState('tabs')
+  const [selectedId, setSelectedId] = useState('quick-folders')
   const [expandedIds, setExpandedIds] = useState(
     () => new Set<string>(['1', 'work']),
   )
@@ -181,7 +181,9 @@ function Home() {
       : selectedId === 'recent'
         ? recentBookmarks.length
         : isQuickFoldersView
-          ? undefined
+          ? defaultBookmarkContainer
+            ? countBookmarks(defaultBookmarkContainer)
+            : undefined
           : isTabView
             ? openTabCount
             : selectedNode
@@ -264,7 +266,7 @@ function Home() {
                   onActivate={activateTab}
                 />
               ) : (
-                <MatchList matches={searchMatches} />
+                <MatchList matches={searchMatches} canMutate={isChromeSource} />
               )
             ) : isTabView ? (
               <OpenTabsContents
@@ -272,14 +274,18 @@ function Home() {
                 onActivate={activateTab}
               />
             ) : isQuickFoldersView ? (
-              <DefaultFoldersSetup
-                isChromeSource={isChromeSource}
-                hasDefaultFolders={hasDefaultFolders}
-              />
+              defaultBookmarkContainer ? (
+                <FolderContents
+                  folder={defaultBookmarkContainer}
+                  canCreate={isChromeSource}
+                />
+              ) : (
+                <DefaultFoldersSetup isChromeSource={isChromeSource} />
+              )
             ) : selectedId === 'all' ? (
               <AllBookmarkContents roots={roots} canCreate={isChromeSource} />
             ) : selectedId === 'recent' ? (
-              <MatchList matches={recentBookmarks} />
+              <MatchList matches={recentBookmarks} canMutate={isChromeSource} />
             ) : selectedNode ? (
               <FolderContents
                 folder={selectedNode}

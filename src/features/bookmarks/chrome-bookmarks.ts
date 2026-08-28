@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
 
+import {
+  getAutoTitleStorageKey,
+  getOpenTabAutoTitle,
+  normalizeAutoTitleUrl,
+} from './auto-title'
 import { demoBookmarkTree } from './demo-data'
 import type { BookmarkNode } from './model'
 
@@ -16,6 +21,11 @@ interface ChromeApi {
       url?: string
     }) => Promise<BookmarkNode>
     getTree: () => Promise<Array<BookmarkNode>>
+    remove: (id: string) => Promise<void>
+    update: (
+      id: string,
+      changes: { title?: string; url?: string },
+    ) => Promise<BookmarkNode>
     onChanged: ChromeEvent
     onChildrenReordered: ChromeEvent
     onCreated: ChromeEvent
@@ -26,8 +36,22 @@ interface ChromeApi {
     id?: string
     getURL: (path: string) => string
   }
+  storage?: {
+    local: {
+      remove: (keys: string | Array<string>) => Promise<void>
+      set: (items: Record<string, unknown>) => Promise<void>
+    }
+  }
   tabs?: {
     create: (properties: { url: string }) => Promise<unknown>
+    query: (queryInfo: Record<string, never>) => Promise<
+      Array<{
+        active?: boolean
+        lastAccessed?: number
+        title?: string
+        url?: string
+      }>
+    >
   }
 }
 
@@ -57,8 +81,8 @@ function findFolderByTitle(
   return undefined
 }
 
-export function hasDefaultBookmarkContainer(nodes: Array<BookmarkNode>) {
-  return Boolean(findFolderByTitle(nodes, DEFAULT_BOOKMARK_CONTAINER_TITLE))
+export function findDefaultBookmarkContainer(nodes: Array<BookmarkNode>) {
+  return findFolderByTitle(nodes, DEFAULT_BOOKMARK_CONTAINER_TITLE)
 }
 
 async function createFolders() {
@@ -66,7 +90,7 @@ async function createFolders() {
   if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
 
   const tree = await bookmarksApi.getTree()
-  const existing = findFolderByTitle(tree, DEFAULT_BOOKMARK_CONTAINER_TITLE)
+  const existing = findDefaultBookmarkContainer(tree)
   if (existing) return existing
 
   const container = await bookmarksApi.create({
@@ -99,18 +123,85 @@ export async function createDefaultBookmarkFolders() {
 }
 
 export async function createBookmark({
+  autoTitle,
   parentId,
   title,
   url,
 }: {
+  autoTitle: boolean
   parentId: string
   title: string
   url: string
 }) {
-  const bookmarksApi = getChromeApi()?.bookmarks
+  const chromeApi = getChromeApi()
+  const bookmarksApi = chromeApi?.bookmarks
   if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
 
-  return bookmarksApi.create({ parentId, title, url })
+  let resolvedAutoTitle: string | undefined
+  if (autoTitle && chromeApi.tabs) {
+    resolvedAutoTitle = await chromeApi.tabs
+      .query({})
+      .then((tabs) =>
+        getOpenTabAutoTitle({ fallbackTitle: title, pageUrl: url, tabs }),
+      )
+      .catch(() => undefined)
+  }
+
+  const bookmark = await bookmarksApi.create({
+    parentId,
+    title: resolvedAutoTitle ?? title,
+    url,
+  })
+
+  if (autoTitle && !resolvedAutoTitle) {
+    const normalizedUrl = normalizeAutoTitleUrl(url)
+    const storageApi = chromeApi.storage
+
+    if (normalizedUrl && storageApi) {
+      await storageApi.local
+        .set({
+          [getAutoTitleStorageKey(bookmark.id)]: {
+            bookmarkId: bookmark.id,
+            fallbackTitle: title,
+            url: normalizedUrl,
+          },
+        })
+        .catch(() => undefined)
+    }
+  }
+
+  return bookmark
+}
+
+export async function updateBookmark({
+  id,
+  title,
+  url,
+}: {
+  id: string
+  title: string
+  url: string
+}) {
+  const chromeApi = getChromeApi()
+  const bookmarksApi = chromeApi?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  const bookmark = await bookmarksApi.update(id, { title, url })
+  await chromeApi.storage?.local
+    .remove(getAutoTitleStorageKey(id))
+    .catch(() => undefined)
+  return bookmark
+}
+
+export async function deleteBookmark(id: string) {
+  const chromeApi = getChromeApi()
+  const bookmarksApi = chromeApi?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  await bookmarksApi.remove(id)
+  await chromeApi.storage?.local
+    .remove(getAutoTitleStorageKey(id))
+    .catch(() => undefined)
 }
 
 export function useBookmarkTree() {

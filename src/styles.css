@@ -582,11 +582,6 @@ input:focus-visible {
   transform: rotate(90deg);
 }
 
-.bookmark-group-toggle-spacer {
-  width: 18px;
-  flex: 0 0 auto;
-}
-
 .group-title-row > svg {
   width: 16px;
   height: 16px;
@@ -855,6 +850,202 @@ input:focus-visible {
   width: 15px;
   height: 15px;
   stroke-width: 1.7;
+}
+
+.bookmark-menu-trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.bookmark-menu-positioner {
+  z-index: 70;
+  outline: 0;
+}
+
+.bookmark-menu-popup {
+  display: grid;
+  width: 132px;
+  gap: 2px;
+  border: 1px solid #dedbd8;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 4px;
+  box-shadow: 0 8px 24px rgb(31 29 28 / 14%);
+  outline: 0;
+}
+
+.bookmark-menu-item {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 9px;
+  border-radius: 5px;
+  padding: 0 9px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 13px;
+  outline: 0;
+  user-select: none;
+}
+
+.bookmark-menu-item:hover,
+.bookmark-menu-item[data-highlighted] {
+  background: var(--hover);
+}
+
+.bookmark-menu-item.is-danger {
+  color: var(--accent-strong);
+}
+
+.bookmark-menu-item svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.8;
+}
+
+.bookmark-dialog-backdrop {
+  position: fixed;
+  z-index: 80;
+  inset: 0;
+  background: rgb(32 32 32 / 28%);
+}
+
+.bookmark-dialog-viewport {
+  position: fixed;
+  z-index: 81;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.bookmark-dialog-popup {
+  width: min(440px, 100%);
+  border: 1px solid #dedbd8;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 22px;
+  box-shadow: 0 18px 60px rgb(31 29 28 / 22%);
+  outline: 0;
+}
+
+.bookmark-dialog-popup.is-compact {
+  width: min(390px, 100%);
+}
+
+.bookmark-dialog-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.bookmark-dialog-description {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.bookmark-edit-form {
+  display: grid;
+  gap: 7px;
+  margin-top: 18px;
+}
+
+.bookmark-edit-form label {
+  color: #4d4b49;
+  font-size: 12px;
+  font-weight: 590;
+}
+
+.bookmark-edit-form label:not(:first-child) {
+  margin-top: 5px;
+}
+
+.bookmark-edit-form input {
+  width: 100%;
+  height: 38px;
+  border: 1px solid #d7d3d0;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 0 10px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.bookmark-dialog-error {
+  margin: 12px 0 0;
+  color: var(--accent-strong);
+  font-size: 12px;
+}
+
+.bookmark-edit-form .bookmark-dialog-error {
+  margin-top: 2px;
+}
+
+.bookmark-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.bookmark-edit-form .bookmark-dialog-actions {
+  margin-top: 10px;
+}
+
+.bookmark-dialog-actions button {
+  display: inline-flex;
+  min-width: 70px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid #d7d3d0;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 0 13px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 590;
+}
+
+.bookmark-dialog-actions button[type='submit'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.bookmark-dialog-actions button.is-danger {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.bookmark-dialog-actions button:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.bookmark-dialog-actions button[type='submit']:hover:not(:disabled),
+.bookmark-dialog-actions button.is-danger:hover:not(:disabled) {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+}
+
+.bookmark-dialog-actions button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.bookmark-dialog-actions svg {
+  width: 14px;
+  height: 14px;
+}
+
+.bookmark-dialog-actions svg.is-spinning {
+  animation: default-folders-spin 800ms linear infinite;
 }
 
 .search-results {
@@ -1354,8 +1545,13 @@ input:focus-visible {
   }
 
   .bookmark-path,
-  .bookmark-action {
+  .bookmark-secondary-action {
     display: none;
+  }
+
+  .bookmark-menu-trigger {
+    display: grid;
+    opacity: 1;
   }
 
   .bookmark-group {

@@ -175,6 +175,14 @@ export function Sidebar({
 
         <nav className="sidebar-nav" aria-label="书签导航">
           <button
+            className={`utility-row${selectedId === 'quick-folders' ? ' is-selected' : ''}`}
+            type="button"
+            onClick={() => onSelect('quick-folders')}
+          >
+            <FolderPlus />
+            <span>快捷文件夹</span>
+          </button>
+          <button
             className={`utility-row${selectedId === 'tabs' ? ' is-selected' : ''}`}
             type="button"
             onClick={() => onSelect('tabs')}
@@ -200,14 +208,6 @@ export function Sidebar({
             <Bookmark />
             <span>全部书签</span>
             <span className="utility-count">{totalCount}</span>
-          </button>
-          <button
-            className={`utility-row${selectedId === 'quick-folders' ? ' is-selected' : ''}`}
-            type="button"
-            onClick={() => onSelect('quick-folders')}
-          >
-            <FolderPlus />
-            <span>快捷文件夹</span>
           </button>
         </nav>
 
