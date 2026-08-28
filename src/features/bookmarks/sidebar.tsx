@@ -3,10 +3,10 @@ import {
   Bookmark,
   ChevronRight,
   Clock3,
+  ExternalLink,
   Folder,
   FolderPlus,
   PanelsTopLeft,
-  Settings2,
   X,
 } from 'lucide-react'
 
@@ -242,15 +242,6 @@ export function Sidebar({
 
         <div className="folder-tree-header">
           <span>文件夹</span>
-          <button
-            className="folder-settings-button"
-            type="button"
-            aria-label="管理书签"
-            title="管理书签"
-            onClick={openBookmarkManager}
-          >
-            <Settings2 />
-          </button>
         </div>
         <ul className="folder-tree">
           {roots.filter(isFolder).map((root) => (
@@ -265,6 +256,16 @@ export function Sidebar({
             />
           ))}
         </ul>
+        <div className="sidebar-footer">
+          <button
+            className="bookmark-manager-button"
+            type="button"
+            onClick={openBookmarkManager}
+          >
+            <ExternalLink />
+            <span>Chrome 书签管理器</span>
+          </button>
+        </div>
       </aside>
     </>
   )

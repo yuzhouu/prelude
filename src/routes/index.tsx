@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { Menu, MoreHorizontal } from 'lucide-react'
+import { Menu } from 'lucide-react'
 
 import {
   AllBookmarkContents,
@@ -10,7 +10,6 @@ import {
 } from '../features/bookmarks/bookmark-content'
 import {
   findDefaultBookmarkContainer,
-  openBookmarkManager,
   useBookmarkTree,
 } from '../features/bookmarks/chrome-bookmarks'
 import { DefaultFoldersSetup } from '../features/bookmarks/default-folders-setup'
@@ -190,17 +189,6 @@ function Home() {
                 canDelete={canDeleteSelectedFolder}
                 onDeleted={handleSelectedFolderDeleted}
               />
-            ) : null}
-            {!isTabView && !isQuickFoldersView ? (
-              <button
-                className="view-menu-button"
-                type="button"
-                aria-label="管理书签"
-                title="管理书签"
-                onClick={openBookmarkManager}
-              >
-                <MoreHorizontal />
-              </button>
             ) : null}
           </div>
         </nav>

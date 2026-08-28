@@ -302,30 +302,6 @@ input:focus-visible {
   font-weight: 550;
 }
 
-.folder-settings-button {
-  display: grid;
-  width: 28px;
-  height: 28px;
-  place-items: center;
-  border: 0;
-  border-radius: 5px;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  color: var(--subtle);
-}
-
-.folder-settings-button:hover {
-  background: var(--hover);
-  color: var(--text);
-}
-
-.folder-settings-button svg {
-  width: 15px;
-  height: 15px;
-  stroke-width: 1.7;
-}
-
 .folder-tree,
 .folder-tree-children {
   margin: 0;
@@ -336,9 +312,46 @@ input:focus-visible {
 .folder-tree {
   flex: 1;
   overflow: auto;
-  padding: 1px 8px 24px;
+  padding: 1px 8px 12px;
   scrollbar-width: thin;
   scrollbar-color: #d6d2ce transparent;
+}
+
+.sidebar-footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--line);
+  padding: 8px;
+}
+
+.bookmark-manager-button {
+  display: grid;
+  width: 100%;
+  min-height: 36px;
+  grid-template-columns: 19px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  padding: 0 9px;
+  cursor: pointer;
+  color: var(--sidebar-muted);
+  text-align: left;
+  font-size: 12.5px;
+  font-weight: 430;
+}
+
+.bookmark-manager-button:hover,
+.bookmark-manager-button:focus-visible {
+  background: var(--hover);
+  color: var(--sidebar-text);
+}
+
+.bookmark-manager-button svg {
+  width: 16px;
+  height: 16px;
+  color: var(--sidebar-subtle);
+  stroke-width: 1.7;
 }
 
 .folder-tree-row {
@@ -427,8 +440,7 @@ input:focus-visible {
 
 .icon-button,
 .mobile-close-button,
-.mobile-menu-button,
-.view-menu-button {
+.mobile-menu-button {
   display: grid;
   place-items: center;
   border: 0;
@@ -439,8 +451,7 @@ input:focus-visible {
 }
 
 .icon-button,
-.mobile-close-button,
-.view-menu-button {
+.mobile-close-button {
   width: 32px;
   height: 32px;
   color: var(--muted);
@@ -448,16 +459,14 @@ input:focus-visible {
 
 .icon-button:hover,
 .mobile-menu-button:hover,
-.mobile-close-button:hover,
-.view-menu-button:hover {
+.mobile-close-button:hover {
   background: var(--hover);
   color: var(--text);
 }
 
 .icon-button svg,
 .mobile-close-button svg,
-.mobile-menu-button svg,
-.view-menu-button svg {
+.mobile-menu-button svg {
   width: 18px;
   height: 18px;
   stroke-width: 1.75;
@@ -1690,8 +1699,7 @@ input:focus-visible {
   margin-top: 22px;
 }
 
-.default-folders-confirm-button,
-.default-folders-secondary-button {
+.default-folders-confirm-button {
   display: inline-flex;
   min-height: 36px;
   align-items: center;
@@ -1718,16 +1726,6 @@ input:focus-visible {
 .default-folders-confirm-button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
-}
-
-.default-folders-secondary-button {
-  border: 1px solid #dedbd8;
-  background: #ffffff;
-  color: var(--text);
-}
-
-.default-folders-secondary-button:hover {
-  background: var(--hover);
 }
 
 .default-folders-confirm-button svg {

@@ -15,7 +15,6 @@ import {
   DEFAULT_FAVORITES_FOLDER_TITLE,
   DEFAULT_PINNED_FOLDER_TITLE,
   DEFAULT_READ_LATER_FOLDER_TITLE,
-  openBookmarkManager,
 } from './chrome-bookmarks'
 
 type CreationStatus = 'idle' | 'creating' | 'created' | 'error'
@@ -91,13 +90,9 @@ export function DefaultFoldersSetup({
 
         <div className="default-folders-actions" aria-live="polite">
           {isCreated ? (
-            <button
-              className="default-folders-secondary-button"
-              type="button"
-              onClick={openBookmarkManager}
-            >
-              管理这些文件夹
-            </button>
+            <p className="default-folders-note">
+              已创建，可直接在左侧文件夹中使用和管理。
+            </p>
           ) : (
             <button
               className="default-folders-confirm-button"
