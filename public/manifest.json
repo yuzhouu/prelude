@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "今巡",
+  "name": "开篇 · Prelude",
   "version": "1.0.0",
-  "description": "每日想看的，都在这里",
+  "description": "一页初开，万事徐来。",
   "permissions": [
     "bookmarks",
     "favicon",

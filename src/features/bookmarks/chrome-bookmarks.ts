@@ -60,12 +60,15 @@ interface ChromeApi {
   }
 }
 
-export const DEFAULT_BOOKMARK_CONTAINER_TITLE = '今巡'
+export const DEFAULT_BOOKMARK_CONTAINER_TITLE = '开篇'
 export const DEFAULT_PINNED_FOLDER_TITLE = '置顶'
 export const DEFAULT_READ_LATER_FOLDER_TITLE = '待读'
 export const DEFAULT_FAVORITES_FOLDER_TITLE = '收藏'
 
-const LEGACY_DEFAULT_BOOKMARK_CONTAINER_TITLE = '书签 · 新标签页'
+const LEGACY_DEFAULT_BOOKMARK_CONTAINER_TITLES = [
+  '今巡',
+  '书签 · 新标签页',
+] as const
 
 let defaultFolderCreationPromise: Promise<BookmarkNode> | undefined
 
@@ -99,10 +102,9 @@ async function migrateDefaultBookmarkContainerTitle(
 ) {
   if (findDefaultBookmarkContainer(nodes)) return nodes
 
-  const legacyContainer = findFolderByTitle(
-    nodes,
-    LEGACY_DEFAULT_BOOKMARK_CONTAINER_TITLE,
-  )
+  const legacyContainer = LEGACY_DEFAULT_BOOKMARK_CONTAINER_TITLES.map(
+    (title) => findFolderByTitle(nodes, title),
+  ).find((container) => container !== undefined)
   if (!legacyContainer) return nodes
 
   await bookmarksApi.update(legacyContainer.id, {

@@ -28,7 +28,7 @@ import { countOpenTabs } from '../features/tabs/model'
 
 export const Route = createFileRoute('/')({ component: Home })
 
-const SIDEBAR_EXPANDED_STORAGE_KEY = 'supposed:sidebar-expanded:v1'
+const SIDEBAR_EXPANDED_STORAGE_KEY = 'prelude:sidebar-expanded:v1'
 
 function getInitialSidebarExpanded() {
   try {
