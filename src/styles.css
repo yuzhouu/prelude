@@ -19,6 +19,9 @@
   --hover: #f3f1ef;
   --row-hover: #f8f7f6;
   --focus: #dd695f;
+  --sidebar-text: #4f4b47;
+  --sidebar-muted: #5f5b57;
+  --sidebar-subtle: #6f6b67;
   --sidebar-width: 280px;
 }
 
@@ -147,10 +150,10 @@ input:focus-visible {
 .app-name {
   overflow: hidden;
   min-width: 0;
-  color: var(--text);
+  color: var(--sidebar-text);
   text-overflow: ellipsis;
-  font-size: 14px;
-  font-weight: 610;
+  font-size: 13px;
+  font-weight: 560;
   line-height: 1.25;
   white-space: nowrap;
 }
@@ -159,9 +162,9 @@ input:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: var(--muted);
+  color: var(--sidebar-subtle);
   font-size: 11px;
-  font-weight: 470;
+  font-weight: 420;
   line-height: 1.2;
   white-space: nowrap;
 }
@@ -200,10 +203,10 @@ input:focus-visible {
   background: transparent;
   padding: 0 9px;
   cursor: pointer;
-  color: var(--text);
+  color: var(--sidebar-muted);
   text-align: left;
-  font-size: 13.5px;
-  font-weight: 480;
+  font-size: 13px;
+  font-weight: 460;
   transition: background 100ms ease;
 }
 
@@ -219,11 +222,16 @@ input:focus-visible {
   stroke-width: 1.75;
 }
 
+.search-trigger:hover svg,
+.search-trigger:focus-visible svg {
+  color: var(--accent-strong);
+}
+
 .search-trigger kbd {
   border: 0;
   background: transparent;
   padding: 0;
-  color: var(--subtle);
+  color: var(--sidebar-subtle);
   font-family: inherit;
   font-size: 10.5px;
   font-weight: 520;
@@ -247,9 +255,10 @@ input:focus-visible {
   background: transparent;
   padding: 0 9px;
   cursor: pointer;
+  color: var(--sidebar-muted);
   text-align: left;
-  font-size: 13.5px;
-  font-weight: 440;
+  font-size: 13px;
+  font-weight: 430;
 }
 
 .utility-row:hover {
@@ -259,7 +268,7 @@ input:focus-visible {
 .utility-row.is-selected {
   background: var(--accent-soft);
   color: var(--accent-strong);
-  font-weight: 520;
+  font-weight: 510;
 }
 
 .utility-row svg {
@@ -270,7 +279,7 @@ input:focus-visible {
 
 .utility-count,
 .folder-tree-count {
-  color: var(--subtle);
+  color: var(--sidebar-subtle);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
@@ -288,9 +297,9 @@ input:focus-visible {
   border-top: 1px solid var(--line);
   margin: 0 12px;
   padding: 8px 5px 4px;
-  color: var(--muted);
+  color: var(--sidebar-subtle);
   font-size: 12px;
-  font-weight: 590;
+  font-weight: 550;
 }
 
 .folder-settings-button {
@@ -388,16 +397,22 @@ input:focus-visible {
   background: transparent;
   padding: 0 8px 0 0;
   cursor: pointer;
+  color: var(--sidebar-muted);
   text-align: left;
-  font-size: 13.5px;
-  font-weight: 420;
+  font-size: 13px;
+  font-weight: 430;
 }
 
 .folder-tree-select svg {
   width: 16px;
   height: 16px;
-  color: #767676;
+  color: var(--sidebar-muted);
   stroke-width: 1.6;
+}
+
+.folder-tree-row.is-selected .folder-tree-select {
+  color: var(--accent-strong);
+  font-weight: 510;
 }
 
 .folder-tree-row.is-selected .folder-tree-select svg {
