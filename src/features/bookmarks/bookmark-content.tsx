@@ -16,6 +16,7 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import {
   createBookmark,
@@ -78,10 +79,11 @@ function QuickAddFolderRow({
   parentId: string
   parentTitle: string
 }) {
+  const { t } = useTranslation()
   const [isEditing, setIsEditing] = useState(false)
   const [title, setTitle] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string>()
+  const [error, setError] = useState<'nameRequired' | 'addFailed'>()
   const titleInputId = useId()
 
   const closeEditor = () => {
@@ -96,7 +98,7 @@ function QuickAddFolderRow({
 
     const nextTitle = title.trim()
     if (!nextTitle) {
-      setError('请输入分类名称')
+      setError('nameRequired')
       return
     }
 
@@ -106,7 +108,7 @@ function QuickAddFolderRow({
       await createBookmarkFolder({ parentId, title: nextTitle })
       closeEditor()
     } catch {
-      setError('添加失败，请重试')
+      setError('addFailed')
     } finally {
       setIsSubmitting(false)
     }
@@ -117,12 +119,12 @@ function QuickAddFolderRow({
       <button
         className="folder-quick-add-trigger"
         type="button"
-        aria-label={`在${parentTitle}中添加分类`}
+        aria-label={t('bookmarks.addFolder.actionIn', { parent: parentTitle })}
         onClick={() => setIsEditing(true)}
       >
         <span className="folder-quick-add-line" aria-hidden="true" />
         <Plus />
-        <span>添加分类</span>
+        <span>{t('bookmarks.addFolder.action')}</span>
         <span className="folder-quick-add-line" aria-hidden="true" />
       </button>
     )
@@ -141,27 +143,37 @@ function QuickAddFolderRow({
       }}
     >
       <label className="sr-only" htmlFor={titleInputId}>
-        分类名称
+        {t('bookmarks.addFolder.name')}
       </label>
       <input
         id={titleInputId}
         type="text"
         autoFocus
         autoComplete="off"
-        placeholder="分类名称"
+        placeholder={t('bookmarks.addFolder.name')}
         value={title}
         onChange={(event) => setTitle(event.target.value)}
       />
       <div className="folder-quick-add-actions">
         <button type="submit" disabled={!canCreate || isSubmitting}>
           {isSubmitting ? <LoaderCircle className="is-spinning" /> : null}
-          添加分类
+          {t('bookmarks.addFolder.action')}
         </button>
         <button type="button" disabled={isSubmitting} onClick={closeEditor}>
-          取消
+          {t('common.cancel')}
         </button>
-        {!canCreate ? <span>加载为 Chrome 扩展后即可添加</span> : null}
-        {error ? <span className="is-error">{error}</span> : null}
+        {!canCreate ? (
+          <span>{t('bookmarks.addFolder.extensionRequired')}</span>
+        ) : null}
+        {error ? (
+          <span className="is-error">
+            {t(
+              error === 'nameRequired'
+                ? 'bookmarks.errors.folderNameRequired'
+                : 'bookmarks.errors.addFailed',
+            )}
+          </span>
+        ) : null}
       </div>
     </form>
   )
@@ -176,11 +188,12 @@ function QuickAddBookmarkRow({
   folderTitle: string
   canCreate: boolean
 }) {
+  const { t } = useTranslation()
   const [isEditing, setIsEditing] = useState(false)
   const [url, setUrl] = useState('')
   const [title, setTitle] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string>()
+  const [error, setError] = useState<'invalidUrl' | 'addFailed'>()
   const urlInputId = useId()
   const titleInputId = useId()
 
@@ -197,7 +210,7 @@ function QuickAddBookmarkRow({
 
     const normalizedUrl = normalizeBookmarkUrl(url)
     if (!normalizedUrl) {
-      setError('请输入有效的网址')
+      setError('invalidUrl')
       return
     }
 
@@ -214,7 +227,7 @@ function QuickAddBookmarkRow({
       })
       closeEditor()
     } catch {
-      setError('添加失败，请重试')
+      setError('addFailed')
     } finally {
       setIsSubmitting(false)
     }
@@ -225,11 +238,13 @@ function QuickAddBookmarkRow({
       <button
         className="bookmark-quick-add-trigger"
         type="button"
-        aria-label={`在${folderTitle}中添加书签`}
+        aria-label={t('bookmarks.addBookmark.actionIn', {
+          folder: folderTitle,
+        })}
         onClick={() => setIsEditing(true)}
       >
         <Plus />
-        <span>添加书签</span>
+        <span>{t('bookmarks.addBookmark.action')}</span>
       </button>
     )
   }
@@ -244,7 +259,7 @@ function QuickAddBookmarkRow({
     >
       <div className="bookmark-quick-add-fields">
         <label className="sr-only" htmlFor={urlInputId}>
-          书签网址
+          {t('bookmarks.addBookmark.url')}
         </label>
         <input
           id={urlInputId}
@@ -252,18 +267,18 @@ function QuickAddBookmarkRow({
           inputMode="url"
           autoFocus
           autoComplete="url"
-          placeholder="粘贴网址"
+          placeholder={t('bookmarks.addBookmark.urlPlaceholder')}
           value={url}
           onChange={(event) => setUrl(event.target.value)}
         />
         <label className="sr-only" htmlFor={titleInputId}>
-          书签标题
+          {t('bookmarks.addBookmark.title')}
         </label>
         <input
           id={titleInputId}
           type="text"
           autoComplete="off"
-          placeholder="标题（留空将自动获取）"
+          placeholder={t('bookmarks.addBookmark.titlePlaceholder')}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
@@ -271,13 +286,23 @@ function QuickAddBookmarkRow({
       <div className="bookmark-quick-add-actions">
         <button type="submit" disabled={!canCreate || isSubmitting}>
           {isSubmitting ? <LoaderCircle className="is-spinning" /> : null}
-          添加
+          {t('bookmarks.addBookmark.shortAction')}
         </button>
         <button type="button" disabled={isSubmitting} onClick={closeEditor}>
-          取消
+          {t('common.cancel')}
         </button>
-        {!canCreate ? <span>加载为 Chrome 扩展后即可添加</span> : null}
-        {error ? <span className="is-error">{error}</span> : null}
+        {!canCreate ? (
+          <span>{t('bookmarks.addBookmark.extensionRequired')}</span>
+        ) : null}
+        {error ? (
+          <span className="is-error">
+            {t(
+              error === 'invalidUrl'
+                ? 'bookmarks.errors.invalidUrl'
+                : 'bookmarks.errors.addFailed',
+            )}
+          </span>
+        ) : null}
       </div>
     </form>
   )
@@ -298,6 +323,7 @@ export function BookmarkRow({
   path?: Array<string>
   sortableProps?: SortableElementProps
 }) {
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
@@ -305,8 +331,8 @@ export function BookmarkRow({
   const [editUrl, setEditUrl] = useState(node.url ?? '')
   const [isSaving, setIsSaving] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [editError, setEditError] = useState<string>()
-  const [deleteError, setDeleteError] = useState<string>()
+  const [editError, setEditError] = useState<'invalidUrl' | 'saveFailed'>()
+  const [deleteError, setDeleteError] = useState(false)
   const editTitleId = useId()
   const editUrlId = useId()
   const url = node.url ?? '#'
@@ -331,7 +357,7 @@ export function BookmarkRow({
 
     const normalizedUrl = normalizeBookmarkUrl(editUrl)
     if (!normalizedUrl) {
-      setEditError('请输入有效的网址')
+      setEditError('invalidUrl')
       return
     }
 
@@ -345,7 +371,7 @@ export function BookmarkRow({
       })
       setIsEditOpen(false)
     } catch {
-      setEditError('保存失败，请重试')
+      setEditError('saveFailed')
     } finally {
       setIsSaving(false)
     }
@@ -355,12 +381,12 @@ export function BookmarkRow({
     if (!canMutate || isDeleting) return
 
     setIsDeleting(true)
-    setDeleteError(undefined)
+    setDeleteError(false)
     try {
       await deleteBookmark(node.id)
       setIsDeleteOpen(false)
     } catch {
-      setDeleteError('删除失败，请重试')
+      setDeleteError(true)
     } finally {
       setIsDeleting(false)
     }
@@ -387,8 +413,16 @@ export function BookmarkRow({
         <button
           className="bookmark-action bookmark-secondary-action"
           type="button"
-          aria-label={copied ? '链接已复制' : `复制 ${node.title} 的链接`}
-          title={copied ? '已复制' : '复制链接'}
+          aria-label={
+            copied
+              ? t('bookmarks.actions.copied')
+              : t('bookmarks.actions.copy', { title: node.title })
+          }
+          title={
+            copied
+              ? t('bookmarks.actions.copiedShort')
+              : t('bookmarks.actions.copyShort')
+          }
           onClick={copyUrl}
         >
           {copied ? <Check /> : <Copy />}
@@ -398,8 +432,8 @@ export function BookmarkRow({
           href={url}
           target="_blank"
           rel="noreferrer"
-          aria-label={`在新标签页打开 ${node.title}`}
-          title="在新标签页打开"
+          aria-label={t('bookmarks.actions.openNewTab', { title: node.title })}
+          title={t('bookmarks.actions.openNewTabShort')}
         >
           <ExternalLink />
         </a>
@@ -407,8 +441,12 @@ export function BookmarkRow({
           className="bookmark-action bookmark-direct-action"
           type="button"
           disabled={!canMutate}
-          aria-label={`编辑 ${node.title}`}
-          title={canMutate ? '编辑' : '加载为 Chrome 扩展后即可修改'}
+          aria-label={t('bookmarks.actions.edit', { title: node.title })}
+          title={
+            canMutate
+              ? t('bookmarks.actions.editShort')
+              : t('bookmarks.actions.extensionRequiredModify')
+          }
           onClick={openEditor}
         >
           <Pencil />
@@ -417,10 +455,14 @@ export function BookmarkRow({
           className="bookmark-action bookmark-direct-action bookmark-delete-action"
           type="button"
           disabled={!canMutate}
-          aria-label={`删除 ${node.title}`}
-          title={canMutate ? '删除' : '加载为 Chrome 扩展后即可修改'}
+          aria-label={t('bookmarks.actions.delete', { title: node.title })}
+          title={
+            canMutate
+              ? t('bookmarks.actions.deleteShort')
+              : t('bookmarks.actions.extensionRequiredModify')
+          }
           onClick={() => {
-            setDeleteError(undefined)
+            setDeleteError(false)
             setIsDeleteOpen(true)
           }}
         >
@@ -439,13 +481,15 @@ export function BookmarkRow({
           <Dialog.Viewport className="bookmark-dialog-viewport">
             <Dialog.Popup className="bookmark-dialog-popup">
               <Dialog.Title className="bookmark-dialog-title">
-                编辑书签
+                {t('bookmarks.editDialog.title')}
               </Dialog.Title>
               <Dialog.Description className="bookmark-dialog-description">
-                修改标题或网址，保存后会同步到 Chrome 书签。
+                {t('bookmarks.editDialog.description')}
               </Dialog.Description>
               <form className="bookmark-edit-form" onSubmit={handleEditSubmit}>
-                <label htmlFor={editTitleId}>标题</label>
+                <label htmlFor={editTitleId}>
+                  {t('bookmarks.editDialog.titleLabel')}
+                </label>
                 <input
                   id={editTitleId}
                   type="text"
@@ -454,7 +498,9 @@ export function BookmarkRow({
                   value={editTitle}
                   onChange={(event) => setEditTitle(event.target.value)}
                 />
-                <label htmlFor={editUrlId}>网址</label>
+                <label htmlFor={editUrlId}>
+                  {t('bookmarks.editDialog.urlLabel')}
+                </label>
                 <input
                   id={editUrlId}
                   type="text"
@@ -465,16 +511,20 @@ export function BookmarkRow({
                 />
                 {editError ? (
                   <p className="bookmark-dialog-error" role="alert">
-                    {editError}
+                    {t(
+                      editError === 'invalidUrl'
+                        ? 'bookmarks.errors.invalidUrl'
+                        : 'bookmarks.errors.saveFailed',
+                    )}
                   </p>
                 ) : null}
                 <div className="bookmark-dialog-actions">
                   <Dialog.Close type="button" disabled={isSaving}>
-                    取消
+                    {t('common.cancel')}
                   </Dialog.Close>
                   <button type="submit" disabled={isSaving}>
                     {isSaving ? <LoaderCircle className="is-spinning" /> : null}
-                    保存
+                    {t('common.save')}
                   </button>
                 </div>
               </form>
@@ -494,20 +544,21 @@ export function BookmarkRow({
           <AlertDialog.Viewport className="bookmark-dialog-viewport">
             <AlertDialog.Popup className="bookmark-dialog-popup is-compact">
               <AlertDialog.Title className="bookmark-dialog-title">
-                删除书签？
+                {t('bookmarks.deleteDialog.title')}
               </AlertDialog.Title>
               <AlertDialog.Description className="bookmark-dialog-description">
-                “{node.title || getHostname(url)}”将从 Chrome
-                书签中删除，此操作无法撤销。
+                {t('bookmarks.deleteDialog.description', {
+                  title: node.title || getHostname(url),
+                })}
               </AlertDialog.Description>
               {deleteError ? (
                 <p className="bookmark-dialog-error" role="alert">
-                  {deleteError}
+                  {t('bookmarks.errors.deleteFailed')}
                 </p>
               ) : null}
               <div className="bookmark-dialog-actions">
                 <AlertDialog.Close type="button" disabled={isDeleting}>
-                  取消
+                  {t('common.cancel')}
                 </AlertDialog.Close>
                 <button
                   className="is-danger"
@@ -516,7 +567,7 @@ export function BookmarkRow({
                   onClick={() => void handleDelete()}
                 >
                   {isDeleting ? <LoaderCircle className="is-spinning" /> : null}
-                  删除
+                  {t('common.delete')}
                 </button>
               </div>
             </AlertDialog.Popup>
@@ -538,31 +589,36 @@ export function FolderDeleteButton({
   folder: BookmarkNode
   onDeleted?: () => void
 }) {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [error, setError] = useState<string>()
-  const folderTitle = folder.title || '未命名文件夹'
+  const [hasError, setHasError] = useState(false)
+  const folderTitle = folder.title || t('common.unnamedFolder')
   const bookmarkCount = countBookmarks(folder)
   const childFolderCount = countChildFolders(folder)
   const hasContents = bookmarkCount > 0 || childFolderCount > 0
   const contentSummary = [
-    childFolderCount > 0 ? `${childFolderCount} 个子文件夹` : undefined,
-    bookmarkCount > 0 ? `${bookmarkCount} 个书签` : undefined,
+    childFolderCount > 0
+      ? t('common.childFolderCount', { count: childFolderCount })
+      : undefined,
+    bookmarkCount > 0
+      ? t('common.bookmarkCount', { count: bookmarkCount })
+      : undefined,
   ]
     .filter(Boolean)
-    .join('和')
+    .join(t('common.listSeparator'))
 
   const handleDelete = async () => {
     if (!canDelete || isDeleting) return
 
     setIsDeleting(true)
-    setError(undefined)
+    setHasError(false)
     try {
       await deleteBookmarkFolder(folder.id)
       setIsOpen(false)
       onDeleted?.()
     } catch {
-      setError('删除文件夹失败，请重试')
+      setHasError(true)
     } finally {
       setIsDeleting(false)
     }
@@ -579,9 +635,13 @@ export function FolderDeleteButton({
         className={`folder-delete-button${className ? ` ${className}` : ''}`}
         type="button"
         disabled={!canDelete}
-        aria-label={`删除文件夹 ${folderTitle}`}
-        title={canDelete ? '删除文件夹' : '加载为 Chrome 扩展后即可删除'}
-        onClick={() => setError(undefined)}
+        aria-label={t('bookmarks.folder.delete', { title: folderTitle })}
+        title={
+          canDelete
+            ? t('bookmarks.folder.deleteShort')
+            : t('bookmarks.folder.extensionRequiredDelete')
+        }
+        onClick={() => setHasError(false)}
       >
         <Trash2 />
       </AlertDialog.Trigger>
@@ -590,21 +650,23 @@ export function FolderDeleteButton({
         <AlertDialog.Viewport className="bookmark-dialog-viewport">
           <AlertDialog.Popup className="bookmark-dialog-popup is-compact">
             <AlertDialog.Title className="bookmark-dialog-title">
-              删除文件夹“{folderTitle}”？
+              {t('bookmarks.folder.deleteTitle', { title: folderTitle })}
             </AlertDialog.Title>
             <AlertDialog.Description className="bookmark-dialog-description">
               {hasContents
-                ? `将同时删除其中的${contentSummary}。此操作无法撤销。`
-                : '该文件夹为空。删除后将无法恢复。'}
+                ? t('bookmarks.folder.deleteWithContents', {
+                    summary: contentSummary,
+                  })
+                : t('bookmarks.folder.deleteEmpty')}
             </AlertDialog.Description>
-            {error ? (
+            {hasError ? (
               <p className="bookmark-dialog-error" role="alert">
-                {error}
+                {t('bookmarks.errors.deleteFolderFailed')}
               </p>
             ) : null}
             <div className="bookmark-dialog-actions">
               <AlertDialog.Close type="button" disabled={isDeleting}>
-                取消
+                {t('common.cancel')}
               </AlertDialog.Close>
               <button
                 className="is-danger"
@@ -613,7 +675,11 @@ export function FolderDeleteButton({
                 onClick={() => void handleDelete()}
               >
                 {isDeleting ? <LoaderCircle className="is-spinning" /> : null}
-                {hasContents ? '删除文件夹及其中内容' : '删除文件夹'}
+                {t(
+                  hasContents
+                    ? 'bookmarks.folder.deleteWithContentsAction'
+                    : 'bookmarks.folder.deleteShort',
+                )}
               </button>
             </div>
           </AlertDialog.Popup>
@@ -638,13 +704,17 @@ function FolderSection({
   isDragging?: boolean
   sortableProps?: SortableElementProps
 }) {
+  const { t } = useTranslation()
   const isManagedTree = isInsideManagedTree || folder.folderType === 'managed'
   const canMutateContents = canCreate && !isManagedTree
   const canDeleteFolder = canCreate && !isManagedTree
   const [isExpanded, setIsExpanded] = useState(true)
   const folderContentId = useId()
-  const folderTitle = folder.title || '未命名文件夹'
-  const toggleLabel = isExpanded ? `收起${folderTitle}` : `展开${folderTitle}`
+  const folderTitle = folder.title || t('common.unnamedFolder')
+  const toggleLabel = t(
+    isExpanded ? 'bookmarks.folder.collapse' : 'bookmarks.folder.expand',
+    { title: folderTitle },
+  )
 
   return (
     <section
@@ -675,7 +745,9 @@ function FolderSection({
           </button>
           <FolderOpen />
           <h2>{folderTitle}</h2>
-          <span>{countBookmarks(folder)} 个书签</span>
+          <span>
+            {t('common.bookmarkCount', { count: countBookmarks(folder) })}
+          </span>
         </div>
         {folder.folderType === undefined && !isManagedTree ? (
           <FolderDeleteButton folder={folder} canDelete={canDeleteFolder} />
@@ -735,6 +807,7 @@ const FULL_ROW_SORTABLE_SENSORS = [
 ]
 
 function BookmarkDragPreview({ node }: { node: BookmarkNode }) {
+  const { t } = useTranslation()
   const isFolderNode = node.url === undefined
   const url = node.url ?? '#'
 
@@ -751,10 +824,13 @@ function BookmarkDragPreview({ node }: { node: BookmarkNode }) {
       </span>
       <span className="bookmark-drag-preview-copy">
         <strong>
-          {node.title || (isFolderNode ? '未命名文件夹' : getHostname(url))}
+          {node.title ||
+            (isFolderNode ? t('common.unnamedFolder') : getHostname(url))}
         </strong>
         <span>
-          {isFolderNode ? `${countBookmarks(node)} 个书签` : getHostname(url)}
+          {isFolderNode
+            ? t('common.bookmarkCount', { count: countBookmarks(node) })
+            : getHostname(url)}
         </span>
       </span>
     </div>
@@ -838,11 +914,12 @@ function SortableFolderChildren({
   isInsideManagedTree?: boolean
   parent: BookmarkNode
 }) {
+  const { t } = useTranslation()
   const sourceChildren = parent.children ?? EMPTY_BOOKMARK_CHILDREN
   const canReorder = canCreate && !isInsideManagedTree
   const [optimisticChildren, setOptimisticChildren] =
     useState<OptimisticChildren>()
-  const [moveError, setMoveError] = useState<string>()
+  const [hasMoveError, setHasMoveError] = useState(false)
   const moveVersionRef = useRef(0)
   const children =
     optimisticChildren?.source === sourceChildren
@@ -860,7 +937,7 @@ function SortableFolderChildren({
     nextChildren: Array<BookmarkNode>
     version: number
   }) => {
-    setMoveError(undefined)
+    setHasMoveError(false)
     try {
       await moveBookmarkNode({
         id,
@@ -872,7 +949,7 @@ function SortableFolderChildren({
       setOptimisticChildren((current) =>
         current?.children === nextChildren ? undefined : current,
       )
-      setMoveError('排序失败，请重试')
+      setHasMoveError(true)
     }
   }
 
@@ -907,7 +984,7 @@ function SortableFolderChildren({
   return (
     <DragDropProvider
       sensors={FULL_ROW_SORTABLE_SENSORS}
-      onDragStart={() => setMoveError(undefined)}
+      onDragStart={() => setHasMoveError(false)}
       onDragEnd={handleDragEnd}
     >
       <div className="bookmark-children">
@@ -924,9 +1001,9 @@ function SortableFolderChildren({
             parentId={parent.id}
           />
         ))}
-        {moveError ? (
+        {hasMoveError ? (
           <p className="bookmark-sort-error" role="alert">
-            {moveError}
+            {t('bookmarks.errors.sortFailed')}
           </p>
         ) : null}
       </div>
@@ -954,7 +1031,8 @@ export function FolderContents({
   canCreate: boolean
   isInsideManagedTree?: boolean
 }) {
-  const folderTitle = folder.title || '未命名文件夹'
+  const { t } = useTranslation()
+  const folderTitle = folder.title || t('common.unnamedFolder')
 
   return (
     <div className="bookmark-sections">
@@ -1010,11 +1088,12 @@ export function MatchList({
   canMutate: boolean
   matches: Array<BookmarkMatch>
 }) {
+  const { t } = useTranslation()
   if (!matches.length) {
     return (
       <EmptyState
-        title="没有找到匹配的书签"
-        detail="试试标题、域名或文件夹名称。"
+        title={t('bookmarks.empty.title')}
+        detail={t('bookmarks.empty.description')}
       />
     )
   }

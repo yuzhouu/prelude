@@ -9,15 +9,19 @@ import {
   PanelsTopLeft,
   X,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 
 import { SearchTrigger } from '../search/search-trigger'
+import { SettingsDialog } from '../settings/settings-dialog'
 import { ThemeToggle } from '../theme/theme-toggle'
 import { countBookmarks, isFolder } from './model'
 import type { BookmarkNode } from './model'
 
-const APP_NAME = '开篇 · Prelude'
-
-function getBookmarkSyncSummary(roots: Array<BookmarkNode>) {
+function getBookmarkSyncSummary(
+  roots: Array<BookmarkNode>,
+  t: TFunction<'translation'>,
+) {
   const topLevelFolders = roots.filter(
     (node) => isFolder(node) && node.folderType !== undefined,
   )
@@ -33,31 +37,31 @@ function getBookmarkSyncSummary(roots: Array<BookmarkNode>) {
   ) {
     return {
       className: 'is-unknown',
-      label: '状态未知',
-      title: '当前 Chrome 版本未提供全部书签的同步状态',
+      label: t('sync.unknown.label'),
+      title: t('sync.unknown.title'),
     }
   }
 
   if (foldersToSummarize.every((node) => node.syncing)) {
     return {
       className: 'is-synced',
-      label: '全部已同步',
-      title: '全部书签均使用 Chrome 账号同步',
+      label: t('sync.synced.label'),
+      title: t('sync.synced.title'),
     }
   }
 
   if (foldersToSummarize.some((node) => node.syncing)) {
     return {
       className: 'is-partial',
-      label: '部分同步',
-      title: '部分书签使用 Chrome 账号同步，部分仅保存在本地',
+      label: t('sync.partial.label'),
+      title: t('sync.partial.title'),
     }
   }
 
   return {
     className: 'is-local',
-    label: '仅本地',
-    title: '全部书签均未使用 Chrome 账号同步',
+    label: t('sync.local.label'),
+    title: t('sync.local.title'),
   }
 }
 
@@ -78,6 +82,7 @@ function FolderTreeRow({
   onSelect,
   onToggle,
 }: FolderTreeRowProps) {
+  const { t } = useTranslation()
   const folders = (node.children ?? []).filter(isFolder)
   const hasFolders = folders.length > 0
   const isExpanded = expandedIds.has(node.id)
@@ -93,7 +98,12 @@ function FolderTreeRow({
           <button
             className="folder-tree-toggle"
             type="button"
-            aria-label={isExpanded ? `收起${node.title}` : `展开${node.title}`}
+            aria-label={t(
+              isExpanded
+                ? 'bookmarks.folder.collapse'
+                : 'bookmarks.folder.expand',
+              { title: node.title },
+            )}
             aria-expanded={isExpanded}
             onClick={() => onToggle(node.id)}
           >
@@ -109,7 +119,7 @@ function FolderTreeRow({
         >
           <Folder />
           <span className="folder-tree-title">
-            {node.title || '未命名文件夹'}
+            {node.title || t('common.unnamedFolder')}
           </span>
           <span className="folder-tree-count">{countBookmarks(node)}</span>
         </button>
@@ -164,14 +174,15 @@ export function Sidebar({
   onSelect,
   onToggle,
 }: SidebarProps) {
-  const syncSummary = getBookmarkSyncSummary(roots)
+  const { t } = useTranslation()
+  const syncSummary = getBookmarkSyncSummary(roots, t)
 
   return (
     <>
       <button
         className={`sidebar-scrim${isMobileOpen ? ' is-open' : ''}`}
         type="button"
-        aria-label="关闭文件夹导航"
+        aria-label={t('navigation.closeFolderNavigation')}
         onClick={onMobileClose}
       />
       <aside
@@ -183,11 +194,13 @@ export function Sidebar({
               <FolderPlus />
             </span>
             <div className="app-brand-copy">
-              <strong className="app-name">{APP_NAME}</strong>
+              <strong className="app-name">{t('app.name')}</strong>
               <span
                 className={`bookmark-sync-summary ${syncSummary.className}`}
                 title={syncSummary.title}
-                aria-label={`全部书签同步状态：${syncSummary.label}`}
+                aria-label={t('sync.allBookmarksStatus', {
+                  status: syncSummary.label,
+                })}
               >
                 <span className="bookmark-sync-dot" aria-hidden="true" />
                 {syncSummary.label}
@@ -198,7 +211,7 @@ export function Sidebar({
             <button
               className="sidebar-collapse-button"
               type="button"
-              aria-label="收起侧边栏"
+              aria-label={t('navigation.collapseSidebar')}
               onClick={onCollapse}
             >
               <PanelLeftClose />
@@ -206,7 +219,7 @@ export function Sidebar({
             <button
               className="mobile-close-button"
               type="button"
-              aria-label="关闭文件夹导航"
+              aria-label={t('navigation.closeFolderNavigation')}
               onClick={onMobileClose}
             >
               <X />
@@ -216,14 +229,17 @@ export function Sidebar({
 
         <SearchTrigger onOpen={onSearchOpen} />
 
-        <nav className="sidebar-nav" aria-label="书签导航">
+        <nav
+          className="sidebar-nav"
+          aria-label={t('navigation.bookmarkNavigation')}
+        >
           <button
             className={`utility-row${selectedId === 'quick-folders' ? ' is-selected' : ''}`}
             type="button"
             onClick={() => onSelect('quick-folders')}
           >
             <FolderPlus />
-            <span>快捷文件夹</span>
+            <span>{t('navigation.quickFolders')}</span>
           </button>
           <button
             className={`utility-row${selectedId === 'tabs' ? ' is-selected' : ''}`}
@@ -231,7 +247,7 @@ export function Sidebar({
             onClick={() => onSelect('tabs')}
           >
             <PanelsTopLeft />
-            <span>当前标签页</span>
+            <span>{t('navigation.currentTabs')}</span>
             <span className="utility-count">{tabCount}</span>
           </button>
           <button
@@ -240,7 +256,7 @@ export function Sidebar({
             onClick={() => onSelect('recent')}
           >
             <Clock3 />
-            <span>最近添加</span>
+            <span>{t('navigation.recent')}</span>
             <span className="utility-count">{recentCount}</span>
           </button>
           <button
@@ -249,13 +265,13 @@ export function Sidebar({
             onClick={() => onSelect('all')}
           >
             <Bookmark />
-            <span>全部书签</span>
+            <span>{t('navigation.allBookmarks')}</span>
             <span className="utility-count">{totalCount}</span>
           </button>
         </nav>
 
         <div className="folder-tree-header">
-          <span>文件夹</span>
+          <span>{t('navigation.folders')}</span>
         </div>
         <ul className="folder-tree">
           {roots.filter(isFolder).map((root) => (
@@ -272,6 +288,7 @@ export function Sidebar({
         </ul>
         <div className="sidebar-footer">
           <ThemeToggle />
+          <SettingsDialog />
         </div>
       </aside>
     </>

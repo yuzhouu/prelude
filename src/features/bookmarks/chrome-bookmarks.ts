@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { i18n } from '../../i18n'
 import {
   getAutoTitleStorageKey,
   getOpenTabAutoTitle,
@@ -60,10 +61,7 @@ interface ChromeApi {
   }
 }
 
-export const DEFAULT_BOOKMARK_CONTAINER_TITLE = '开篇'
-export const DEFAULT_PINNED_FOLDER_TITLE = '置顶'
-export const DEFAULT_READ_LATER_FOLDER_TITLE = '待读'
-export const DEFAULT_FAVORITES_FOLDER_TITLE = '收藏'
+const DEFAULT_BOOKMARK_CONTAINER_TITLES = ['开篇', 'Prelude'] as const
 
 const LEGACY_DEFAULT_BOOKMARK_CONTAINER_TITLES = [
   '今巡',
@@ -93,7 +91,18 @@ function findFolderByTitle(
 }
 
 export function findDefaultBookmarkContainer(nodes: Array<BookmarkNode>) {
-  return findFolderByTitle(nodes, DEFAULT_BOOKMARK_CONTAINER_TITLE)
+  return DEFAULT_BOOKMARK_CONTAINER_TITLES.map((title) =>
+    findFolderByTitle(nodes, title),
+  ).find((container) => container !== undefined)
+}
+
+export function getDefaultBookmarkFolderTitles() {
+  return {
+    container: i18n.t('defaultFolders.names.container'),
+    pinned: i18n.t('defaultFolders.names.pinned'),
+    readLater: i18n.t('defaultFolders.names.readLater'),
+    favorites: i18n.t('defaultFolders.names.favorites'),
+  }
 }
 
 async function migrateDefaultBookmarkContainerTitle(
@@ -108,7 +117,7 @@ async function migrateDefaultBookmarkContainerTitle(
   if (!legacyContainer) return nodes
 
   await bookmarksApi.update(legacyContainer.id, {
-    title: DEFAULT_BOOKMARK_CONTAINER_TITLE,
+    title: getDefaultBookmarkFolderTitles().container,
   })
   return bookmarksApi.getTree()
 }
@@ -121,22 +130,24 @@ async function createFolders() {
   const existing = findDefaultBookmarkContainer(tree)
   if (existing) return existing
 
+  const titles = getDefaultBookmarkFolderTitles()
+
   const container = await bookmarksApi.create({
-    title: DEFAULT_BOOKMARK_CONTAINER_TITLE,
+    title: titles.container,
   })
 
   await Promise.all([
     bookmarksApi.create({
       parentId: container.id,
-      title: DEFAULT_PINNED_FOLDER_TITLE,
+      title: titles.pinned,
     }),
     bookmarksApi.create({
       parentId: container.id,
-      title: DEFAULT_READ_LATER_FOLDER_TITLE,
+      title: titles.readLater,
     }),
     bookmarksApi.create({
       parentId: container.id,
-      title: DEFAULT_FAVORITES_FOLDER_TITLE,
+      title: titles.favorites,
     }),
   ])
 

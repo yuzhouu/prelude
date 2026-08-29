@@ -1,6 +1,7 @@
 import { Dialog } from '@base-ui/react/dialog'
 import { Search, X } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { BookmarkMatch } from '../bookmarks/model'
 import type { OpenTab, OpenTabWindow } from '../tabs/model'
@@ -22,6 +23,7 @@ export function BookmarkSearchDialog({
   onActivateTab: (tab: OpenTab) => void
   onOpenChange: (open: boolean) => void
 }) {
+  const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -33,8 +35,9 @@ export function BookmarkSearchDialog({
         bookmarks,
         openTabWindows,
         rawQuery: query,
+        t,
       }),
-    [bookmarks, openTabWindows, query],
+    [bookmarks, openTabWindows, query, t],
   )
   const selectedIndex = Math.min(
     activeIndex,
@@ -122,7 +125,9 @@ export function BookmarkSearchDialog({
         <Dialog.Backdrop className="search-dialog-backdrop" />
         <Dialog.Viewport className="search-dialog-viewport">
           <Dialog.Popup className="search-dialog-popup" initialFocus={inputRef}>
-            <Dialog.Title className="sr-only">搜索或输入网址</Dialog.Title>
+            <Dialog.Title className="sr-only">
+              {t('search.dialogTitle')}
+            </Dialog.Title>
             <form className="search-dialog-form" onSubmit={handleSubmit}>
               <Search aria-hidden="true" />
               <input
@@ -130,8 +135,8 @@ export function BookmarkSearchDialog({
                 type="search"
                 role="combobox"
                 value={query}
-                placeholder="搜索或输入网址"
-                aria-label="搜索或输入网址"
+                placeholder={t('search.dialogTitle')}
+                aria-label={t('search.dialogTitle')}
                 aria-autocomplete="list"
                 aria-controls={suggestions.length ? listboxId : undefined}
                 aria-expanded={suggestions.length > 0}
@@ -146,7 +151,7 @@ export function BookmarkSearchDialog({
               <Dialog.Close
                 className="search-dialog-close"
                 type="button"
-                aria-label="关闭搜索"
+                aria-label={t('search.close')}
               >
                 <X />
               </Dialog.Close>
@@ -158,8 +163,8 @@ export function BookmarkSearchDialog({
                   <span className="search-dialog-hint-icon">
                     <Search aria-hidden="true" />
                   </span>
-                  <strong>搜索书签、标签页或网页</strong>
-                  <p>输入网址直接访问，其他内容使用默认搜索引擎搜索。</p>
+                  <strong>{t('search.hintTitle')}</strong>
+                  <p>{t('search.hintDescription')}</p>
                 </div>
               ) : (
                 <OmniboxResults
@@ -173,8 +178,8 @@ export function BookmarkSearchDialog({
             </div>
 
             <footer className="search-dialog-footer">
-              <span>书签、标签页与 Chrome 默认搜索引擎</span>
-              <span>↑↓ 选择 · Enter 打开 · Esc 关闭</span>
+              <span>{t('search.sources')}</span>
+              <span>{t('search.keyboardHelp')}</span>
             </footer>
           </Dialog.Popup>
         </Dialog.Viewport>

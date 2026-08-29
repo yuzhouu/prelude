@@ -1,0 +1,10 @@
+{
+  "extensionName": {
+    "message": "Prelude",
+    "description": "Extension name"
+  },
+  "extensionDescription": {
+    "message": "A calm beginning for everything ahead.",
+    "description": "Extension description"
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Laptop, Moon, Sun } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import {
   applyTheme,
@@ -11,12 +12,13 @@ import {
 import type { ThemePreference } from './theme'
 
 const THEME_OPTIONS = [
-  { value: 'system', label: '跟随系统', icon: Laptop },
-  { value: 'light', label: '浅色', icon: Sun },
-  { value: 'dark', label: '深色', icon: Moon },
+  { value: 'system', labelKey: 'theme.system', icon: Laptop },
+  { value: 'light', labelKey: 'theme.light', icon: Sun },
+  { value: 'dark', labelKey: 'theme.dark', icon: Moon },
 ] as const
 
 export function ThemeToggle() {
+  const { t } = useTranslation()
   const [preference, setPreference] =
     useState<ThemePreference>(getThemePreference)
 
@@ -34,10 +36,14 @@ export function ThemeToggle() {
   }
 
   return (
-    <div className="theme-control">
-      <span className="theme-control-label">外观</span>
-      <div className="theme-options" role="group" aria-label="外观主题">
-        {THEME_OPTIONS.map(({ value, label, icon: Icon }) => (
+    <div
+      className="theme-options"
+      role="group"
+      aria-label={t('theme.groupLabel')}
+    >
+      {THEME_OPTIONS.map(({ value, labelKey, icon: Icon }) => {
+        const label = t(labelKey)
+        return (
           <button
             key={value}
             className="theme-option"
@@ -49,8 +55,8 @@ export function ThemeToggle() {
           >
             <Icon />
           </button>
-        ))}
-      </div>
+        )
+      })}
     </div>
   )
 }

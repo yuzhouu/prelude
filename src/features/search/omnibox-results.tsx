@@ -6,6 +6,7 @@ import {
   Search,
 } from 'lucide-react'
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BookmarkFavicon } from '../bookmarks/bookmark-favicon'
 import type { OmniboxSuggestion } from './omnibox-model'
@@ -45,6 +46,7 @@ export function OmniboxResults({
   onSelect: (suggestion: OmniboxSuggestion) => void
   suggestions: Array<OmniboxSuggestion>
 }) {
+  const { t } = useTranslation()
   const listboxRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export function OmniboxResults({
       id={listboxId}
       className="omnibox-results"
       role="listbox"
-      aria-label="搜索建议"
+      aria-label={t('search.suggestions')}
     >
       {suggestions.map((suggestion, index) => {
         const isActive = index === activeIndex

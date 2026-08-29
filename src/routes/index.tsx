@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Menu, PanelLeftOpen } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import {
   AllBookmarkContents,
@@ -39,6 +40,7 @@ function getInitialSidebarExpanded() {
 }
 
 function Home() {
+  const { t } = useTranslation()
   const { tree, isChromeSource } = useBookmarkTree()
   const { windows: openTabWindows, activateTab } = useOpenTabs()
   const roots = useMemo(() => getVisibleRoots(tree), [tree])
@@ -144,14 +146,14 @@ function Home() {
   const isQuickFoldersView = selectedId === 'quick-folders'
   const viewTitle =
     selectedId === 'all'
-      ? '全部书签'
+      ? t('navigation.allBookmarks')
       : selectedId === 'recent'
-        ? '最近添加'
+        ? t('navigation.recent')
         : isQuickFoldersView
-          ? '快捷文件夹'
+          ? t('navigation.quickFolders')
           : isTabView
-            ? '当前标签页'
-            : selectedNode?.title || '书签'
+            ? t('navigation.currentTabs')
+            : selectedNode?.title || t('navigation.bookmarks')
   return (
     <div
       className={`app-shell${isSidebarExpanded ? ' is-sidebar-expanded' : ''}`}
@@ -188,7 +190,7 @@ function Home() {
           <button
             className="mobile-menu-button"
             type="button"
-            aria-label="打开文件夹导航"
+            aria-label={t('navigation.openFolderNavigation')}
             onClick={() => setIsMobileSidebarOpen(true)}
           >
             <Menu />
@@ -204,11 +206,14 @@ function Home() {
           ) : null}
         </div>
 
-        <nav className="main-breadcrumb" aria-label="当前位置">
+        <nav
+          className="main-breadcrumb"
+          aria-label={t('navigation.currentLocation')}
+        >
           <button
             className="sidebar-expand-button"
             type="button"
-            aria-label="展开侧边栏"
+            aria-label={t('navigation.expandSidebar')}
             onClick={() => setIsSidebarExpanded(true)}
           >
             <PanelLeftOpen />

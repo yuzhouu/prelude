@@ -1,3 +1,5 @@
+import type { TFunction } from 'i18next'
+
 import { searchBookmarks } from '../bookmarks/model'
 import type { BookmarkMatch } from '../bookmarks/model'
 import { filterOpenTabs } from '../tabs/model'
@@ -63,10 +65,12 @@ export function buildOmniboxSuggestions({
   bookmarks,
   openTabWindows,
   rawQuery,
+  t,
 }: {
   bookmarks: Array<BookmarkMatch>
   openTabWindows: Array<OpenTabWindow>
   rawQuery: string
+  t: TFunction<'translation'>
 }) {
   const query = rawQuery.trim()
   if (!query) return []
@@ -77,14 +81,14 @@ export function buildOmniboxSuggestions({
         id: 'primary:navigate',
         kind: 'navigate',
         title: navigableUrl,
-        description: '访问网址',
+        description: t('search.visitUrl'),
         url: navigableUrl,
       }
     : {
         id: 'primary:search',
         kind: 'search',
-        title: `搜索“${query}”`,
-        description: '使用 Chrome 默认搜索引擎',
+        title: t('search.searchFor', { query }),
+        description: t('search.defaultProvider'),
         query,
       }
 

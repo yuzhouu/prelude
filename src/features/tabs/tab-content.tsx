@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AudioLines, AppWindow, Pin } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { getFaviconUrl } from '../bookmarks/chrome-bookmarks'
 import type { OpenTab, OpenTabWindow } from './model'
@@ -44,6 +45,7 @@ function TabRow({
   isCurrent: boolean
   onActivate: (tab: OpenTab) => void
 }) {
+  const { t } = useTranslation()
   return (
     <button
       className={`open-tab-row${isCurrent ? ' is-active' : ''}`}
@@ -56,9 +58,11 @@ function TabRow({
         <span>{getHostname(tab.url)}</span>
       </span>
       <span className="open-tab-meta">
-        {tab.pinned ? <Pin aria-label="已固定" /> : null}
-        {tab.audible ? <AudioLines aria-label="正在播放声音" /> : null}
-        {isCurrent ? <span className="active-tab-label">当前</span> : null}
+        {tab.pinned ? <Pin aria-label={t('tabs.pinned')} /> : null}
+        {tab.audible ? <AudioLines aria-label={t('tabs.audible')} /> : null}
+        {isCurrent ? (
+          <span className="active-tab-label">{t('tabs.current')}</span>
+        ) : null}
       </span>
     </button>
   )
@@ -71,14 +75,15 @@ export function OpenTabsContents({
   windows: Array<OpenTabWindow>
   onActivate: (tab: OpenTab) => void
 }) {
+  const { t } = useTranslation()
   if (!windows.length) {
     return (
       <div className="empty-state">
         <div className="empty-state-icon">
           <AppWindow />
         </div>
-        <strong>没有匹配的标签页</strong>
-        <p>打开新的网页后，它会自动出现在这里。</p>
+        <strong>{t('tabs.emptyTitle')}</strong>
+        <p>{t('tabs.emptyDescription')}</p>
       </div>
     )
   }
@@ -90,9 +95,13 @@ export function OpenTabsContents({
           <header className="tab-window-header">
             <div>
               <AppWindow />
-              <h2>{window.focused ? '当前窗口' : `窗口 ${index + 1}`}</h2>
+              <h2>
+                {window.focused
+                  ? t('tabs.currentWindow')
+                  : t('tabs.window', { number: index + 1 })}
+              </h2>
             </div>
-            <span>{window.tabs.length} 个标签页</span>
+            <span>{t('common.tabCount', { count: window.tabs.length })}</span>
           </header>
           <div className="open-tab-list">
             {window.tabs.map((tab) => (

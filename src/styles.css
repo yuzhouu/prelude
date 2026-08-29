@@ -418,12 +418,16 @@ input:focus-visible {
 }
 
 .sidebar-footer {
+  display: flex;
   flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
   border-top: 1px solid var(--line);
   padding: 8px;
 }
 
-.theme-control {
+.language-control {
   display: grid;
   min-height: 36px;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -432,13 +436,14 @@ input:focus-visible {
   padding: 0 3px 0 9px;
 }
 
-.theme-control-label {
+.language-control-label {
   color: var(--sidebar-muted);
   font-size: 12.5px;
   font-weight: 430;
 }
 
-.theme-options {
+.theme-options,
+.language-options {
   display: flex;
   align-items: center;
   gap: 1px;
@@ -448,7 +453,8 @@ input:focus-visible {
   padding: 2px;
 }
 
-.theme-option {
+.theme-option,
+.language-option {
   display: grid;
   width: 27px;
   height: 26px;
@@ -465,11 +471,105 @@ input:focus-visible {
     box-shadow 100ms ease;
 }
 
-.theme-option:hover {
+.settings-open-button,
+.settings-dialog-close {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: var(--control-muted);
+  color: var(--sidebar-muted);
+  cursor: pointer;
+}
+
+.settings-open-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+}
+
+.settings-open-button:hover,
+.settings-dialog-close:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.settings-open-button svg,
+.settings-dialog-close svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.8;
+}
+
+.settings-dialog-backdrop {
+  position: fixed;
+  z-index: 80;
+  inset: 0;
+  background: var(--backdrop);
+}
+
+.settings-dialog-viewport {
+  position: fixed;
+  z-index: 81;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.settings-dialog-popup {
+  width: min(390px, 100%);
+  border: 1px solid var(--line-control);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 20px;
+  box-shadow: 0 18px 60px var(--shadow-dialog);
+  outline: 0;
+}
+
+.settings-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.settings-dialog-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.settings-dialog-description {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.settings-dialog-close {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+}
+
+.settings-dialog-content {
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--control-muted);
+  padding: 8px;
+}
+
+.theme-option:hover,
+.language-option:hover {
   color: var(--sidebar-text);
 }
 
-.theme-option[aria-pressed='true'] {
+.theme-option[aria-pressed='true'],
+.language-option[aria-pressed='true'] {
   background: var(--surface);
   box-shadow: 0 1px 2px var(--shadow-card);
   color: var(--accent-strong);
@@ -479,6 +579,13 @@ input:focus-visible {
   width: 14px;
   height: 14px;
   stroke-width: 1.8;
+}
+
+.language-option {
+  width: 32px;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
 }
 
 .folder-tree-row {
