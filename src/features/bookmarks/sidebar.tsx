@@ -3,7 +3,6 @@ import {
   Bookmark,
   ChevronRight,
   Clock3,
-  ExternalLink,
   Folder,
   FolderPlus,
   PanelLeftClose,
@@ -12,7 +11,7 @@ import {
 } from 'lucide-react'
 
 import { SearchTrigger } from '../search/search-trigger'
-import { openBookmarkManager } from './chrome-bookmarks'
+import { ThemeToggle } from '../theme/theme-toggle'
 import { countBookmarks, isFolder } from './model'
 import type { BookmarkNode } from './model'
 
@@ -272,14 +271,7 @@ export function Sidebar({
           ))}
         </ul>
         <div className="sidebar-footer">
-          <button
-            className="bookmark-manager-button"
-            type="button"
-            onClick={openBookmarkManager}
-          >
-            <ExternalLink />
-            <span>Chrome 书签管理器</span>
-          </button>
+          <ThemeToggle />
         </div>
       </aside>
     </>

@@ -324,13 +324,3 @@ export function getFaviconUrl(pageUrl: string) {
   faviconUrl.searchParams.set('size', '32')
   return faviconUrl.toString()
 }
-
-export function openBookmarkManager() {
-  const chromeApi = getChromeApi()
-  if (chromeApi?.tabs) {
-    void chromeApi.tabs.create({ url: 'chrome://bookmarks/' })
-    return
-  }
-
-  window.location.assign('chrome://bookmarks/')
-}

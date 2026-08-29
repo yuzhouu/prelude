@@ -1,28 +1,115 @@
 @import 'tailwindcss';
 
 :root {
-  color: #202020;
-  background: #ffffff;
+  --accent: #dc4c3e;
+  --accent-strong: #c63f34;
+  --accent-soft: #fdecea;
+  --accent-action: #dc4c3e;
+  --accent-action-hover: #c63f34;
+  --on-accent: #ffffff;
+  --page: #ffffff;
+  --surface: #ffffff;
+  --surface-translucent: rgb(255 255 255 / 96%);
+  --surface-subtle: #fbfaf9;
+  --sidebar: #faf9f8;
+  --text: #202020;
+  --text-strong: #2c2c2c;
+  --text-heading: #34302e;
+  --text-label: #4d4b49;
+  --muted: #6f6f6f;
+  --subtle: #929292;
+  --placeholder: #9a9693;
+  --icon-muted: #7b7b7b;
+  --icon-faint: #aaa5a1;
+  --line: #eceae8;
+  --line-sidebar: #efedeb;
+  --line-control: #dedbd8;
+  --line-input: #d7d3d0;
+  --line-dialog: #dcd8d5;
+  --hover: #f3f1ef;
+  --row-hover: #f8f7f6;
+  --control-muted: #f1f0ef;
+  --control-muted-text: #66615d;
+  --control-hover: #e9e7e5;
+  --focus: #dd695f;
+  --sidebar-text: #4f4b47;
+  --sidebar-muted: #5f5b57;
+  --sidebar-subtle: #6f6b67;
+  --status-unknown: #a29e9a;
+  --status-synced: #5f8d72;
+  --status-partial: #c08a42;
+  --success: #2f8b48;
+  --success-soft: #eaf6ed;
+  --scrollbar-thumb: #d6d2ce;
+  --backdrop: rgb(32 32 32 / 28%);
+  --backdrop-strong: rgb(32 27 25 / 32%);
+  --mobile-scrim: rgb(30 26 22 / 27%);
+  --shadow-drag: rgb(40 35 32 / 18%);
+  --shadow-card: rgb(42 36 31 / 5%);
+  --shadow-dialog: rgb(31 29 28 / 22%);
+  --shadow-search: rgb(31 24 21 / 24%);
+  --shadow-sidebar: rgb(34 28 23 / 14%);
+  color: var(--text);
+  background: var(--page);
+  color-scheme: light;
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --accent: #dc4c3e;
-  --accent-strong: #c63f34;
-  --accent-soft: #fdecea;
-  --sidebar: #faf9f8;
-  --text: #202020;
-  --muted: #6f6f6f;
-  --subtle: #929292;
-  --line: #eceae8;
-  --hover: #f3f1ef;
-  --row-hover: #f8f7f6;
-  --focus: #dd695f;
-  --sidebar-text: #4f4b47;
-  --sidebar-muted: #5f5b57;
-  --sidebar-subtle: #6f6b67;
   --sidebar-width: 280px;
+}
+
+:root[data-theme='dark'] {
+  --accent: #ff8f85;
+  --accent-strong: #ffaaa3;
+  --accent-soft: #3b2321;
+  --accent-action: #c94f44;
+  --accent-action-hover: #b64036;
+  --on-accent: #ffffff;
+  --page: #141312;
+  --surface: #1b1a19;
+  --surface-translucent: rgb(27 26 25 / 96%);
+  --surface-subtle: #201e1d;
+  --sidebar: #181716;
+  --text: #f2efed;
+  --text-strong: #f6f3f1;
+  --text-heading: #f0ece9;
+  --text-label: #d5cfcb;
+  --muted: #b8b1ac;
+  --subtle: #948d88;
+  --placeholder: #827b76;
+  --icon-muted: #aaa39e;
+  --icon-faint: #756f6b;
+  --line: #34312f;
+  --line-sidebar: #302d2b;
+  --line-control: #48433f;
+  --line-input: #4d4844;
+  --line-dialog: #4a4541;
+  --hover: #2a2725;
+  --row-hover: #242220;
+  --control-muted: #2b2826;
+  --control-muted-text: #c3bcb7;
+  --control-hover: #34302d;
+  --focus: #ff8f85;
+  --sidebar-text: #e6e1de;
+  --sidebar-muted: #c2bbb6;
+  --sidebar-subtle: #98918c;
+  --status-unknown: #89827d;
+  --status-synced: #74ad8a;
+  --status-partial: #d2a15e;
+  --success: #74ba88;
+  --success-soft: #1e3928;
+  --scrollbar-thumb: #4b4642;
+  --backdrop: rgb(0 0 0 / 48%);
+  --backdrop-strong: rgb(0 0 0 / 58%);
+  --mobile-scrim: rgb(0 0 0 / 52%);
+  --shadow-drag: rgb(0 0 0 / 42%);
+  --shadow-card: rgb(0 0 0 / 22%);
+  --shadow-dialog: rgb(0 0 0 / 48%);
+  --shadow-search: rgb(0 0 0 / 58%);
+  --shadow-sidebar: rgb(0 0 0 / 38%);
+  color-scheme: dark;
 }
 
 * {
@@ -39,7 +126,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #ffffff;
+  background: var(--page);
   color: var(--text);
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
@@ -89,7 +176,7 @@ input:focus-visible {
   width: var(--sidebar-width);
   flex-direction: column;
   overflow: hidden;
-  border-right: 1px solid #efedeb;
+  border-right: 1px solid var(--line-sidebar);
   background: var(--sidebar);
   visibility: hidden;
   transform: translateX(-101%);
@@ -150,8 +237,8 @@ input:focus-visible {
   flex: 0 0 auto;
   place-items: center;
   border-radius: 8px;
-  background: var(--accent);
-  color: #ffffff;
+  background: var(--accent-action);
+  color: var(--on-accent);
 }
 
 .app-logo svg {
@@ -187,15 +274,15 @@ input:focus-visible {
   height: 6px;
   flex: 0 0 auto;
   border-radius: 50%;
-  background: #a29e9a;
+  background: var(--status-unknown);
 }
 
 .bookmark-sync-summary.is-synced .bookmark-sync-dot {
-  background: #5f8d72;
+  background: var(--status-synced);
 }
 
 .bookmark-sync-summary.is-partial .bookmark-sync-dot {
-  background: #c08a42;
+  background: var(--status-partial);
 }
 
 .profile-actions {
@@ -327,7 +414,7 @@ input:focus-visible {
   overflow: auto;
   padding: 1px 8px 12px;
   scrollbar-width: thin;
-  scrollbar-color: #d6d2ce transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 .sidebar-footer {
@@ -336,35 +423,62 @@ input:focus-visible {
   padding: 8px;
 }
 
-.bookmark-manager-button {
+.theme-control {
   display: grid;
-  width: 100%;
   min-height: 36px;
-  grid-template-columns: 19px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 9px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  padding: 0 9px;
-  cursor: pointer;
+  gap: 8px;
+  padding: 0 3px 0 9px;
+}
+
+.theme-control-label {
   color: var(--sidebar-muted);
-  text-align: left;
   font-size: 12.5px;
   font-weight: 430;
 }
 
-.bookmark-manager-button:hover,
-.bookmark-manager-button:focus-visible {
-  background: var(--hover);
+.theme-options {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--control-muted);
+  padding: 2px;
+}
+
+.theme-option {
+  display: grid;
+  width: 27px;
+  height: 26px;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  color: var(--sidebar-subtle);
+  transition:
+    background 100ms ease,
+    color 100ms ease,
+    box-shadow 100ms ease;
+}
+
+.theme-option:hover {
   color: var(--sidebar-text);
 }
 
-.bookmark-manager-button svg {
-  width: 16px;
-  height: 16px;
-  color: var(--sidebar-subtle);
-  stroke-width: 1.7;
+.theme-option[aria-pressed='true'] {
+  background: var(--surface);
+  box-shadow: 0 1px 2px var(--shadow-card);
+  color: var(--accent-strong);
+}
+
+.theme-option svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.8;
 }
 
 .folder-tree-row {
@@ -505,7 +619,7 @@ input:focus-visible {
   position: relative;
   min-height: 100vh;
   margin-left: 0;
-  background: #ffffff;
+  background: var(--page);
   transition: margin-left 170ms ease;
 }
 
@@ -545,7 +659,7 @@ input:focus-visible {
 .breadcrumb-current h1 {
   overflow: hidden;
   margin: 0;
-  color: #5f5b57;
+  color: var(--sidebar-muted);
   text-overflow: ellipsis;
   font-size: 12.5px;
   font-weight: 560;
@@ -605,9 +719,9 @@ input:focus-visible {
   gap: 10px;
   border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
   border-radius: 7px;
-  background: rgb(255 255 255 / 96%);
+  background: var(--surface-translucent);
   padding: 0 12px;
-  box-shadow: 0 16px 42px rgb(40 35 32 / 18%);
+  box-shadow: 0 16px 42px var(--shadow-drag);
   color: var(--text);
 }
 
@@ -773,14 +887,14 @@ input:focus-visible {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
-  color: #7b7b7b;
+  color: var(--icon-muted);
   stroke-width: 1.6;
 }
 
 .group-title-row h2 {
   overflow: hidden;
   margin: 0;
-  color: #3c3c3c;
+  color: var(--text-strong);
   text-overflow: ellipsis;
   font-size: 13.5px;
   font-weight: 590;
@@ -891,9 +1005,9 @@ input:focus-visible {
 .folder-quick-add-form input {
   width: 100%;
   height: 34px;
-  border: 1px solid #d7d3d0;
+  border: 1px solid var(--line-input);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 0 10px;
   color: var(--text);
   font-size: 13px;
@@ -912,9 +1026,9 @@ input:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  border: 1px solid #dedbd8;
+  border: 1px solid var(--line-control);
   border-radius: 5px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 0 11px;
   cursor: pointer;
   font-size: 12px;
@@ -922,9 +1036,9 @@ input:focus-visible {
 }
 
 .folder-quick-add-actions button[type='submit'] {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #ffffff;
+  border-color: var(--accent-action);
+  background: var(--accent-action);
+  color: var(--on-accent);
 }
 
 .folder-quick-add-actions button:hover:not(:disabled) {
@@ -932,8 +1046,8 @@ input:focus-visible {
 }
 
 .folder-quick-add-actions button[type='submit']:hover:not(:disabled) {
-  border-color: var(--accent-strong);
-  background: var(--accent-strong);
+  border-color: var(--accent-action-hover);
+  background: var(--accent-action-hover);
 }
 
 .folder-quick-add-actions button:disabled {
@@ -1016,9 +1130,9 @@ input:focus-visible {
 .bookmark-quick-add-fields input {
   min-width: 0;
   height: 34px;
-  border: 1px solid #dedbd8;
+  border: 1px solid var(--line-control);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 0 10px;
   color: var(--text);
   font-size: 13px;
@@ -1041,9 +1155,9 @@ input:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  border: 1px solid #dedbd8;
+  border: 1px solid var(--line-control);
   border-radius: 5px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 0 11px;
   cursor: pointer;
   font-size: 12px;
@@ -1051,9 +1165,9 @@ input:focus-visible {
 }
 
 .bookmark-quick-add-actions button[type='submit'] {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #ffffff;
+  border-color: var(--accent-action);
+  background: var(--accent-action);
+  color: var(--on-accent);
 }
 
 .bookmark-quick-add-actions button:hover:not(:disabled) {
@@ -1061,8 +1175,8 @@ input:focus-visible {
 }
 
 .bookmark-quick-add-actions button[type='submit']:hover:not(:disabled) {
-  border-color: var(--accent-strong);
-  background: var(--accent-strong);
+  border-color: var(--accent-action-hover);
+  background: var(--accent-action-hover);
 }
 
 .bookmark-quick-add-actions button:disabled {
@@ -1110,8 +1224,8 @@ input:focus-visible {
   place-items: center;
   overflow: hidden;
   border-radius: 5px;
-  background: #f1f0ef;
-  color: #66615d;
+  background: var(--control-muted);
+  color: var(--control-muted-text);
   font-size: 11px;
   font-weight: 650;
 }
@@ -1135,7 +1249,7 @@ input:focus-visible {
 
 .bookmark-copy strong {
   overflow: hidden;
-  color: #2c2c2c;
+  color: var(--text-strong);
   text-overflow: ellipsis;
   font-size: 13.5px;
   font-weight: 500;
@@ -1185,7 +1299,7 @@ input:focus-visible {
 }
 
 .bookmark-action:hover {
-  background: #e9e7e5;
+  background: var(--control-hover);
   color: var(--text);
 }
 
@@ -1209,7 +1323,7 @@ input:focus-visible {
   position: fixed;
   z-index: 80;
   inset: 0;
-  background: rgb(32 32 32 / 28%);
+  background: var(--backdrop);
 }
 
 .bookmark-dialog-viewport {
@@ -1223,11 +1337,11 @@ input:focus-visible {
 
 .bookmark-dialog-popup {
   width: min(440px, 100%);
-  border: 1px solid #dedbd8;
+  border: 1px solid var(--line-control);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 22px;
-  box-shadow: 0 18px 60px rgb(31 29 28 / 22%);
+  box-shadow: 0 18px 60px var(--shadow-dialog);
   outline: 0;
 }
 
@@ -1257,7 +1371,7 @@ input:focus-visible {
 }
 
 .bookmark-edit-form label {
-  color: #4d4b49;
+  color: var(--text-label);
   font-size: 12px;
   font-weight: 590;
 }
@@ -1269,9 +1383,9 @@ input:focus-visible {
 .bookmark-edit-form input {
   width: 100%;
   height: 38px;
-  border: 1px solid #d7d3d0;
+  border: 1px solid var(--line-input);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 0 10px;
   color: var(--text);
   font-size: 13px;
@@ -1305,9 +1419,9 @@ input:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid #d7d3d0;
+  border: 1px solid var(--line-input);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 0 13px;
   cursor: pointer;
   font-size: 13px;
@@ -1315,15 +1429,15 @@ input:focus-visible {
 }
 
 .bookmark-dialog-actions button[type='submit'] {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #ffffff;
+  border-color: var(--accent-action);
+  background: var(--accent-action);
+  color: var(--on-accent);
 }
 
 .bookmark-dialog-actions button.is-danger {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #ffffff;
+  border-color: var(--accent-action);
+  background: var(--accent-action);
+  color: var(--on-accent);
 }
 
 .bookmark-dialog-actions button:hover:not(:disabled) {
@@ -1332,8 +1446,8 @@ input:focus-visible {
 
 .bookmark-dialog-actions button[type='submit']:hover:not(:disabled),
 .bookmark-dialog-actions button.is-danger:hover:not(:disabled) {
-  border-color: var(--accent-strong);
-  background: var(--accent-strong);
+  border-color: var(--accent-action-hover);
+  background: var(--accent-action-hover);
 }
 
 .bookmark-dialog-actions button:disabled {
@@ -1354,7 +1468,7 @@ input:focus-visible {
   position: fixed;
   z-index: 90;
   inset: 0;
-  background: rgb(32 27 25 / 32%);
+  background: var(--backdrop-strong);
   backdrop-filter: blur(2px);
 }
 
@@ -1374,10 +1488,10 @@ input:focus-visible {
   max-height: min(680px, calc(100vh - 120px));
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
-  border: 1px solid #dcd8d5;
+  border: 1px solid var(--line-dialog);
   border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 24px 80px rgb(31 24 21 / 24%);
+  background: var(--surface);
+  box-shadow: 0 24px 80px var(--shadow-search);
   outline: 0;
 }
 
@@ -1410,7 +1524,7 @@ input:focus-visible {
 }
 
 .search-dialog-form input::placeholder {
-  color: #9a9693;
+  color: var(--placeholder);
 }
 
 .search-dialog-form input::-webkit-search-cancel-button {
@@ -1445,7 +1559,7 @@ input:focus-visible {
   overflow-y: auto;
   padding: 10px;
   scrollbar-width: thin;
-  scrollbar-color: #d6d2ce transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 .search-dialog-hint {
@@ -1475,7 +1589,7 @@ input:focus-visible {
 }
 
 .search-dialog-hint strong {
-  color: #34302e;
+  color: var(--text-heading);
   font-size: 14px;
   font-weight: 620;
 }
@@ -1549,7 +1663,7 @@ input:focus-visible {
 }
 
 .search-result-copy strong {
-  color: #2f2d2b;
+  color: var(--text-strong);
   font-size: 13.5px;
   font-weight: 540;
   line-height: 18px;
@@ -1564,7 +1678,7 @@ input:focus-visible {
 .search-result-row > svg {
   width: 15px;
   height: 15px;
-  color: #aaa5a1;
+  color: var(--icon-faint);
   stroke-width: 1.7;
 }
 
@@ -1575,7 +1689,7 @@ input:focus-visible {
   justify-content: space-between;
   gap: 12px;
   border-top: 1px solid var(--line);
-  background: #fbfaf9;
+  background: var(--surface-subtle);
   padding: 0 14px;
   color: var(--subtle);
   font-size: 10.5px;
@@ -1614,7 +1728,7 @@ input:focus-visible {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
-  color: #7b7b7b;
+  color: var(--icon-muted);
   stroke-width: 1.6;
 }
 
@@ -1674,7 +1788,7 @@ input:focus-visible {
 }
 
 .open-tab-copy strong {
-  color: #2c2c2c;
+  color: var(--text-strong);
   font-size: 13.5px;
   font-weight: 500;
   line-height: 18px;
@@ -1719,9 +1833,9 @@ input:focus-visible {
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--surface);
   padding: 30px;
-  box-shadow: 0 8px 28px rgb(42 36 31 / 5%);
+  box-shadow: 0 8px 28px var(--shadow-card);
 }
 
 .default-folders-icon {
@@ -1736,8 +1850,8 @@ input:focus-visible {
 }
 
 .default-folders-icon.is-created {
-  background: #eaf6ed;
-  color: #2f8b48;
+  background: var(--success-soft);
+  color: var(--success);
 }
 
 .default-folders-icon svg {
@@ -1748,7 +1862,7 @@ input:focus-visible {
 
 .default-folders-card h3 {
   margin: 0;
-  color: #2b2b2b;
+  color: var(--text-strong);
   font-size: 17px;
   font-weight: 650;
   letter-spacing: -0.015em;
@@ -1783,7 +1897,7 @@ input:focus-visible {
 }
 
 .default-folder-preview-row.is-root {
-  background: #ffffff;
+  background: var(--surface);
 }
 
 .default-folder-preview-row.is-child {
@@ -1793,7 +1907,7 @@ input:focus-visible {
 .default-folder-preview-row > svg {
   width: 17px;
   height: 17px;
-  color: #767676;
+  color: var(--icon-muted);
   stroke-width: 1.7;
 }
 
@@ -1804,7 +1918,7 @@ input:focus-visible {
 }
 
 .default-folder-preview-row strong {
-  color: #353535;
+  color: var(--text-heading);
   font-size: 13px;
   font-weight: 590;
   overflow-wrap: anywhere;
@@ -1838,14 +1952,14 @@ input:focus-visible {
 }
 
 .default-folders-confirm-button {
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  color: #ffffff;
+  border: 1px solid var(--accent-action);
+  background: var(--accent-action);
+  color: var(--on-accent);
 }
 
 .default-folders-confirm-button:hover:not(:disabled) {
-  border-color: var(--accent-strong);
-  background: var(--accent-strong);
+  border-color: var(--accent-action-hover);
+  background: var(--accent-action-hover);
 }
 
 .default-folders-confirm-button:disabled {
@@ -1936,7 +2050,7 @@ input:focus-visible {
   .sidebar {
     width: min(300px, 88vw);
     transform: translateX(-101%);
-    box-shadow: 10px 0 36px rgb(34 28 23 / 14%);
+    box-shadow: 10px 0 36px var(--shadow-sidebar);
   }
 
   .sidebar.is-expanded {
@@ -1959,7 +2073,7 @@ input:focus-visible {
     z-index: 20;
     display: block;
     border: 0;
-    background: rgb(30 26 22 / 27%);
+    background: var(--mobile-scrim);
     opacity: 0;
     pointer-events: none;
     transition: opacity 170ms ease;
@@ -1991,7 +2105,7 @@ input:focus-visible {
     align-items: center;
     gap: 8px;
     border-bottom: 1px solid var(--line);
-    background: rgb(255 255 255 / 96%);
+    background: var(--surface-translucent);
     padding: 0 14px;
     backdrop-filter: blur(10px);
   }

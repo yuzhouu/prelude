@@ -2,7 +2,9 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider } from '@tanstack/react-router'
 
 import { getRouter } from './router'
+import { initializeTheme } from './features/theme/theme'
 
+initializeTheme()
 const router = getRouter()
 
 const rootElement = document.getElementById('app')!
