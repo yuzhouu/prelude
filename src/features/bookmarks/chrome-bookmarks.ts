@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { i18n } from '../../i18n'
+import { READ_LATER_FOLDER_STORAGE_KEY } from '../capture/model'
 import {
   getAutoTitleStorageKey,
   getOpenTabAutoTitle,
@@ -136,7 +137,7 @@ async function createFolders() {
     title: titles.container,
   })
 
-  await Promise.all([
+  const [, readLater] = await Promise.all([
     bookmarksApi.create({
       parentId: container.id,
       title: titles.pinned,
@@ -150,6 +151,10 @@ async function createFolders() {
       title: titles.favorites,
     }),
   ])
+
+  await getChromeApi()
+    ?.storage?.local.set({ [READ_LATER_FOLDER_STORAGE_KEY]: readLater.id })
+    .catch(() => undefined)
 
   return container
 }

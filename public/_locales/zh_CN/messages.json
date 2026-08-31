@@ -6,5 +6,79 @@
   "extensionDescription": {
     "message": "一页初开，万事徐来。",
     "description": "扩展简介"
+  },
+  "captureActionTitle": {
+    "message": "打开收集面板"
+  },
+  "captureCommandDescription": {
+    "message": "把当前标签页加入待读"
+  },
+  "captureContextRoot": {
+    "message": "收集到开篇"
+  },
+  "captureContextPage": {
+    "message": "当前标签页加入待读"
+  },
+  "captureContextWindow": {
+    "message": "保存当前窗口"
+  },
+  "captureContextGroup": {
+    "message": "保存当前标签组"
+  },
+  "captureContextClose": {
+    "message": "保存后关闭原标签页"
+  },
+  "captureNotificationTitle": {
+    "message": "开篇 · 收集"
+  },
+  "captureSaved": {
+    "message": "已加入待读：$COUNT$ 个标签页",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureSavedAndClosed": {
+    "message": "已保存 $SAVED$ 个，并关闭 $CLOSED$ 个原标签页",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "closed": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedWithDuplicates": {
+    "message": "已保存 $SAVED$ 个，跳过 $DUPLICATES$ 个重复网址",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "duplicates": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedCloseFailed": {
+    "message": "已保存 $COUNT$ 个，但没能关闭原标签页",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureDuplicateOnly": {
+    "message": "这个网址已在书签中，没有重复保存"
+  },
+  "captureNoPage": {
+    "message": "当前没有可收集的网页"
+  },
+  "captureNoGroup": {
+    "message": "当前网页不在标签组中"
+  },
+  "captureFailed": {
+    "message": "保存失败，请确认扩展仍拥有书签和标签页权限"
   }
 }

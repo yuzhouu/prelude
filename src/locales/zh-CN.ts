@@ -67,6 +67,61 @@ export const zhCN = {
     title: '设置',
     description: '管理开篇的界面偏好。',
   },
+  capture: {
+    open: '收集',
+    close: '关闭收集面板',
+    eyebrow: '收集入口',
+    title: '收集到“待读”',
+    description: '把散落的页面先收进来，再在每日浏览中处理与归档。',
+    currentPage: {
+      title: '当前标签页',
+      empty: '当前窗口里没有可收集的网页',
+      action: '加入待读',
+    },
+    currentWindow: {
+      title: '当前窗口',
+      description_one: '保存这个窗口中的 {{count}} 个网页',
+      description_other: '保存这个窗口中的 {{count}} 个网页',
+      action: '保存窗口',
+    },
+    currentGroup: {
+      title: '当前标签组',
+      description_one: '“{{title}}”中的 {{count}} 个网页',
+      description_other: '“{{title}}”中的 {{count}} 个网页',
+      empty: '最近浏览的页面不在标签组中',
+      action: '保存标签组',
+    },
+    duplicates: {
+      title_one: '发现 {{count}} 个重复网址',
+      title_other: '发现 {{count}} 个重复网址',
+      description: '它们已经在书签中。可以跳过，也可以保留一份新的。',
+      skip: '跳过重复并保存',
+      saveAnyway: '仍然保存全部',
+    },
+    closeAfter: {
+      title: '保存后关闭原标签页',
+      description: '只关闭这次成功加入待读的页面，并记住此选择。',
+    },
+    saving: '正在保存…',
+    failed: '保存失败，请确认扩展仍拥有书签和标签页权限。',
+    extensionRequired: '加载为 Chrome 扩展后即可使用真实收集入口。',
+    shortcutHint: '快捷键 Alt + Shift + S；右键菜单也可收集。',
+    newTabHint: '在开篇新标签页中，“当前标签页”会取最近浏览的网页。',
+    result: {
+      saved_one: '已加入待读：{{count}} 个页面。',
+      saved_other: '已加入待读：{{count}} 个页面。',
+      savedAndClosed_one: '已保存 {{count}} 个，并关闭 {{closed}} 个原标签页。',
+      savedAndClosed_other:
+        '已保存 {{count}} 个，并关闭 {{closed}} 个原标签页。',
+      savedWithSkipped_one:
+        '已保存 {{count}} 个，跳过 {{skipped}} 个重复网址。',
+      savedWithSkipped_other:
+        '已保存 {{count}} 个，跳过 {{skipped}} 个重复网址。',
+      savedCloseFailed_one: '已保存 {{count}} 个，但没能关闭原标签页。',
+      savedCloseFailed_other: '已保存 {{count}} 个，但没能关闭原标签页。',
+      allDuplicates: '这些网址已经在书签中，没有重复保存。',
+    },
+  },
   search: {
     trigger: '搜索',
     triggerLabel: '搜索书签与标签页',

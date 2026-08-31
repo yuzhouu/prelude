@@ -941,6 +941,388 @@ input:focus-visible {
   gap: 1px;
 }
 
+.capture-popup-body {
+  width: 560px;
+  min-width: 560px;
+  min-height: 0;
+  background: var(--surface);
+}
+
+.capture-popup-root {
+  width: 560px;
+  max-height: 600px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+.capture-popup-surface {
+  min-height: 100%;
+  padding: 22px;
+}
+
+.capture-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.capture-dialog-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.capture-dialog-eyebrow svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.9;
+}
+
+.capture-dialog-title {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 20px;
+  font-weight: 660;
+  letter-spacing: -0.018em;
+}
+
+.capture-dialog-description {
+  max-width: 470px;
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.capture-dialog-close {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface-subtle);
+  padding: 0;
+  cursor: pointer;
+  color: var(--subtle);
+}
+
+.capture-dialog-close:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.capture-dialog-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.capture-options {
+  display: grid;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.capture-option {
+  display: grid;
+  width: 100%;
+  min-height: 68px;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  padding: 9px 11px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 100ms ease,
+    background 100ms ease,
+    transform 100ms ease;
+}
+
+.capture-option:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--line));
+  background: var(--row-hover);
+  transform: translateY(-1px);
+}
+
+.capture-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.capture-option-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.capture-option-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.7;
+}
+
+.capture-option-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.capture-option-heading {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.capture-option-heading strong,
+.capture-option-heading span,
+.capture-option-copy > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.capture-option-heading strong {
+  flex: 0 0 auto;
+  color: var(--text-strong);
+  font-size: 13.5px;
+  font-weight: 610;
+}
+
+.capture-option-heading span,
+.capture-option-copy > span {
+  color: var(--subtle);
+  font-size: 11.5px;
+}
+
+.capture-option-action {
+  border-radius: 6px;
+  background: var(--accent-soft);
+  padding: 6px 9px;
+  color: var(--accent-strong);
+  font-size: 11.5px;
+  font-weight: 610;
+  white-space: nowrap;
+}
+
+.capture-duplicate-panel {
+  border: 1px solid color-mix(in srgb, var(--status-partial) 42%, var(--line));
+  border-radius: 9px;
+  margin-top: 12px;
+  background: color-mix(in srgb, var(--status-partial) 8%, var(--surface));
+  padding: 14px;
+}
+
+.capture-duplicate-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.capture-duplicate-heading > svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--status-partial);
+}
+
+.capture-duplicate-heading strong {
+  color: var(--text-strong);
+  font-size: 13px;
+  font-weight: 620;
+}
+
+.capture-duplicate-heading p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.capture-duplicate-panel ul {
+  display: grid;
+  gap: 4px;
+  margin: 10px 0 0;
+  padding: 0 0 0 26px;
+  list-style: none;
+}
+
+.capture-duplicate-panel li {
+  display: flex;
+  min-width: 0;
+  gap: 7px;
+  color: var(--text-label);
+  font-size: 11.5px;
+}
+
+.capture-duplicate-panel li span,
+.capture-duplicate-panel li small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.capture-duplicate-panel li span {
+  min-width: 0;
+  flex: 1;
+}
+
+.capture-duplicate-panel li small {
+  color: var(--subtle);
+}
+
+.capture-duplicate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+  padding-left: 26px;
+}
+
+.capture-duplicate-actions button {
+  min-height: 30px;
+  border: 1px solid var(--line-control);
+  border-radius: 6px;
+  background: var(--surface);
+  padding: 0 10px;
+  cursor: pointer;
+  color: var(--text-label);
+  font-size: 11.5px;
+  font-weight: 570;
+}
+
+.capture-duplicate-actions button:first-child {
+  border-color: var(--accent-action);
+  background: var(--accent-action);
+  color: var(--on-accent);
+}
+
+.capture-close-option {
+  display: grid;
+  min-height: 58px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.capture-close-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.capture-checkbox {
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  border: 1px solid var(--line-input);
+  border-radius: 5px;
+  background: var(--surface);
+  color: transparent;
+}
+
+.capture-close-option input:checked + .capture-checkbox {
+  border-color: var(--accent-action);
+  background: var(--accent-action);
+  color: var(--on-accent);
+}
+
+.capture-close-option input:focus-visible + .capture-checkbox {
+  outline: 2px solid color-mix(in srgb, var(--focus) 70%, transparent);
+  outline-offset: 2px;
+}
+
+.capture-close-option input:disabled + .capture-checkbox,
+.capture-close-option:has(input:disabled) > span:last-child {
+  opacity: 0.52;
+}
+
+.capture-checkbox svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.2;
+}
+
+.capture-close-option > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+
+.capture-close-option strong {
+  color: var(--text-label);
+  font-size: 12.5px;
+  font-weight: 590;
+}
+
+.capture-close-option small {
+  color: var(--subtle);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.capture-dialog-status {
+  min-height: 20px;
+  margin-top: 13px;
+}
+
+.capture-dialog-status > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.capture-dialog-status > span.is-success {
+  color: var(--success);
+}
+
+.capture-dialog-status > span.is-error {
+  color: var(--accent-strong);
+}
+
+.capture-dialog-status svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+.capture-dialog-status svg.is-spinning {
+  animation: default-folders-spin 800ms linear infinite;
+}
+
+.capture-dialog-note {
+  margin: 7px 0 0;
+  color: var(--subtle);
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
 .folder-delete-button.is-breadcrumb {
   width: 32px;
   height: 32px;
@@ -2252,6 +2634,48 @@ input:focus-visible {
 @media (max-width: 560px) {
   .search-trigger kbd {
     display: none;
+  }
+
+  .capture-dialog-header {
+    gap: 14px;
+  }
+
+  .capture-dialog-title {
+    font-size: 18px;
+  }
+
+  .capture-options {
+    margin-top: 18px;
+  }
+
+  .capture-option {
+    min-height: 70px;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    padding: 9px;
+  }
+
+  .capture-option-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .capture-option-action {
+    display: none;
+  }
+
+  .capture-option-heading {
+    display: grid;
+    gap: 2px;
+  }
+
+  .capture-duplicate-panel li {
+    display: grid;
+    gap: 1px;
+  }
+
+  .capture-duplicate-actions {
+    padding-left: 0;
   }
 
   .search-dialog-viewport {

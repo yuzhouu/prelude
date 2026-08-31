@@ -12,6 +12,8 @@ const config = defineConfig({
     rollupOptions: {
       input: {
         index: new URL('./index.html', import.meta.url).pathname,
+        'capture-popup': new URL('./capture-popup.html', import.meta.url)
+          .pathname,
         'auto-title-background': new URL(
           './src/auto-title-background.ts',
           import.meta.url,

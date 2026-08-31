@@ -71,6 +71,71 @@ export const en = {
     title: 'Settings',
     description: 'Manage your interface preferences for Prelude.',
   },
+  capture: {
+    open: 'Collect',
+    close: 'Close collection panel',
+    eyebrow: 'Collection entry',
+    title: 'Collect into Read later',
+    description:
+      'Gather loose pages first, then process and archive them during your daily review.',
+    currentPage: {
+      title: 'Current tab',
+      empty: 'There is no page to collect in this window',
+      action: 'Add to Read later',
+    },
+    currentWindow: {
+      title: 'Current window',
+      description_one: 'Save {{count}} page from this window',
+      description_other: 'Save {{count}} pages from this window',
+      action: 'Save window',
+    },
+    currentGroup: {
+      title: 'Current tab group',
+      description_one: '{{count}} page in “{{title}}”',
+      description_other: '{{count}} pages in “{{title}}”',
+      empty: 'The most recently viewed page is not in a tab group',
+      action: 'Save tab group',
+    },
+    duplicates: {
+      title_one: 'Found {{count}} duplicate URL',
+      title_other: 'Found {{count}} duplicate URLs',
+      description:
+        'These pages are already bookmarked. Skip them or keep another copy.',
+      skip: 'Skip duplicates and save',
+      saveAnyway: 'Save everything anyway',
+    },
+    closeAfter: {
+      title: 'Close original tabs after saving',
+      description:
+        'Only close pages saved in this capture, and remember this choice.',
+    },
+    saving: 'Saving…',
+    failed:
+      'Could not save. Check the extension’s bookmark and tab permissions.',
+    extensionRequired:
+      'Load this app as a Chrome extension to use the live collection entry.',
+    shortcutHint: 'Use Alt + Shift + S or the page context menu to collect.',
+    newTabHint:
+      'On Prelude’s new tab page, Current tab uses the most recently viewed page.',
+    result: {
+      saved_one: 'Added {{count}} page to Read later.',
+      saved_other: 'Added {{count}} pages to Read later.',
+      savedAndClosed_one:
+        'Saved {{count}} page and closed {{closed}} original tab.',
+      savedAndClosed_other:
+        'Saved {{count}} pages and closed {{closed}} original tabs.',
+      savedWithSkipped_one:
+        'Saved {{count}} page and skipped {{skipped}} duplicate URL.',
+      savedWithSkipped_other:
+        'Saved {{count}} pages and skipped {{skipped}} duplicate URLs.',
+      savedCloseFailed_one:
+        'Saved {{count}} page, but could not close the original tab.',
+      savedCloseFailed_other:
+        'Saved {{count}} pages, but could not close the original tabs.',
+      allDuplicates:
+        'These URLs are already bookmarked, so no copies were made.',
+    },
+  },
   search: {
     trigger: 'Search',
     triggerLabel: 'Search bookmarks and tabs',

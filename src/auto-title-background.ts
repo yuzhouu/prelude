@@ -9,6 +9,7 @@ import {
 } from './features/bookmarks/auto-title'
 import type { AutoTitleMarker } from './features/bookmarks/auto-title'
 import type { BookmarkNode } from './features/bookmarks/model'
+import { setupCaptureBackground } from './features/capture/capture-background'
 
 interface StorageArea {
   get: (
@@ -212,3 +213,5 @@ chromeApi.bookmarks.onRemoved.addListener((id, removeInfo) => {
 
   void chromeApi.storage.local.remove(removedIds.map(getAutoTitleStorageKey))
 })
+
+setupCaptureBackground()

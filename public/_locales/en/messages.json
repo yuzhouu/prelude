@@ -6,5 +6,79 @@
   "extensionDescription": {
     "message": "A calm beginning for everything ahead.",
     "description": "Extension description"
+  },
+  "captureActionTitle": {
+    "message": "Open collection panel"
+  },
+  "captureCommandDescription": {
+    "message": "Add the current tab to Read later"
+  },
+  "captureContextRoot": {
+    "message": "Collect with Prelude"
+  },
+  "captureContextPage": {
+    "message": "Add current tab to Read later"
+  },
+  "captureContextWindow": {
+    "message": "Save current window"
+  },
+  "captureContextGroup": {
+    "message": "Save current tab group"
+  },
+  "captureContextClose": {
+    "message": "Close original tabs after saving"
+  },
+  "captureNotificationTitle": {
+    "message": "Prelude · Collect"
+  },
+  "captureSaved": {
+    "message": "Added $COUNT$ tab(s) to Read later",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureSavedAndClosed": {
+    "message": "Saved $SAVED$ and closed $CLOSED$ original tab(s)",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "closed": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedWithDuplicates": {
+    "message": "Saved $SAVED$ and skipped $DUPLICATES$ duplicate URL(s)",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "duplicates": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedCloseFailed": {
+    "message": "Saved $COUNT$ tab(s), but could not close the originals",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureDuplicateOnly": {
+    "message": "This URL is already bookmarked, so it was not saved again"
+  },
+  "captureNoPage": {
+    "message": "There is no page to collect in the current window"
+  },
+  "captureNoGroup": {
+    "message": "The current page is not in a tab group"
+  },
+  "captureFailed": {
+    "message": "Could not save. Check the extension's bookmark and tab permissions"
   }
 }
