@@ -22,6 +22,7 @@ import {
   getVisibleRoots,
 } from '../features/bookmarks/model'
 import { Sidebar } from '../features/bookmarks/sidebar'
+import { normalizeCapturedUrl } from '../features/capture/model'
 import { BookmarkSearchDialog } from '../features/search/bookmark-search-dialog'
 import { useOpenTabs } from '../features/tabs/chrome-tabs'
 import { OpenTabsContents } from '../features/tabs/tab-content'
@@ -42,7 +43,11 @@ function getInitialSidebarExpanded() {
 function Home() {
   const { t } = useTranslation()
   const { tree, isChromeSource } = useBookmarkTree()
-  const { windows: openTabWindows, activateTab } = useOpenTabs()
+  const {
+    windows: openTabWindows,
+    isChromeSource: areTabsFromChrome,
+    activateTab,
+  } = useOpenTabs()
   const roots = useMemo(() => getVisibleRoots(tree), [tree])
   const bookmarks = useMemo(() => getBookmarkMatches(roots), [roots])
   const recentBookmarks = useMemo(
@@ -50,6 +55,15 @@ function Home() {
     [bookmarks],
   )
   const totalCount = useMemo(() => countTreeBookmarks(roots), [roots])
+  const bookmarkedUrlKeys = useMemo(
+    () =>
+      new Set(
+        bookmarks.flatMap(({ node }) =>
+          node.url ? [normalizeCapturedUrl(node.url)] : [],
+        ),
+      ),
+    [bookmarks],
+  )
   const defaultBookmarkContainer = useMemo(
     () => findDefaultBookmarkContainer(roots),
     [roots],
@@ -238,6 +252,8 @@ function Home() {
           <div className="view-content">
             {isTabView ? (
               <OpenTabsContents
+                bookmarkedUrlKeys={bookmarkedUrlKeys}
+                canCapture={isChromeSource && areTabsFromChrome}
                 windows={openTabWindows}
                 onActivate={activateTab}
               />

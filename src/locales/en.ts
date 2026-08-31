@@ -160,6 +160,21 @@ export const en = {
       'New pages will appear here automatically after you open them.',
     currentWindow: 'Current window',
     window: 'Window {{number}}',
+    capture: {
+      action: 'Collect “{{title}}” into Read later',
+      saving: 'Collecting “{{title}}”',
+      saved: '“{{title}}” was collected into Read later',
+      failed: 'Could not collect “{{title}}”. Click to try again',
+      bookmarked:
+        '“{{title}}” is already bookmarked. Click to collect it again',
+      extensionRequired:
+        'Load this app as a Chrome extension to collect this page',
+      unsupported: 'This type of page cannot be collected as a bookmark',
+      duplicateTitle: 'This address is already bookmarked',
+      duplicateDescription:
+        '“{{title}}” already has a bookmark. Collecting it again will save another copy in Read later.',
+      saveAnyway: 'Collect anyway',
+    },
   },
   bookmarks: {
     addFolder: {

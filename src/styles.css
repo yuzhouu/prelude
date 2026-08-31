@@ -1920,6 +1920,7 @@ input:focus-visible {
   color: var(--on-accent);
 }
 
+.bookmark-dialog-actions button.is-primary,
 .bookmark-dialog-actions button.is-danger {
   border-color: var(--accent-action);
   background: var(--accent-action);
@@ -1931,6 +1932,7 @@ input:focus-visible {
 }
 
 .bookmark-dialog-actions button[type='submit']:hover:not(:disabled),
+.bookmark-dialog-actions button.is-primary:hover:not(:disabled),
 .bookmark-dialog-actions button.is-danger:hover:not(:disabled) {
   border-color: var(--accent-action-hover);
   background: var(--accent-action-hover);
@@ -2234,18 +2236,14 @@ input:focus-visible {
 }
 
 .open-tab-row {
-  display: grid;
+  display: flex;
   width: 100%;
   min-height: 52px;
-  grid-template-columns: 26px minmax(0, 1fr) auto;
-  align-items: center;
+  align-items: stretch;
   gap: 10px;
-  border: 0;
   border-bottom: 1px solid var(--line);
   background: transparent;
   padding: 0 8px;
-  cursor: pointer;
-  text-align: left;
   transition: background 100ms ease;
 }
 
@@ -2257,6 +2255,20 @@ input:focus-visible {
 
 .open-tab-row.is-active {
   background: var(--accent-soft);
+}
+
+.open-tab-main {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  grid-template-columns: 26px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
 }
 
 .open-tab-copy {
@@ -2289,6 +2301,7 @@ input:focus-visible {
 .open-tab-meta {
   display: flex;
   min-width: 50px;
+  align-self: center;
   align-items: center;
   justify-content: flex-end;
   gap: 7px;
@@ -2305,6 +2318,74 @@ input:focus-visible {
   color: var(--accent-strong);
   font-size: 11px;
   font-weight: 590;
+}
+
+.open-tab-capture-action {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  opacity: 0;
+  cursor: pointer;
+  color: var(--subtle);
+  transition:
+    opacity 90ms ease,
+    background 90ms ease,
+    color 90ms ease;
+}
+
+.open-tab-row:hover .open-tab-capture-action,
+.open-tab-capture-action:focus-visible,
+.open-tab-capture-action.is-saving,
+.open-tab-capture-action.is-saved,
+.open-tab-capture-action.is-error {
+  opacity: 1;
+}
+
+.open-tab-capture-action:hover:not(:disabled) {
+  background: var(--control-hover);
+  color: var(--accent-strong);
+}
+
+.open-tab-capture-action.is-saved,
+.open-tab-capture-action.is-bookmarked {
+  color: var(--success);
+}
+
+.open-tab-capture-action.is-error {
+  color: var(--accent-strong);
+}
+
+.open-tab-capture-action:disabled {
+  cursor: not-allowed;
+}
+
+.open-tab-row:hover .open-tab-capture-action:disabled {
+  opacity: 0.38;
+}
+
+.open-tab-capture-action svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.7;
+}
+
+.open-tab-capture-action svg.is-spinning {
+  animation: default-folders-spin 800ms linear infinite;
+}
+
+@media (hover: none) {
+  .open-tab-capture-action {
+    opacity: 1;
+  }
+
+  .open-tab-capture-action:disabled {
+    opacity: 0.38;
+  }
 }
 
 .default-folders-page {
@@ -2776,6 +2857,14 @@ input:focus-visible {
   .open-tab-row {
     padding-right: 5px;
     padding-left: 5px;
+  }
+
+  .open-tab-capture-action {
+    opacity: 1;
+  }
+
+  .open-tab-capture-action:disabled {
+    opacity: 0.38;
   }
 
   .open-tab-meta {

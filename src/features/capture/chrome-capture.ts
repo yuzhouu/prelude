@@ -1,6 +1,7 @@
 import {
   CLOSE_AFTER_CAPTURE_STORAGE_KEY,
   READ_LATER_FOLDER_STORAGE_KEY,
+  isCaptureableUrl,
   normalizeCapturedUrl,
 } from './model'
 import type {
@@ -70,13 +71,7 @@ interface ChromeApi {
 const CONTAINER_TITLES = ['开篇', 'Prelude', '今巡', '书签 · 新标签页']
 const READ_LATER_TITLES = ['待读', 'Read later']
 const TAB_GROUP_ID_NONE = -1
-const CAPTUREABLE_PROTOCOLS = new Set([
-  'chrome:',
-  'file:',
-  'ftp:',
-  'http:',
-  'https:',
-])
+let pendingReadLaterFolder: Promise<BookmarkNode> | undefined
 
 function getChromeApi() {
   return (globalThis as typeof globalThis & { chrome?: ChromeApi }).chrome
@@ -137,11 +132,7 @@ function isCaptureableTab(
     return false
   }
 
-  try {
-    return CAPTUREABLE_PROTOCOLS.has(new URL(tab.url).protocol)
-  } catch {
-    return false
-  }
+  return isCaptureableUrl(tab.url)
 }
 
 function toCaptureTab(
@@ -232,7 +223,7 @@ async function rememberReadLaterFolder(folderId: string) {
     .catch(() => undefined)
 }
 
-async function ensureReadLaterFolder() {
+async function findOrCreateReadLaterFolder() {
   const chromeApi = getChromeApi()
   const bookmarksApi = chromeApi?.bookmarks
   if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
@@ -257,6 +248,49 @@ async function ensureReadLaterFolder() {
     }))
   await rememberReadLaterFolder(readLater.id)
   return readLater
+}
+
+async function ensureReadLaterFolder() {
+  if (pendingReadLaterFolder) return pendingReadLaterFolder
+
+  const request = findOrCreateReadLaterFolder()
+  pendingReadLaterFolder = request
+  try {
+    return await request
+  } finally {
+    if (pendingReadLaterFolder === request) pendingReadLaterFolder = undefined
+  }
+}
+
+async function createCapturePlan({
+  kind,
+  label,
+  sourceTabs,
+}: {
+  kind: CaptureKind
+  label: string
+  sourceTabs: Array<CaptureTab>
+}): Promise<CapturePlan> {
+  const bookmarksApi = getChromeApi()?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  const tree = await bookmarksApi.getTree()
+  const bookmarkUrlKeys = new Set<string>()
+  tree.forEach((node) => collectBookmarkUrlKeys(node, bookmarkUrlKeys))
+  const sourceUrlKeys = new Set<string>()
+  const items: Array<CapturePlanItem> = sourceTabs.map((tab) => {
+    const urlKey = normalizeCapturedUrl(tab.url)
+    const isDuplicate = bookmarkUrlKeys.has(urlKey) || sourceUrlKeys.has(urlKey)
+    sourceUrlKeys.add(urlKey)
+    return { tab, isDuplicate }
+  })
+
+  return {
+    kind,
+    label,
+    items,
+    duplicateCount: items.filter((item) => item.isDuplicate).length,
+  }
 }
 
 export async function getCloseAfterCapturePreference() {
@@ -298,10 +332,6 @@ export async function getCaptureSnapshot(): Promise<CaptureSnapshot> {
 }
 
 export async function prepareCapture(kind: CaptureKind): Promise<CapturePlan> {
-  const chromeApi = getChromeApi()
-  const bookmarksApi = chromeApi?.bookmarks
-  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
-
   const tabs = await getCurrentWindowTabs()
   const currentPage = pickCurrentPage(tabs)
   let sourceTabs: Array<CaptureTab>
@@ -325,23 +355,35 @@ export async function prepareCapture(kind: CaptureKind): Promise<CapturePlan> {
     label = getBatchLabel('window', getCaptureNames().window)
   }
 
-  const tree = await bookmarksApi.getTree()
-  const bookmarkUrlKeys = new Set<string>()
-  tree.forEach((node) => collectBookmarkUrlKeys(node, bookmarkUrlKeys))
-  const sourceUrlKeys = new Set<string>()
-  const items: Array<CapturePlanItem> = sourceTabs.map((tab) => {
-    const urlKey = normalizeCapturedUrl(tab.url)
-    const isDuplicate = bookmarkUrlKeys.has(urlKey) || sourceUrlKeys.has(urlKey)
-    sourceUrlKeys.add(urlKey)
-    return { tab, isDuplicate }
-  })
-
-  return {
+  return createCapturePlan({
     kind,
     label,
-    items,
-    duplicateCount: items.filter((item) => item.isDuplicate).length,
-  }
+    sourceTabs,
+  })
+}
+
+export async function prepareTabCapture(
+  tab: Pick<
+    CaptureTab,
+    'active' | 'id' | 'pinned' | 'title' | 'url' | 'windowId'
+  >,
+): Promise<CapturePlan> {
+  const sourceTabs = isCaptureableUrl(tab.url)
+    ? [
+        {
+          ...tab,
+          groupId: TAB_GROUP_ID_NONE,
+          index: 0,
+          lastAccessed: 0,
+        },
+      ]
+    : []
+
+  return createCapturePlan({
+    kind: 'page',
+    label: tab.title,
+    sourceTabs,
+  })
 }
 
 export async function executeCapture({

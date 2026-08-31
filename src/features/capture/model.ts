@@ -48,6 +48,22 @@ export type DuplicatePolicy = 'save' | 'skip'
 export const CLOSE_AFTER_CAPTURE_STORAGE_KEY = 'prelude:close-after-capture:v1'
 export const READ_LATER_FOLDER_STORAGE_KEY = 'prelude:read-later-folder-id:v1'
 
+const CAPTUREABLE_PROTOCOLS = new Set([
+  'chrome:',
+  'file:',
+  'ftp:',
+  'http:',
+  'https:',
+])
+
+export function isCaptureableUrl(rawUrl: string) {
+  try {
+    return CAPTUREABLE_PROTOCOLS.has(new URL(rawUrl).protocol)
+  } catch {
+    return false
+  }
+}
+
 export function normalizeCapturedUrl(rawUrl: string) {
   try {
     const url = new URL(rawUrl)

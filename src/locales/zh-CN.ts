@@ -144,6 +144,19 @@ export const zhCN = {
     emptyDescription: '打开新的网页后，它会自动出现在这里。',
     currentWindow: '当前窗口',
     window: '窗口 {{number}}',
+    capture: {
+      action: '将“{{title}}”收集到待读',
+      saving: '正在收集“{{title}}”',
+      saved: '“{{title}}”已收集到待读',
+      failed: '收集“{{title}}”失败，点击重试',
+      bookmarked: '“{{title}}”已在书签中，点击可再次收集',
+      extensionRequired: '加载为 Chrome 扩展后即可收集',
+      unsupported: '此类页面无法收集到书签',
+      duplicateTitle: '这个网址已经在书签中',
+      duplicateDescription:
+        '“{{title}}”已有书签。仍然收集会在“待读”中再保存一份。',
+      saveAnyway: '仍然收集',
+    },
   },
   bookmarks: {
     addFolder: {
