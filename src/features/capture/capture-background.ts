@@ -4,6 +4,7 @@ import {
   prepareCapture,
   setCloseAfterCapturePreference,
 } from './chrome-capture'
+import { CLOSE_AFTER_CAPTURE_STORAGE_KEY } from './model'
 import type { CaptureKind, CaptureResult } from './model'
 
 interface ChromeApi {
@@ -29,10 +30,6 @@ interface ChromeApi {
         }) => void,
       ) => void
     }
-    onShown: {
-      addListener: (callback: () => void) => void
-    }
-    refresh: () => void
     removeAll: () => Promise<void>
     update: (
       id: string,
@@ -60,6 +57,16 @@ interface ChromeApi {
     }
     onStartup: {
       addListener: (callback: () => void) => void
+    }
+  }
+  storage: {
+    onChanged: {
+      addListener: (
+        callback: (
+          changes: Partial<Record<string, { newValue?: unknown }>>,
+          areaName: string,
+        ) => void,
+      ) => void
     }
   }
 }
@@ -220,12 +227,14 @@ export function setupCaptureBackground() {
     }
   })
 
-  chromeApi.contextMenus.onShown.addListener(() => {
-    void getCloseAfterCapturePreference().then((checked) =>
-      chromeApi.contextMenus
-        .update(MENU_CLOSE, { checked })
-        .then(() => chromeApi.contextMenus.refresh())
-        .catch(() => undefined),
-    )
+  chromeApi.storage.onChanged.addListener((changes, areaName) => {
+    const preferenceChange = changes[CLOSE_AFTER_CAPTURE_STORAGE_KEY]
+    if (areaName !== 'local' || !preferenceChange) return
+
+    void chromeApi.contextMenus
+      .update(MENU_CLOSE, {
+        checked: preferenceChange.newValue === true,
+      })
+      .catch(() => undefined)
   })
 }
