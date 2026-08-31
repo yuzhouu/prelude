@@ -2,7 +2,7 @@ import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { Dialog } from '@base-ui/react/dialog'
 import { move } from '@dnd-kit/helpers'
 import { DragDropProvider, DragOverlay, PointerSensor } from '@dnd-kit/react'
-import type { DragEndEvent } from '@dnd-kit/react'
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/react'
 import { isSortableOperation, useSortable } from '@dnd-kit/react/sortable'
 import { useId, useRef, useState } from 'react'
 import {
@@ -693,22 +693,27 @@ function FolderSection({
   folder,
   level = 0,
   canCreate,
+  expanded,
   isInsideManagedTree = false,
   isDragging = false,
+  onExpandedChange,
   sortableProps,
 }: {
   folder: BookmarkNode
   level?: number
   canCreate: boolean
+  expanded?: boolean
   isInsideManagedTree?: boolean
   isDragging?: boolean
+  onExpandedChange?: (expanded: boolean) => void
   sortableProps?: SortableElementProps
 }) {
   const { t } = useTranslation()
   const isManagedTree = isInsideManagedTree || folder.folderType === 'managed'
   const canMutateContents = canCreate && !isManagedTree
   const canDeleteFolder = canCreate && !isManagedTree
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [internalExpanded, setInternalExpanded] = useState(true)
+  const isExpanded = expanded ?? internalExpanded
   const folderContentId = useId()
   const folderTitle = folder.title || t('common.unnamedFolder')
   const toggleLabel = t(
@@ -739,7 +744,11 @@ function FolderSection({
             aria-expanded={isExpanded}
             aria-controls={folderContentId}
             title={toggleLabel}
-            onClick={() => setIsExpanded((current) => !current)}
+            onClick={() => {
+              const nextExpanded = !isExpanded
+              if (expanded === undefined) setInternalExpanded(nextExpanded)
+              onExpandedChange?.(nextExpanded)
+            }}
           >
             <ChevronRight className={isExpanded ? 'is-expanded' : ''} />
           </button>
@@ -841,19 +850,23 @@ function SortableFolderChild({
   canCreate,
   canReorder,
   child,
+  folderExpanded,
   folderLevel,
   indentBookmarks,
   index,
   isInsideManagedTree,
+  onFolderExpandedChange,
   parentId,
 }: {
   canCreate: boolean
   canReorder: boolean
   child: BookmarkNode
+  folderExpanded: boolean
   folderLevel: number
   indentBookmarks: boolean
   index: number
   isInsideManagedTree: boolean
+  onFolderExpandedChange: (expanded: boolean) => void
   parentId: string
 }) {
   const kind: SortableItemKind = child.url === undefined ? 'folder' : 'bookmark'
@@ -886,8 +899,10 @@ function SortableFolderChild({
       folder={child}
       level={folderLevel}
       canCreate={canCreate}
+      expanded={folderExpanded}
       isInsideManagedTree={isInsideManagedTree}
       isDragging={isActive}
+      onExpandedChange={onFolderExpandedChange}
       sortableProps={sortableProps}
     />
   ) : (
@@ -919,12 +934,27 @@ function SortableFolderChildren({
   const canReorder = canCreate && !isInsideManagedTree
   const [optimisticChildren, setOptimisticChildren] =
     useState<OptimisticChildren>()
+  const [collapsedFolderIds, setCollapsedFolderIds] = useState<Set<string>>(
+    () => new Set(),
+  )
   const [hasMoveError, setHasMoveError] = useState(false)
   const moveVersionRef = useRef(0)
   const children =
     optimisticChildren?.source === sourceChildren
       ? optimisticChildren.children
       : sourceChildren
+
+  const setFolderExpanded = (folderId: string, expanded: boolean) => {
+    setCollapsedFolderIds((current) => {
+      const shouldCollapse = !expanded
+      if (current.has(folderId) === shouldCollapse) return current
+
+      const next = new Set(current)
+      if (shouldCollapse) next.add(folderId)
+      else next.delete(folderId)
+      return next
+    })
+  }
 
   const persistMove = async ({
     destinationIndex,
@@ -981,10 +1011,19 @@ function SortableFolderChildren({
     })
   }
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setHasMoveError(false)
+    const sourceData = event.operation.source?.data as
+      SortableItemData | undefined
+    if (sourceData?.kind === 'folder') {
+      setFolderExpanded(sourceData.node.id, false)
+    }
+  }
+
   return (
     <DragDropProvider
       sensors={FULL_ROW_SORTABLE_SENSORS}
-      onDragStart={() => setHasMoveError(false)}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <div className="bookmark-children">
@@ -994,10 +1033,14 @@ function SortableFolderChildren({
             canCreate={canCreate}
             canReorder={canReorder}
             child={child}
+            folderExpanded={!collapsedFolderIds.has(child.id)}
             folderLevel={folderLevel}
             indentBookmarks={indentBookmarks}
             index={index}
             isInsideManagedTree={isInsideManagedTree}
+            onFolderExpandedChange={(expanded) =>
+              setFolderExpanded(child.id, expanded)
+            }
             parentId={parent.id}
           />
         ))}

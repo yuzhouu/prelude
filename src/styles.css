@@ -872,6 +872,20 @@ input:focus-visible {
   font-size: 12px;
 }
 
+.bookmark-drag-preview.is-folder .bookmark-drag-preview-copy {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.bookmark-drag-preview.is-folder .bookmark-drag-preview-copy strong {
+  min-width: 0;
+}
+
+.bookmark-drag-preview.is-folder .bookmark-drag-preview-copy span {
+  flex: 0 0 auto;
+}
+
 .bookmark-sort-error {
   margin: 8px 8px 0;
   color: var(--accent-strong);
