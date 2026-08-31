@@ -1,0 +1,84 @@
+{
+  "extensionName": {
+    "message": "Prelude",
+    "description": "拡張機能名"
+  },
+  "extensionDescription": {
+    "message": "静かな一歩から、すべてが始まる。",
+    "description": "拡張機能の説明"
+  },
+  "captureActionTitle": {
+    "message": "収集パネルを開く"
+  },
+  "captureCommandDescription": {
+    "message": "現在のタブを「後で読む」に追加"
+  },
+  "captureContextRoot": {
+    "message": "Preludeで収集"
+  },
+  "captureContextPage": {
+    "message": "現在のタブを「後で読む」に追加"
+  },
+  "captureContextWindow": {
+    "message": "現在のウィンドウを保存"
+  },
+  "captureContextGroup": {
+    "message": "現在のタブグループを保存"
+  },
+  "captureContextClose": {
+    "message": "保存後に元のタブを閉じる"
+  },
+  "captureNotificationTitle": {
+    "message": "Prelude · 収集"
+  },
+  "captureSaved": {
+    "message": "$COUNT$件を「後で読む」に追加しました",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureSavedAndClosed": {
+    "message": "$SAVED$件を保存し、元のタブを$CLOSED$個閉じました",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "closed": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedWithDuplicates": {
+    "message": "$SAVED$件を保存し、重複URLを$DUPLICATES$件スキップしました",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "duplicates": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedCloseFailed": {
+    "message": "$COUNT$件を保存しましたが、元のタブを閉じられませんでした",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureDuplicateOnly": {
+    "message": "このURLはすでにブックマークされているため、再保存されませんでした"
+  },
+  "captureNoPage": {
+    "message": "現在のウィンドウには収集できるページがありません"
+  },
+  "captureNoGroup": {
+    "message": "現在のページはタブグループに属していません"
+  },
+  "captureFailed": {
+    "message": "保存できませんでした。拡張機能のブックマークとタブの権限を確認してください"
+  }
+}

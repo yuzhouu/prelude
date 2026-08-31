@@ -69,31 +69,73 @@ interface ChromeApi {
 }
 
 const CONTAINER_TITLES = ['开篇', 'Prelude', '今巡', '书签 · 新标签页']
-const READ_LATER_TITLES = ['待读', 'Read later']
+const READ_LATER_TITLES = [
+  '待读',
+  'Read later',
+  '後で読む',
+  'Leer más tarde',
+  'À lire plus tard',
+  'Прочитать позже',
+]
 const TAB_GROUP_ID_NONE = -1
 let pendingReadLaterFolder: Promise<BookmarkNode> | undefined
+
+const CAPTURE_NAMES = {
+  en: {
+    container: 'Prelude',
+    group: 'Tab group',
+    readLater: 'Read later',
+    window: 'Window',
+  },
+  es: {
+    container: 'Prelude',
+    group: 'Grupo de pestañas',
+    readLater: 'Leer más tarde',
+    window: 'Ventana',
+  },
+  fr: {
+    container: 'Prelude',
+    group: 'Groupe d’onglets',
+    readLater: 'À lire plus tard',
+    window: 'Fenêtre',
+  },
+  ja: {
+    container: 'Prelude',
+    group: 'タブグループ',
+    readLater: '後で読む',
+    window: 'ウィンドウ',
+  },
+  ru: {
+    container: 'Prelude',
+    group: 'Группа вкладок',
+    readLater: 'Прочитать позже',
+    window: 'Окно',
+  },
+  zh: {
+    container: '开篇',
+    group: '标签组',
+    readLater: '待读',
+    window: '窗口',
+  },
+} as const
 
 function getChromeApi() {
   return (globalThis as typeof globalThis & { chrome?: ChromeApi }).chrome
 }
 
-function getCaptureNames() {
-  const language = getChromeApi()?.i18n?.getUILanguage().toLowerCase() ?? 'zh'
-  const isChinese = language.startsWith('zh')
+function isCaptureLanguage(
+  languageCode: string,
+): languageCode is keyof typeof CAPTURE_NAMES {
+  return Object.hasOwn(CAPTURE_NAMES, languageCode)
+}
 
-  return isChinese
-    ? {
-        container: '开篇',
-        group: '标签组',
-        readLater: '待读',
-        window: '窗口',
-      }
-    : {
-        container: 'Prelude',
-        group: 'Tab group',
-        readLater: 'Read later',
-        window: 'Window',
-      }
+function getCaptureNames() {
+  const languageCode =
+    getChromeApi()?.i18n?.getUILanguage().toLowerCase().split(/[-_]/)[0] ?? 'zh'
+
+  return isCaptureLanguage(languageCode)
+    ? CAPTURE_NAMES[languageCode]
+    : CAPTURE_NAMES.en
 }
 
 function findFolderByTitle(

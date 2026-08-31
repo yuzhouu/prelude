@@ -1,0 +1,84 @@
+{
+  "extensionName": {
+    "message": "Prelude",
+    "description": "Название расширения"
+  },
+  "extensionDescription": {
+    "message": "Спокойное начало всего, что впереди.",
+    "description": "Описание расширения"
+  },
+  "captureActionTitle": {
+    "message": "Открыть панель сбора"
+  },
+  "captureCommandDescription": {
+    "message": "Добавить текущую вкладку в «Прочитать позже»"
+  },
+  "captureContextRoot": {
+    "message": "Собрать с Prelude"
+  },
+  "captureContextPage": {
+    "message": "Добавить текущую вкладку в «Прочитать позже»"
+  },
+  "captureContextWindow": {
+    "message": "Сохранить текущее окно"
+  },
+  "captureContextGroup": {
+    "message": "Сохранить текущую группу вкладок"
+  },
+  "captureContextClose": {
+    "message": "Закрывать исходные вкладки после сохранения"
+  },
+  "captureNotificationTitle": {
+    "message": "Prelude · Сбор"
+  },
+  "captureSaved": {
+    "message": "Добавлено вкладок в «Прочитать позже»: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureSavedAndClosed": {
+    "message": "Сохранено: $SAVED$; закрыто исходных вкладок: $CLOSED$",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "closed": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedWithDuplicates": {
+    "message": "Сохранено: $SAVED$; пропущено повторяющихся адресов: $DUPLICATES$",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "duplicates": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedCloseFailed": {
+    "message": "Сохранено: $COUNT$, но не удалось закрыть исходные вкладки",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureDuplicateOnly": {
+    "message": "Этот адрес уже есть в закладках, поэтому он не был сохранён повторно"
+  },
+  "captureNoPage": {
+    "message": "В текущем окне нет страниц, которые можно добавить"
+  },
+  "captureNoGroup": {
+    "message": "Текущая страница не входит в группу вкладок"
+  },
+  "captureFailed": {
+    "message": "Не удалось сохранить. Проверьте разрешения расширения на доступ к закладкам и вкладкам"
+  }
+}

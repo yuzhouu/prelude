@@ -1,0 +1,84 @@
+{
+  "extensionName": {
+    "message": "Prelude",
+    "description": "Nombre de la extensión"
+  },
+  "extensionDescription": {
+    "message": "Un comienzo sereno para todo lo que viene.",
+    "description": "Descripción de la extensión"
+  },
+  "captureActionTitle": {
+    "message": "Abrir panel de guardado"
+  },
+  "captureCommandDescription": {
+    "message": "Añadir la pestaña actual a Leer más tarde"
+  },
+  "captureContextRoot": {
+    "message": "Guardar con Prelude"
+  },
+  "captureContextPage": {
+    "message": "Añadir la pestaña actual a Leer más tarde"
+  },
+  "captureContextWindow": {
+    "message": "Guardar la ventana actual"
+  },
+  "captureContextGroup": {
+    "message": "Guardar el grupo de pestañas actual"
+  },
+  "captureContextClose": {
+    "message": "Cerrar las pestañas originales después de guardar"
+  },
+  "captureNotificationTitle": {
+    "message": "Prelude · Guardar"
+  },
+  "captureSaved": {
+    "message": "Se añadieron $COUNT$ pestañas a Leer más tarde",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureSavedAndClosed": {
+    "message": "Se guardaron $SAVED$ y se cerraron $CLOSED$ pestañas originales",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "closed": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedWithDuplicates": {
+    "message": "Se guardaron $SAVED$ y se omitieron $DUPLICATES$ URL duplicadas",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "duplicates": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedCloseFailed": {
+    "message": "Se guardaron $COUNT$, pero no se pudieron cerrar las pestañas originales",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureDuplicateOnly": {
+    "message": "Esta URL ya estaba en tus marcadores, así que no se volvió a guardar"
+  },
+  "captureNoPage": {
+    "message": "No hay ninguna página que guardar en la ventana actual"
+  },
+  "captureNoGroup": {
+    "message": "La página actual no pertenece a un grupo de pestañas"
+  },
+  "captureFailed": {
+    "message": "No se pudo guardar. Comprueba los permisos de marcadores y pestañas de la extensión"
+  }
+}

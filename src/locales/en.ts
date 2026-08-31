@@ -64,6 +64,10 @@ export const en = {
     groupLabel: 'Interface language',
     zhCN: 'Simplified Chinese',
     en: 'English',
+    ja: 'Japanese',
+    es: 'Spanish',
+    fr: 'French',
+    ru: 'Russian',
   },
   settings: {
     open: 'Open settings',

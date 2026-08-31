@@ -5,11 +5,25 @@ import {
   resolveSupportedLanguage,
   supportedLanguages,
 } from '../../i18n'
+import type { SupportedLanguage } from '../../i18n'
 
-const SHORT_LANGUAGE_LABELS = {
+const SHORT_LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
   'zh-CN': '中',
   en: 'EN',
-} as const
+  es: 'ES',
+  fr: 'FR',
+  ja: '日',
+  ru: 'RU',
+}
+
+const LANGUAGE_LABEL_KEYS = {
+  'zh-CN': 'language.zhCN',
+  en: 'language.en',
+  es: 'language.es',
+  fr: 'language.fr',
+  ja: 'language.ja',
+  ru: 'language.ru',
+} as const satisfies Record<SupportedLanguage, `language.${string}`>
 
 export function LanguageToggle() {
   const { t, i18n } = useTranslation()
@@ -26,9 +40,7 @@ export function LanguageToggle() {
         aria-label={t('language.groupLabel')}
       >
         {supportedLanguages.map((language) => {
-          const label = t(
-            language === 'zh-CN' ? 'language.zhCN' : 'language.en',
-          )
+          const label = t(LANGUAGE_LABEL_KEYS[language])
           return (
             <button
               key={language}

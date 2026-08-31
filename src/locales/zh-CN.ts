@@ -60,6 +60,10 @@ export const zhCN = {
     groupLabel: '界面语言',
     zhCN: '简体中文',
     en: 'English',
+    ja: '日本語',
+    es: 'Español',
+    fr: 'Français',
+    ru: 'Русский',
   },
   settings: {
     open: '打开设置',
@@ -252,6 +256,6 @@ export const zhCN = {
 
 type MessageShape<T> = {
   [Key in keyof T]: T[Key] extends string ? string : MessageShape<T[Key]>
-}
+} & Record<string, unknown>
 
 export type MessageCatalog = MessageShape<typeof zhCN>

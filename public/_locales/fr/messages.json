@@ -1,0 +1,84 @@
+{
+  "extensionName": {
+    "message": "Prelude",
+    "description": "Nom de l’extension"
+  },
+  "extensionDescription": {
+    "message": "Un début serein pour tout ce qui vient.",
+    "description": "Description de l’extension"
+  },
+  "captureActionTitle": {
+    "message": "Ouvrir le panneau de collecte"
+  },
+  "captureCommandDescription": {
+    "message": "Ajouter l’onglet actuel à À lire plus tard"
+  },
+  "captureContextRoot": {
+    "message": "Collecter avec Prelude"
+  },
+  "captureContextPage": {
+    "message": "Ajouter l’onglet actuel à À lire plus tard"
+  },
+  "captureContextWindow": {
+    "message": "Enregistrer la fenêtre actuelle"
+  },
+  "captureContextGroup": {
+    "message": "Enregistrer le groupe d’onglets actuel"
+  },
+  "captureContextClose": {
+    "message": "Fermer les onglets d’origine après l’enregistrement"
+  },
+  "captureNotificationTitle": {
+    "message": "Prelude · Collecte"
+  },
+  "captureSaved": {
+    "message": "$COUNT$ onglets ajoutés à À lire plus tard",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureSavedAndClosed": {
+    "message": "$SAVED$ éléments enregistrés et $CLOSED$ onglets d’origine fermés",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "closed": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedWithDuplicates": {
+    "message": "$SAVED$ éléments enregistrés et $DUPLICATES$ URL en double ignorées",
+    "placeholders": {
+      "saved": {
+        "content": "$1"
+      },
+      "duplicates": {
+        "content": "$2"
+      }
+    }
+  },
+  "captureSavedCloseFailed": {
+    "message": "$COUNT$ éléments enregistrés, mais les onglets d’origine n’ont pas pu être fermés",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "captureDuplicateOnly": {
+    "message": "Cette URL figure déjà dans vos favoris, elle n’a donc pas été enregistrée à nouveau"
+  },
+  "captureNoPage": {
+    "message": "Aucune page ne peut être collectée dans la fenêtre actuelle"
+  },
+  "captureNoGroup": {
+    "message": "La page actuelle ne fait pas partie d’un groupe d’onglets"
+  },
+  "captureFailed": {
+    "message": "Enregistrement impossible. Vérifiez les autorisations de favoris et d’onglets de l’extension"
+  }
+}

@@ -2,9 +2,20 @@ import { createInstance } from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import { en } from './locales/en'
+import { es } from './locales/es'
+import { fr } from './locales/fr'
+import { ja } from './locales/ja'
+import { ru } from './locales/ru'
 import { zhCN } from './locales/zh-CN'
 
-export const supportedLanguages = ['zh-CN', 'en'] as const
+export const supportedLanguages = [
+  'zh-CN',
+  'en',
+  'ja',
+  'es',
+  'fr',
+  'ru',
+] as const
 export type SupportedLanguage = (typeof supportedLanguages)[number]
 
 const LANGUAGE_STORAGE_KEY = 'prelude:language:v1'
@@ -18,7 +29,13 @@ interface ChromeI18nApi {
 export function resolveSupportedLanguage(
   language: string | null | undefined,
 ): SupportedLanguage {
-  if (language?.toLowerCase().startsWith('zh')) return 'zh-CN'
+  const languageCode = language?.toLowerCase().split(/[-_]/)[0]
+
+  if (languageCode === 'zh') return 'zh-CN'
+  if (languageCode === 'ja') return 'ja'
+  if (languageCode === 'es') return 'es'
+  if (languageCode === 'fr') return 'fr'
+  if (languageCode === 'ru') return 'ru'
   return 'en'
 }
 
@@ -56,6 +73,10 @@ void i18n.use(initReactI18next).init({
   resources: {
     'zh-CN': { translation: zhCN },
     en: { translation: en },
+    es: { translation: es },
+    fr: { translation: fr },
+    ja: { translation: ja },
+    ru: { translation: ru },
   },
   lng: getStoredLanguage() ?? resolveSupportedLanguage(getBrowserLanguage()),
   fallbackLng: 'zh-CN',

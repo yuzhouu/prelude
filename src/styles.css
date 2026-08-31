@@ -444,6 +444,8 @@ input:focus-visible {
   display: flex;
   align-items: center;
   gap: 1px;
+  max-width: 100%;
+  overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: 7px;
   background: var(--control-muted);
