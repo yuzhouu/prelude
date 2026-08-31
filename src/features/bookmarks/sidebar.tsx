@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react'
 import {
   Bookmark,
+  CalendarDays,
   ChevronRight,
   Clock3,
   Folder,
-  FolderPlus,
   PanelLeftClose,
   PanelsTopLeft,
   X,
@@ -238,7 +238,7 @@ export function Sidebar({
             type="button"
             onClick={() => onSelect('quick-folders')}
           >
-            <FolderPlus />
+            <CalendarDays />
             <span>{t('navigation.quickFolders')}</span>
           </button>
           <button

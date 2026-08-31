@@ -19,7 +19,7 @@ export const en = {
     listSeparator: ' and ',
   },
   navigation: {
-    quickFolders: 'Quick folders',
+    quickFolders: 'Today',
     currentTabs: 'Current tabs',
     recent: 'Recently added',
     allBookmarks: 'All bookmarks',

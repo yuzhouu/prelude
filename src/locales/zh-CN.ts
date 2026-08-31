@@ -17,7 +17,7 @@ export const zhCN = {
     listSeparator: '和',
   },
   navigation: {
-    quickFolders: '快捷文件夹',
+    quickFolders: '今日',
     currentTabs: '当前标签页',
     recent: '最近添加',
     allBookmarks: '全部书签',
