@@ -4,7 +4,7 @@ import { move } from '@dnd-kit/helpers'
 import { DragDropProvider, DragOverlay, PointerSensor } from '@dnd-kit/react'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/react'
 import { isSortableOperation, useSortable } from '@dnd-kit/react/sortable'
-import { useId, useRef, useState } from 'react'
+import { createContext, useContext, useId, useRef, useState } from 'react'
 import {
   Check,
   ChevronRight,
@@ -70,6 +70,41 @@ function getDefaultBookmarkTitle(url: string) {
   }
 }
 
+const ActiveQuickAddEditorContext = createContext<string | null>(null)
+const SetActiveQuickAddEditorContext = createContext<React.Dispatch<
+  React.SetStateAction<string | null>
+> | null>(null)
+
+function QuickAddEditorScope({ children }: { children: React.ReactNode }) {
+  const [activeEditorId, setActiveEditorId] = useState<string | null>(null)
+
+  return (
+    <ActiveQuickAddEditorContext.Provider value={activeEditorId}>
+      <SetActiveQuickAddEditorContext.Provider value={setActiveEditorId}>
+        {children}
+      </SetActiveQuickAddEditorContext.Provider>
+    </ActiveQuickAddEditorContext.Provider>
+  )
+}
+
+function useQuickAddEditor(editorId: string) {
+  const activeEditorId = useContext(ActiveQuickAddEditorContext)
+  const setActiveEditorId = useContext(SetActiveQuickAddEditorContext)
+
+  if (!setActiveEditorId) {
+    throw new Error('Quick-add editors must be rendered inside their scope.')
+  }
+
+  return {
+    isEditing: activeEditorId === editorId,
+    openEditor: () => setActiveEditorId(editorId),
+    closeEditor: () =>
+      setActiveEditorId((currentEditorId) =>
+        currentEditorId === editorId ? null : currentEditorId,
+      ),
+  }
+}
+
 function QuickAddFolderRow({
   canCreate,
   parentId,
@@ -80,14 +115,19 @@ function QuickAddFolderRow({
   parentTitle: string
 }) {
   const { t } = useTranslation()
-  const [isEditing, setIsEditing] = useState(false)
+  const editorId = useId()
+  const {
+    closeEditor: closeActiveEditor,
+    isEditing,
+    openEditor,
+  } = useQuickAddEditor(editorId)
   const [title, setTitle] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<'nameRequired' | 'addFailed'>()
   const titleInputId = useId()
 
   const closeEditor = () => {
-    setIsEditing(false)
+    closeActiveEditor()
     setTitle('')
     setError(undefined)
   }
@@ -120,7 +160,7 @@ function QuickAddFolderRow({
         className="folder-quick-add-trigger"
         type="button"
         aria-label={t('bookmarks.addFolder.actionIn', { parent: parentTitle })}
-        onClick={() => setIsEditing(true)}
+        onClick={openEditor}
       >
         <span className="folder-quick-add-line" aria-hidden="true" />
         <Plus />
@@ -189,7 +229,12 @@ function QuickAddBookmarkRow({
   canCreate: boolean
 }) {
   const { t } = useTranslation()
-  const [isEditing, setIsEditing] = useState(false)
+  const editorId = useId()
+  const {
+    closeEditor: closeActiveEditor,
+    isEditing,
+    openEditor,
+  } = useQuickAddEditor(editorId)
   const [url, setUrl] = useState('')
   const [title, setTitle] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -198,7 +243,7 @@ function QuickAddBookmarkRow({
   const titleInputId = useId()
 
   const closeEditor = () => {
-    setIsEditing(false)
+    closeActiveEditor()
     setUrl('')
     setTitle('')
     setError(undefined)
@@ -241,7 +286,7 @@ function QuickAddBookmarkRow({
         aria-label={t('bookmarks.addBookmark.actionIn', {
           folder: folderTitle,
         })}
-        onClick={() => setIsEditing(true)}
+        onClick={openEditor}
       >
         <Plus />
         <span>{t('bookmarks.addBookmark.action')}</span>
@@ -1078,28 +1123,30 @@ export function FolderContents({
   const folderTitle = folder.title || t('common.unnamedFolder')
 
   return (
-    <div className="bookmark-sections">
-      <SortableFolderChildren
-        parent={folder}
-        folderLevel={0}
-        canCreate={canCreate}
-        isInsideManagedTree={isInsideManagedTree}
-      />
-      <section className="bookmark-group root-bookmarks">
-        <div className="bookmark-list">
-          <QuickAddBookmarkRow
-            folderId={folder.id}
-            folderTitle={folderTitle}
-            canCreate={canCreate && !isInsideManagedTree}
-          />
-        </div>
-      </section>
-      <QuickAddFolderRow
-        parentId={folder.id}
-        parentTitle={folderTitle}
-        canCreate={canCreate && !isInsideManagedTree}
-      />
-    </div>
+    <QuickAddEditorScope>
+      <div className="bookmark-sections">
+        <SortableFolderChildren
+          parent={folder}
+          folderLevel={0}
+          canCreate={canCreate}
+          isInsideManagedTree={isInsideManagedTree}
+        />
+        <section className="bookmark-group root-bookmarks">
+          <div className="bookmark-list">
+            <QuickAddBookmarkRow
+              folderId={folder.id}
+              folderTitle={folderTitle}
+              canCreate={canCreate && !isInsideManagedTree}
+            />
+          </div>
+        </section>
+        <QuickAddFolderRow
+          parentId={folder.id}
+          parentTitle={folderTitle}
+          canCreate={canCreate && !isInsideManagedTree}
+        />
+      </div>
+    </QuickAddEditorScope>
   )
 }
 
@@ -1111,16 +1158,18 @@ export function AllBookmarkContents({
   canCreate: boolean
 }) {
   return (
-    <div className="bookmark-sections">
-      {roots.map((root) => (
-        <FolderSection
-          key={root.id}
-          folder={root}
-          canCreate={canCreate}
-          isInsideManagedTree={root.folderType === 'managed'}
-        />
-      ))}
-    </div>
+    <QuickAddEditorScope>
+      <div className="bookmark-sections">
+        {roots.map((root) => (
+          <FolderSection
+            key={root.id}
+            folder={root}
+            canCreate={canCreate}
+            isInsideManagedTree={root.folderType === 'managed'}
+          />
+        ))}
+      </div>
+    </QuickAddEditorScope>
   )
 }
 
