@@ -32,7 +32,7 @@ English reference: Manage Chrome bookmarks and open tabs in a calm new tab, and 
 
 ### `search`
 
-把用户明确提交的普通文本交给 Chrome 当前配置的默认搜索引擎，并在当前标签页打开结果。开篇不保存或上传查询。
+把用户明确提交的普通文本交给 Chrome 当前配置的默认搜索引擎，并在当前标签页打开结果。序幕不保存或上传查询。
 
 ### `favicon`
 
@@ -83,6 +83,6 @@ Certify all of the following:
 
 Use this sentence near the beginning of every store description:
 
-> 开篇会读取 Chrome 书签及打开标签页的标题和网址，用于展示、搜索、管理与收集；书签与标签页数据仅在本机处理，不上传、不出售，也不用于广告。只有用户主动提交的网页搜索会由 Chrome 交给当前配置的默认搜索引擎。
+> 序幕会读取 Chrome 书签及打开标签页的标题和网址，用于展示、搜索、管理与收集；书签与标签页数据仅在本机处理，不上传、不出售，也不用于广告。只有用户主动提交的网页搜索会由 Chrome 交给当前配置的默认搜索引擎。
 
 The same disclosure appears inside Settings → Data and privacy before the link to the full policy.

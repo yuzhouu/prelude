@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "开篇 · Prelude",
+    "message": "序幕 · Prelude",
     "description": "扩展名称"
   },
   "extensionDescription": {
@@ -14,7 +14,7 @@
     "message": "把当前标签页加入待读"
   },
   "captureContextRoot": {
-    "message": "收集到开篇"
+    "message": "收集到序幕"
   },
   "captureContextPage": {
     "message": "当前标签页加入待读"
@@ -29,7 +29,7 @@
     "message": "保存后关闭原标签页"
   },
   "captureNotificationTitle": {
-    "message": "开篇 · 收集"
+    "message": "序幕 · 收集"
   },
   "captureSaved": {
     "message": "已加入待读：$COUNT$ 个标签页",

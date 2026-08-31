@@ -21,7 +21,7 @@ The focused comparison checks the mark independently at large size and in the re
 - Spacing and layout rhythm: the mark occupies the existing `32 x 32` logo slot and preserves the existing `8px` identity gap and sidebar header alignment.
 - Colors and visual tokens: main mark `#dc4c3e`, folded corner `#202020`, separator `#faf9f8`; light and dark themes were inspected.
 - Image quality and asset fidelity: the selected generated mark was traced into a scalable external SVG, not redrawn as an inline UI shape. Transparent PNG extension sizes are produced from that SVG and have exact dimensions.
-- Copy and content: `开篇 · Prelude` and the sync-status copy are unchanged.
+- Copy and content: the current brand is `序幕 · Prelude`; the logo mark and sync-status copy remain unchanged.
 
 ## Findings
 
@@ -35,7 +35,7 @@ No actionable P0, P1, or P2 findings remain.
 
 ## Interaction and runtime checks
 
-- Page identity: `http://127.0.0.1:4173/`, title `开篇 · Prelude`.
+- Page identity: `http://127.0.0.1:4173/`, title `序幕 · Prelude`.
 - Meaningful content rendered with no framework error overlay.
 - Sidebar logo loaded from `/icons/prelude.svg` and was visible.
 - Search trigger opened the search dialog; Escape closed it.

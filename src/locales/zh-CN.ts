@@ -1,6 +1,6 @@
 export const zhCN = {
   app: {
-    name: '开篇 · Prelude',
+    name: '序幕 · Prelude',
     description:
       '把 Chrome 书签、当前标签页与待读收集整合进安静的新标签页；书签与标签页数据仅在本地处理。',
   },
@@ -70,10 +70,10 @@ export const zhCN = {
     open: '打开设置',
     close: '关闭设置',
     title: '设置',
-    description: '管理开篇的界面偏好与数据说明。',
+    description: '管理序幕的界面偏好与数据说明。',
     privacy: {
       title: '数据与隐私',
-      summary: '开篇只为管理书签、标签页与待读内容而处理必要的浏览器数据。',
+      summary: '序幕只为管理书签、标签页与待读内容而处理必要的浏览器数据。',
       bookmarks: '读取并修改你主动管理的 Chrome 书签与文件夹。',
       tabs: '读取打开标签页的标题和网址，用于展示、搜索与收集。',
       local: '书签与标签页数据在本机处理，不上传、不出售，也不用于广告。',
@@ -120,7 +120,7 @@ export const zhCN = {
     failed: '保存失败，请确认扩展仍拥有书签和标签页权限。',
     extensionRequired: '加载为 Chrome 扩展后即可使用真实收集入口。',
     shortcutHint: '快捷键 Alt + Shift + S；右键菜单也可收集。',
-    newTabHint: '在开篇新标签页中，“当前标签页”会取最近浏览的网页。',
+    newTabHint: '在序幕新标签页中，“当前标签页”会取最近浏览的网页。',
     result: {
       saved_one: '已加入待读：{{count}} 个页面。',
       saved_other: '已加入待读：{{count}} 个页面。',
@@ -239,7 +239,7 @@ export const zhCN = {
   },
   defaultFolders: {
     names: {
-      container: '开篇',
+      container: '序幕',
       pinned: '置顶',
       readLater: '待读',
       favorites: '收藏',

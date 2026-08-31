@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "product": "开篇 · Prelude",
+  "product": "序幕 · Prelude",
   "generatedAt": "2026-08-31",
   "provenance": {
     "screenshots": "Captured from the real Vite-rendered product at http://127.0.0.1:3000 using the built-in demo bookmark and tab data. No interface elements were invented or composited into screenshots.",
@@ -22,7 +22,7 @@
       "state": "All bookmarks",
       "width": 1280,
       "height": 800,
-      "sha256": "196014e4a4d599e5b084fab55bd9f135cc817f9c474ffb8140c7bfa96c041af3"
+      "sha256": "5889e3ab9394d5f122b5ca5c4d367bd2534fa008cce18721c8445a7bfea66ad0"
     },
     {
       "path": "screenshots/zh-CN/02-open-tabs-1280x800.png",
@@ -31,7 +31,7 @@
       "state": "Open tabs",
       "width": 1280,
       "height": 800,
-      "sha256": "2c4873bba88b952cdb4c0cc14ee62dec888fc1f0953e07dab26833579120a90f"
+      "sha256": "7bf6e3570d74bbf372e1655718e8db1745e75db4f9e59d74f59ff78599daf080"
     },
     {
       "path": "screenshots/zh-CN/03-search-1280x800.png",
@@ -40,7 +40,7 @@
       "state": "Search results",
       "width": 1280,
       "height": 800,
-      "sha256": "dfeadf6920bcbfd9634a9b4ff11fc2210e01248b4dbc3022e44b663a344ceed8"
+      "sha256": "f41caf3607be43531f1108ad2ab9a24c2109d486d6f258663b3830f5b36d8168"
     },
     {
       "path": "screenshots/zh-CN/04-privacy-settings-1280x800.png",
@@ -49,7 +49,7 @@
       "state": "Data and privacy disclosure",
       "width": 1280,
       "height": 800,
-      "sha256": "847f6f25af0e8c21918d6f49efcbfc25a5c8c7b842044d0eeb27faa64370e3d2"
+      "sha256": "26ce84ebb4302a97467e56945a3f85f9254bf98a41dd8cac110e4d1ee0b3c7de"
     },
     {
       "path": "screenshots/zh-CN/05-recent-1280x800.png",
@@ -58,7 +58,7 @@
       "state": "Recently added",
       "width": 1280,
       "height": 800,
-      "sha256": "ebb3de05282fb3d7dc76e90b0eb3aea15fd26c3510aaea466dc6d55a360fcff6"
+      "sha256": "de4f04ccc599e50e8a91219a9a937f9565e85f9d959d48c26fbd35058c592b1e"
     },
     {
       "path": "promo-small-440x280.png",
@@ -66,7 +66,7 @@
       "role": "small-promo-tile",
       "width": 440,
       "height": 280,
-      "sha256": "f62fc84a385b48b5aa7b9b3b69e68cd818d0a032f7e7f04f4bdfbc5c54a8670d"
+      "sha256": "c8da56d0e0db304e87248f60749194c50d7910f1d75859142be14f46aaf37121"
     },
     {
       "path": "promo-marquee-1400x560.png",
@@ -74,7 +74,7 @@
       "role": "marquee-promo-tile",
       "width": 1400,
       "height": 560,
-      "sha256": "05c74349c1bb4e438c015acdfac65e8db2751d3330b2241eab604e5cf12c6fd1"
+      "sha256": "e3b5c5e441df02a3bf3937a9c934c6b26744fcf35be13d166fbcd63a8a534245"
     }
   ]
 }

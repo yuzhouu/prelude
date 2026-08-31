@@ -1,6 +1,6 @@
 # Chrome Web Store release pack
 
-This directory contains the copy and artwork prepared for the first public release of 开篇 · Prelude.
+This directory contains the copy and artwork prepared for the first public release of 序幕 · Prelude.
 
 ## Dashboard values
 

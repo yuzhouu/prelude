@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="560" viewBox="0 0 1400 560" role="img" aria-labelledby="title description">
-  <title id="title">开篇 · Prelude</title>
+  <title id="title">序幕 · Prelude</title>
   <desc id="description">把 Chrome 书签、当前标签页与待读收集整合进安静的新标签页</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
@@ -18,11 +18,11 @@
   <circle cx="1337" cy="525" r="190" fill="#dc4c3e" opacity="0.045" />
 
   <g transform="translate(74 82)">
-    <rect width="70" height="80" rx="17" fill="#ffffff" stroke="#eadedb" />
-    <image href="/icons/prelude.svg" x="13" y="10" width="44" height="54" preserveAspectRatio="xMidYMid meet" />
+    <rect width="70" height="70" rx="17" fill="#ffffff" stroke="#eadedb" />
+    <image href="/icons/prelude.svg" x="13" y="8" width="44" height="54" preserveAspectRatio="xMidYMid meet" />
   </g>
-  <text x="74" y="217" fill="#202020" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="48" font-weight="730" letter-spacing="-1.7">开篇 · Prelude</text>
-  <text x="76" y="264" fill="#514b47" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="22" font-weight="600">一页初开，万事徐来。</text>
+  <text x="74" y="217" fill="#202020" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="48" font-weight="730" letter-spacing="-1.7">序幕 · Prelude</text>
+  <text x="76" y="264" fill="#514b47" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="22" font-weight="600">江流天地外，山色有无中</text>
   <text x="76" y="315" fill="#6e6863" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="17">
     <tspan x="76" dy="0">把 Chrome 书签、当前标签页与待读收集，</tspan>
     <tspan x="76" dy="29">整合进一个安静的新标签页。</tspan>

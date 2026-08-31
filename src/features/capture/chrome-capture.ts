@@ -68,7 +68,7 @@ interface ChromeApi {
   }
 }
 
-const CONTAINER_TITLES = ['开篇', 'Prelude', '今巡', '书签 · 新标签页']
+const CONTAINER_TITLES = ['序幕', 'Prelude', '开篇', '今巡', '书签 · 新标签页']
 const READ_LATER_TITLES = [
   '待读',
   'Read later',
@@ -112,7 +112,7 @@ const CAPTURE_NAMES = {
     window: 'Окно',
   },
   zh: {
-    container: '开篇',
+    container: '序幕',
     group: '标签组',
     readLater: '待读',
     window: '窗口',

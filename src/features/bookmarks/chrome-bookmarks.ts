@@ -62,9 +62,10 @@ interface ChromeApi {
   }
 }
 
-const DEFAULT_BOOKMARK_CONTAINER_TITLES = ['开篇', 'Prelude'] as const
+const DEFAULT_BOOKMARK_CONTAINER_TITLES = ['序幕', 'Prelude'] as const
 
 const LEGACY_DEFAULT_BOOKMARK_CONTAINER_TITLES = [
+  '开篇',
   '今巡',
   '书签 · 新标签页',
 ] as const
