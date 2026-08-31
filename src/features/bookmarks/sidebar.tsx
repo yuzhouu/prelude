@@ -191,7 +191,7 @@ export function Sidebar({
         <div className="sidebar-brand">
           <div className="app-identity">
             <span className="app-logo" aria-hidden="true">
-              <FolderPlus />
+              <img src="/icons/prelude.svg" alt="" />
             </span>
             <div className="app-brand-copy">
               <strong className="app-name">{t('app.name')}</strong>

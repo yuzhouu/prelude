@@ -236,15 +236,12 @@ input:focus-visible {
   height: 32px;
   flex: 0 0 auto;
   place-items: center;
-  border-radius: 8px;
-  background: var(--accent-action);
-  color: var(--on-accent);
 }
 
-.app-logo svg {
-  width: 17px;
-  height: 17px;
-  stroke-width: 1.8;
+.app-logo img {
+  display: block;
+  width: 32px;
+  height: 32px;
 }
 
 .app-name {
