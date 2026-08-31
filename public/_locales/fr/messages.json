@@ -4,7 +4,7 @@
     "description": "Nom de l’extension"
   },
   "extensionDescription": {
-    "message": "Un début serein pour tout ce qui vient.",
+    "message": "Un nouvel onglet apaisé pour favoris, onglets ouverts et À lire plus tard. Les données des favoris et onglets restent locales.",
     "description": "Description de l’extension"
   },
   "captureActionTitle": {

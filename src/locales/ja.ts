@@ -3,7 +3,8 @@ import type { MessageCatalog } from './zh-CN'
 export const ja = {
   app: {
     name: 'Prelude',
-    description: '静かな一歩から、すべてが始まる。',
+    description:
+      'Chromeのブックマーク、開いているタブ、あとで読む項目を静かな新しいタブで管理。ブックマークとタブのデータは端末内で処理します。',
   },
   common: {
     cancel: 'キャンセル',
@@ -74,7 +75,20 @@ export const ja = {
     open: '設定を開く',
     close: '設定を閉じる',
     title: '設定',
-    description: 'Preludeの表示設定を管理します。',
+    description: 'Preludeの表示設定とデータに関する説明を確認します。',
+    privacy: {
+      title: 'データとプライバシー',
+      summary:
+        'Preludeは、ブックマーク、タブ、「後で読む」の管理に必要なブラウザデータだけを処理します。',
+      bookmarks:
+        'ユーザーが管理するChromeのブックマークとフォルダを読み取り、変更します。',
+      tabs: '表示、検索、収集のために、開いているタブのタイトルとURLを読み取ります。',
+      local:
+        'ブックマークとタブのデータは端末内で処理され、アップロード、販売、広告利用は行いません。',
+      search:
+        'ユーザーが実行したウェブ検索だけが、Chromeから既定の検索プロバイダへ渡されます。',
+      action: 'プライバシーポリシーを読む',
+    },
   },
   capture: {
     open: '収集',

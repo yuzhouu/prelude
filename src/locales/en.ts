@@ -3,7 +3,8 @@ import type { MessageCatalog } from './zh-CN'
 export const en = {
   app: {
     name: 'Prelude',
-    description: 'A calm beginning for everything ahead.',
+    description:
+      'A calm new tab for Chrome bookmarks, open tabs, and Read later. Bookmark and tab data stays local.',
   },
   common: {
     cancel: 'Cancel',
@@ -73,7 +74,20 @@ export const en = {
     open: 'Open settings',
     close: 'Close settings',
     title: 'Settings',
-    description: 'Manage your interface preferences for Prelude.',
+    description: 'Manage Prelude’s interface preferences and data notice.',
+    privacy: {
+      title: 'Data and privacy',
+      summary:
+        'Prelude handles only the browser data needed to manage bookmarks, tabs, and Read later.',
+      bookmarks:
+        'Reads and changes the Chrome bookmarks and folders you manage.',
+      tabs: 'Reads open-tab titles and URLs for display, search, and collection.',
+      local:
+        'Bookmark and tab data stays local; it is not uploaded, sold, or used for ads.',
+      search:
+        'Only a web search you submit is passed by Chrome to the default search provider.',
+      action: 'Read the full privacy policy',
+    },
   },
   capture: {
     open: 'Collect',

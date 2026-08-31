@@ -3,7 +3,8 @@ import type { MessageCatalog } from './zh-CN'
 export const es = {
   app: {
     name: 'Prelude',
-    description: 'Un comienzo sereno para todo lo que viene.',
+    description:
+      'Una nueva pestaña para marcadores, pestañas abiertas y Leer más tarde. Sus datos permanecen en local.',
   },
   common: {
     cancel: 'Cancelar',
@@ -75,7 +76,20 @@ export const es = {
     open: 'Abrir configuración',
     close: 'Cerrar configuración',
     title: 'Configuración',
-    description: 'Gestiona tus preferencias de interfaz de Prelude.',
+    description: 'Gestiona la interfaz de Prelude y consulta el uso de datos.',
+    privacy: {
+      title: 'Datos y privacidad',
+      summary:
+        'Prelude solo trata los datos del navegador necesarios para gestionar marcadores, pestañas y Leer más tarde.',
+      bookmarks:
+        'Lee y modifica los marcadores y carpetas de Chrome que gestionas.',
+      tabs: 'Lee títulos y URL de pestañas abiertas para mostrarlas, buscarlas y guardarlas.',
+      local:
+        'Los datos de marcadores y pestañas permanecen en local; no se venden ni usan para publicidad.',
+      search:
+        'Solo las búsquedas web que envías se entregan al buscador predeterminado de Chrome.',
+      action: 'Leer la política de privacidad',
+    },
   },
   capture: {
     open: 'Guardar',

@@ -4,6 +4,8 @@
 
 开篇（Prelude）是一个将固定网站变成每日浏览任务、并顺手管理书签与标签页的 Chrome 新标签页扩展。它直接读取 Chrome 的书签树，并在侧栏和主内容区保留原有文件夹层级。
 
+[隐私政策](./PRIVACY.md) · [支持](https://github.com/yuzhouu/supposed/issues)
+
 ## 功能
 
 - 使用 `chrome.bookmarks.getTree()` 读取真实书签与文件夹结构
@@ -49,4 +51,4 @@ pnpm dev
 
 ## 数据与权限
 
-扩展声明 `bookmarks`、`contextMenus`、`favicon`、`notifications`、`search`、`storage`、`tabGroups`、`tabs` 和 `webNavigation` 权限。`search` 只用于把普通文本交给 Chrome 的默认搜索引擎；`tabs` 与 `tabGroups` 用于读取当前页面、窗口和标签组，并在用户开启选项后关闭已保存的原标签页；`contextMenus` 提供右键收集入口，`notifications` 反馈后台保存与重复网址结果；`storage` 只记录自动标题状态、待读文件夹位置和关闭标签页偏好；`webNavigation` 用于在网址发生重定向时关联原始书签与最终页面标题，不读取页面正文。经用户触发建立的文件夹是普通 Chrome 书签文件夹，用户可以随时改名、移动或删除。所有数据均在本地处理，没有远程数据服务。
+扩展声明 `bookmarks`、`contextMenus`、`favicon`、`notifications`、`search`、`storage`、`tabGroups`、`tabs` 和 `webNavigation` 权限。`search` 只用于把普通文本交给 Chrome 的默认搜索引擎；`tabs` 与 `tabGroups` 用于读取当前页面、窗口和标签组，并在用户开启选项后关闭已保存的原标签页；`contextMenus` 提供右键收集入口，`notifications` 反馈后台保存与重复网址结果；`storage` 只记录自动标题状态、待读文件夹位置和关闭标签页偏好；`webNavigation` 用于在网址发生重定向时关联原始书签与最终页面标题，不读取页面正文。经用户触发建立的文件夹是普通 Chrome 书签文件夹，用户可以随时改名、移动或删除。书签、标签页、导航元数据和偏好仅在本地处理，没有远程数据服务；只有用户主动提交的网页搜索会由 Chrome 交给默认搜索引擎。完整说明见[隐私政策](./PRIVACY.md)。

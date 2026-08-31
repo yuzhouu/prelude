@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="280" viewBox="0 0 440 280" role="img" aria-labelledby="title description">
+  <title id="title">开篇 · Prelude</title>
+  <desc id="description">书签、标签页与待读内容的安静新标签页</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e65d50" />
+      <stop offset="1" stop-color="#c73f34" />
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#7c211b" flood-opacity="0.24" />
+    </filter>
+  </defs>
+  <rect width="440" height="280" fill="url(#background)" />
+  <circle cx="404" cy="-4" r="132" fill="#ffffff" opacity="0.08" />
+  <circle cx="32" cy="282" r="118" fill="#7f2019" opacity="0.09" />
+  <g filter="url(#shadow)">
+    <rect x="36" y="38" width="76" height="86" rx="18" fill="#fffaf8" />
+    <image href="/icons/prelude.svg" x="50" y="47" width="48" height="60" preserveAspectRatio="xMidYMid meet" />
+  </g>
+  <text x="36" y="174" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="31" font-weight="700" letter-spacing="-0.8">开篇 · Prelude</text>
+  <text x="37" y="207" fill="#ffe7e3" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="15" font-weight="600">书签 · 标签页 · 待读</text>
+  <text x="37" y="239" fill="#ffffff" opacity="0.82" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', sans-serif" font-size="12">一页初开，万事徐来。</text>
+</svg>

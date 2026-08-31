@@ -1,7 +1,8 @@
 export const zhCN = {
   app: {
     name: '开篇 · Prelude',
-    description: '一页初开，万事徐来。',
+    description:
+      '把 Chrome 书签、当前标签页与待读收集整合进安静的新标签页；书签与标签页数据仅在本地处理。',
   },
   common: {
     cancel: '取消',
@@ -69,7 +70,16 @@ export const zhCN = {
     open: '打开设置',
     close: '关闭设置',
     title: '设置',
-    description: '管理开篇的界面偏好。',
+    description: '管理开篇的界面偏好与数据说明。',
+    privacy: {
+      title: '数据与隐私',
+      summary: '开篇只为管理书签、标签页与待读内容而处理必要的浏览器数据。',
+      bookmarks: '读取并修改你主动管理的 Chrome 书签与文件夹。',
+      tabs: '读取打开标签页的标题和网址，用于展示、搜索与收集。',
+      local: '书签与标签页数据在本机处理，不上传、不出售，也不用于广告。',
+      search: '只有你主动提交的网页搜索会由 Chrome 交给默认搜索引擎。',
+      action: '查看完整隐私政策',
+    },
   },
   capture: {
     open: '收集',

@@ -3,7 +3,8 @@ import type { MessageCatalog } from './zh-CN'
 export const fr = {
   app: {
     name: 'Prelude',
-    description: 'Un début serein pour tout ce qui vient.',
+    description:
+      'Un nouvel onglet apaisé pour favoris, onglets ouverts et À lire plus tard. Les données des favoris et onglets restent locales.',
   },
   common: {
     cancel: 'Annuler',
@@ -74,7 +75,21 @@ export const fr = {
     open: 'Ouvrir les paramètres',
     close: 'Fermer les paramètres',
     title: 'Paramètres',
-    description: 'Gérez vos préférences d’interface pour Prelude.',
+    description:
+      'Gérez l’interface de Prelude et consultez l’usage des données.',
+    privacy: {
+      title: 'Données et confidentialité',
+      summary:
+        'Prelude traite uniquement les données du navigateur nécessaires aux favoris, onglets et éléments À lire plus tard.',
+      bookmarks:
+        'Lit et modifie les favoris et dossiers Chrome que vous gérez.',
+      tabs: 'Lit les titres et URL des onglets ouverts pour les afficher, rechercher et collecter.',
+      local:
+        'Les données des favoris et onglets restent locales, sans vente ni usage publicitaire.',
+      search:
+        'Seules les recherches Web que vous envoyez sont confiées au moteur par défaut de Chrome.',
+      action: 'Lire la politique de confidentialité',
+    },
   },
   capture: {
     open: 'Collecter',

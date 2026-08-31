@@ -1,5 +1,5 @@
 import { Dialog } from '@base-ui/react/dialog'
-import { Settings, X } from 'lucide-react'
+import { ExternalLink, Settings, ShieldCheck, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { LanguageToggle } from '../language/language-toggle'
@@ -43,6 +43,33 @@ export function SettingsDialog() {
             <div className="settings-dialog-content">
               <LanguageToggle />
             </div>
+
+            <section
+              className="settings-privacy-card"
+              aria-labelledby="settings-privacy-title"
+            >
+              <div className="settings-privacy-heading">
+                <span className="settings-privacy-icon" aria-hidden="true">
+                  <ShieldCheck />
+                </span>
+                <div>
+                  <h2 id="settings-privacy-title">
+                    {t('settings.privacy.title')}
+                  </h2>
+                  <p>{t('settings.privacy.summary')}</p>
+                </div>
+              </div>
+              <ul>
+                <li>{t('settings.privacy.bookmarks')}</li>
+                <li>{t('settings.privacy.tabs')}</li>
+                <li>{t('settings.privacy.local')}</li>
+                <li>{t('settings.privacy.search')}</li>
+              </ul>
+              <a href="/privacy.html" target="_blank" rel="noreferrer">
+                {t('settings.privacy.action')}
+                <ExternalLink aria-hidden="true" />
+              </a>
+            </section>
           </Dialog.Popup>
         </Dialog.Viewport>
       </Dialog.Portal>
