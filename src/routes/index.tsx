@@ -4,6 +4,11 @@ import { Menu, PanelLeftOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../components/ui/tooltip'
+import {
   AllBookmarkContents,
   BookmarkOpenTabScope,
   FolderDeleteButton,
@@ -225,14 +230,23 @@ function Home() {
           className="main-breadcrumb"
           aria-label={t('navigation.currentLocation')}
         >
-          <button
-            className="sidebar-expand-button"
-            type="button"
-            aria-label={t('navigation.expandSidebar')}
-            onClick={() => setIsSidebarExpanded(true)}
-          >
-            <PanelLeftOpen />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  className="sidebar-expand-button"
+                  type="button"
+                  aria-label={t('navigation.expandSidebar')}
+                  onClick={() => setIsSidebarExpanded(true)}
+                >
+                  <PanelLeftOpen />
+                </button>
+              }
+            />
+            <TooltipContent side="bottom">
+              {t('navigation.expandSidebar')}
+            </TooltipContent>
+          </Tooltip>
           <div className="breadcrumb-current">
             <h1 aria-current="page">{viewTitle}</h1>
             <span aria-hidden="true">/</span>

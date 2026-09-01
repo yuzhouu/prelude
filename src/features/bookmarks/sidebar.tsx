@@ -12,6 +12,11 @@ import {
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../components/ui/tooltip'
 import { SearchTrigger } from '../search/search-trigger'
 import { SettingsDialog } from '../settings/settings-dialog'
 import { ThemeToggle } from '../theme/theme-toggle'
@@ -195,27 +200,45 @@ export function Sidebar({
             </span>
             <div className="app-brand-copy">
               <strong className="app-name">{t('app.name')}</strong>
-              <span
-                className={`bookmark-sync-summary ${syncSummary.className}`}
-                title={syncSummary.title}
-                aria-label={t('sync.allBookmarksStatus', {
-                  status: syncSummary.label,
-                })}
-              >
-                <span className="bookmark-sync-dot" aria-hidden="true" />
-                {syncSummary.label}
-              </span>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <span
+                      className={`bookmark-sync-summary ${syncSummary.className}`}
+                      aria-label={t('sync.allBookmarksStatus', {
+                        status: syncSummary.label,
+                      })}
+                      tabIndex={0}
+                    >
+                      <span className="bookmark-sync-dot" aria-hidden="true" />
+                      {syncSummary.label}
+                    </span>
+                  }
+                />
+                <TooltipContent side="bottom">
+                  {syncSummary.title}
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
           <div className="profile-actions">
-            <button
-              className="sidebar-collapse-button"
-              type="button"
-              aria-label={t('navigation.collapseSidebar')}
-              onClick={onCollapse}
-            >
-              <PanelLeftClose />
-            </button>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <button
+                    className="sidebar-collapse-button"
+                    type="button"
+                    aria-label={t('navigation.collapseSidebar')}
+                    onClick={onCollapse}
+                  >
+                    <PanelLeftClose />
+                  </button>
+                }
+              />
+              <TooltipContent side="bottom">
+                {t('navigation.collapseSidebar')}
+              </TooltipContent>
+            </Tooltip>
             <button
               className="mobile-close-button"
               type="button"

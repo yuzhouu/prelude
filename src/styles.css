@@ -164,6 +164,14 @@ input:focus-visible {
   border: 0;
 }
 
+.tooltip-disabled-trigger {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+}
+
 .app-shell {
   min-height: 100vh;
 }

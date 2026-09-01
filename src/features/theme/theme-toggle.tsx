@@ -3,6 +3,11 @@ import { Laptop, Moon, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../components/ui/tooltip'
+import {
   applyTheme,
   getThemePreference,
   resolveTheme,
@@ -44,17 +49,22 @@ export function ThemeToggle() {
       {THEME_OPTIONS.map(({ value, labelKey, icon: Icon }) => {
         const label = t(labelKey)
         return (
-          <button
-            key={value}
-            className="theme-option"
-            type="button"
-            title={label}
-            aria-label={label}
-            aria-pressed={preference === value}
-            onClick={() => selectTheme(value)}
-          >
-            <Icon />
-          </button>
+          <Tooltip key={value}>
+            <TooltipTrigger
+              render={
+                <button
+                  className="theme-option"
+                  type="button"
+                  aria-label={label}
+                  aria-pressed={preference === value}
+                  onClick={() => selectTheme(value)}
+                >
+                  <Icon />
+                </button>
+              }
+            />
+            <TooltipContent>{label}</TooltipContent>
+          </Tooltip>
         )
       })}
     </div>

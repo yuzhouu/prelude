@@ -26,6 +26,11 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../components/ui/tooltip'
 import { normalizeCapturedUrl } from '../capture/model'
 import type { OpenTab, OpenTabWindow } from '../tabs/model'
 import {
@@ -511,77 +516,121 @@ export function BookmarkRow({
             <span className="bookmark-path">{path.join(' / ')}</span>
           ) : null}
         </a>
-        {openTab ? (
-          <button
-            className="bookmark-action bookmark-open-tab-action"
-            type="button"
-            aria-label={t('bookmarks.actions.switchToOpenTab', {
-              title: node.title,
-            })}
-            title={t('bookmarks.actions.switchToOpenTabShort')}
-            onClick={() => openTabContext?.onActivateTab(openTab)}
-          >
-            <PanelsTopLeft />
-          </button>
-        ) : null}
-        <a
-          className="bookmark-action bookmark-secondary-action"
-          href={url}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={t('bookmarks.actions.openNewTab', { title: node.title })}
-          title={t('bookmarks.actions.openNewTabShort')}
-        >
-          <ExternalLink />
-        </a>
-        <button
-          className="bookmark-action bookmark-secondary-action"
-          type="button"
-          aria-label={
-            copied
-              ? t('bookmarks.actions.copied')
-              : t('bookmarks.actions.copy', { title: node.title })
-          }
-          title={
-            copied
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <button
+                className="bookmark-action bookmark-secondary-action"
+                type="button"
+                aria-label={
+                  copied
+                    ? t('bookmarks.actions.copied')
+                    : t('bookmarks.actions.copy', { title: node.title })
+                }
+                onClick={copyUrl}
+              >
+                {copied ? <Check /> : <Copy />}
+              </button>
+            }
+          />
+          <TooltipContent>
+            {copied
               ? t('bookmarks.actions.copiedShort')
-              : t('bookmarks.actions.copyShort')
-          }
-          onClick={copyUrl}
-        >
-          {copied ? <Check /> : <Copy />}
-        </button>
-        <button
-          className="bookmark-action bookmark-direct-action"
-          type="button"
-          disabled={!canMutate}
-          aria-label={t('bookmarks.actions.edit', { title: node.title })}
-          title={
-            canMutate
+              : t('bookmarks.actions.copyShort')}
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <a
+                className="bookmark-action bookmark-secondary-action"
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('bookmarks.actions.openNewTab', {
+                  title: node.title,
+                })}
+              >
+                <ExternalLink />
+              </a>
+            }
+          />
+          <TooltipContent>
+            {t('bookmarks.actions.openNewTabShort')}
+          </TooltipContent>
+        </Tooltip>
+        {openTab ? (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  className="bookmark-action bookmark-open-tab-action"
+                  type="button"
+                  aria-label={t('bookmarks.actions.switchToOpenTab', {
+                    title: node.title,
+                  })}
+                  onClick={() => openTabContext?.onActivateTab(openTab)}
+                >
+                  <PanelsTopLeft />
+                </button>
+              }
+            />
+            <TooltipContent>
+              {t('bookmarks.actions.switchToOpenTabShort')}
+            </TooltipContent>
+          </Tooltip>
+        ) : null}
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="tooltip-disabled-trigger">
+                <button
+                  className="bookmark-action bookmark-direct-action"
+                  type="button"
+                  disabled={!canMutate}
+                  aria-label={t('bookmarks.actions.edit', {
+                    title: node.title,
+                  })}
+                  onClick={openEditor}
+                >
+                  <Pencil />
+                </button>
+              </span>
+            }
+          />
+          <TooltipContent>
+            {canMutate
               ? t('bookmarks.actions.editShort')
-              : t('bookmarks.actions.extensionRequiredModify')
-          }
-          onClick={openEditor}
-        >
-          <Pencil />
-        </button>
-        <button
-          className="bookmark-action bookmark-direct-action bookmark-delete-action"
-          type="button"
-          disabled={!canMutate}
-          aria-label={t('bookmarks.actions.delete', { title: node.title })}
-          title={
-            canMutate
+              : t('bookmarks.actions.extensionRequiredModify')}
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="tooltip-disabled-trigger">
+                <button
+                  className="bookmark-action bookmark-direct-action bookmark-delete-action"
+                  type="button"
+                  disabled={!canMutate}
+                  aria-label={t('bookmarks.actions.delete', {
+                    title: node.title,
+                  })}
+                  onClick={() => {
+                    setDeleteError(false)
+                    setIsDeleteOpen(true)
+                  }}
+                >
+                  <Trash2 />
+                </button>
+              </span>
+            }
+          />
+          <TooltipContent>
+            {canMutate
               ? t('bookmarks.actions.deleteShort')
-              : t('bookmarks.actions.extensionRequiredModify')
-          }
-          onClick={() => {
-            setDeleteError(false)
-            setIsDeleteOpen(true)
-          }}
-        >
-          <Trash2 />
-        </button>
+              : t('bookmarks.actions.extensionRequiredModify')}
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       <Dialog.Root
@@ -745,20 +794,30 @@ export function FolderDeleteButton({
         if (!isDeleting) setIsOpen(open)
       }}
     >
-      <AlertDialog.Trigger
-        className={`folder-delete-button${className ? ` ${className}` : ''}`}
-        type="button"
-        disabled={!canDelete}
-        aria-label={t('bookmarks.folder.delete', { title: folderTitle })}
-        title={
-          canDelete
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <span className="tooltip-disabled-trigger">
+              <AlertDialog.Trigger
+                className={`folder-delete-button${className ? ` ${className}` : ''}`}
+                type="button"
+                disabled={!canDelete}
+                aria-label={t('bookmarks.folder.delete', {
+                  title: folderTitle,
+                })}
+                onClick={() => setHasError(false)}
+              >
+                <Trash2 />
+              </AlertDialog.Trigger>
+            </span>
+          }
+        />
+        <TooltipContent>
+          {canDelete
             ? t('bookmarks.folder.deleteShort')
-            : t('bookmarks.folder.extensionRequiredDelete')
-        }
-        onClick={() => setHasError(false)}
-      >
-        <Trash2 />
-      </AlertDialog.Trigger>
+            : t('bookmarks.folder.extensionRequiredDelete')}
+        </TooltipContent>
+      </Tooltip>
       <AlertDialog.Portal>
         <AlertDialog.Backdrop className="bookmark-dialog-backdrop" />
         <AlertDialog.Viewport className="bookmark-dialog-viewport">
@@ -851,21 +910,29 @@ function FolderSection({
         className="bookmark-group-header"
       >
         <div className="group-title-row">
-          <button
-            className="bookmark-group-toggle"
-            type="button"
-            aria-label={toggleLabel}
-            aria-expanded={isExpanded}
-            aria-controls={folderContentId}
-            title={toggleLabel}
-            onClick={() => {
-              const nextExpanded = !isExpanded
-              if (expanded === undefined) setInternalExpanded(nextExpanded)
-              onExpandedChange?.(nextExpanded)
-            }}
-          >
-            <ChevronRight className={isExpanded ? 'is-expanded' : ''} />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  className="bookmark-group-toggle"
+                  type="button"
+                  aria-label={toggleLabel}
+                  aria-expanded={isExpanded}
+                  aria-controls={folderContentId}
+                  onClick={() => {
+                    const nextExpanded = !isExpanded
+                    if (expanded === undefined) {
+                      setInternalExpanded(nextExpanded)
+                    }
+                    onExpandedChange?.(nextExpanded)
+                  }}
+                >
+                  <ChevronRight className={isExpanded ? 'is-expanded' : ''} />
+                </button>
+              }
+            />
+            <TooltipContent>{toggleLabel}</TooltipContent>
+          </Tooltip>
           <FolderOpen />
           <h2>{folderTitle}</h2>
           <span>

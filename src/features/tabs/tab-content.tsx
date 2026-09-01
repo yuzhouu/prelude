@@ -11,6 +11,11 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../components/ui/tooltip'
 import { getFaviconUrl } from '../bookmarks/chrome-bookmarks'
 import {
   executeCapture,
@@ -118,24 +123,35 @@ function TabRow({
         {isCurrent ? (
           <span className="active-tab-label">{t('tabs.current')}</span>
         ) : null}
-        <button
-          className={`open-tab-capture-action is-${displayStatus}`}
-          type="button"
-          disabled={!canCapture || !isSupported || captureStatus === 'saving'}
-          aria-label={captureLabel}
-          title={captureLabel}
-          onClick={() => onCapture(tab)}
-        >
-          {displayStatus === 'saving' ? (
-            <LoaderCircle className="is-spinning" />
-          ) : displayStatus === 'saved' || displayStatus === 'bookmarked' ? (
-            <Check />
-          ) : displayStatus === 'error' ? (
-            <AlertTriangle />
-          ) : (
-            <Inbox />
-          )}
-        </button>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="tooltip-disabled-trigger">
+                <button
+                  className={`open-tab-capture-action is-${displayStatus}`}
+                  type="button"
+                  disabled={
+                    !canCapture || !isSupported || captureStatus === 'saving'
+                  }
+                  aria-label={captureLabel}
+                  onClick={() => onCapture(tab)}
+                >
+                  {displayStatus === 'saving' ? (
+                    <LoaderCircle className="is-spinning" />
+                  ) : displayStatus === 'saved' ||
+                    displayStatus === 'bookmarked' ? (
+                    <Check />
+                  ) : displayStatus === 'error' ? (
+                    <AlertTriangle />
+                  ) : (
+                    <Inbox />
+                  )}
+                </button>
+              </span>
+            }
+          />
+          <TooltipContent>{captureLabel}</TooltipContent>
+        </Tooltip>
         {captureStatus === 'saved' || captureStatus === 'error' ? (
           <span className="sr-only" role="status">
             {captureLabel}

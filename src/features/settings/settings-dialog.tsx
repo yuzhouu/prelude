@@ -2,6 +2,11 @@ import { Dialog } from '@base-ui/react/dialog'
 import { ExternalLink, Settings, ShieldCheck, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../components/ui/tooltip'
 import { LanguageToggle } from '../language/language-toggle'
 
 export function SettingsDialog() {
@@ -9,14 +14,20 @@ export function SettingsDialog() {
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger
-        className="settings-open-button"
-        type="button"
-        title={t('settings.open')}
-        aria-label={t('settings.open')}
-      >
-        <Settings />
-      </Dialog.Trigger>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Dialog.Trigger
+              className="settings-open-button"
+              type="button"
+              aria-label={t('settings.open')}
+            >
+              <Settings />
+            </Dialog.Trigger>
+          }
+        />
+        <TooltipContent>{t('settings.open')}</TooltipContent>
+      </Tooltip>
 
       <Dialog.Portal>
         <Dialog.Backdrop className="settings-dialog-backdrop" />

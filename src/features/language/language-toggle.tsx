@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next'
 
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../components/ui/tooltip'
+import {
   changeLanguage,
   resolveSupportedLanguage,
   supportedLanguages,
@@ -42,17 +47,22 @@ export function LanguageToggle() {
         {supportedLanguages.map((language) => {
           const label = t(LANGUAGE_LABEL_KEYS[language])
           return (
-            <button
-              key={language}
-              className="language-option"
-              type="button"
-              title={label}
-              aria-label={label}
-              aria-pressed={currentLanguage === language}
-              onClick={() => void changeLanguage(language)}
-            >
-              {SHORT_LANGUAGE_LABELS[language]}
-            </button>
+            <Tooltip key={language}>
+              <TooltipTrigger
+                render={
+                  <button
+                    className="language-option"
+                    type="button"
+                    aria-label={label}
+                    aria-pressed={currentLanguage === language}
+                    onClick={() => void changeLanguage(language)}
+                  >
+                    {SHORT_LANGUAGE_LABELS[language]}
+                  </button>
+                }
+              />
+              <TooltipContent>{label}</TooltipContent>
+            </Tooltip>
           )
         })}
       </div>
