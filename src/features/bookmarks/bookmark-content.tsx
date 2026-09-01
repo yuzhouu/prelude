@@ -511,6 +511,29 @@ export function BookmarkRow({
             <span className="bookmark-path">{path.join(' / ')}</span>
           ) : null}
         </a>
+        {openTab ? (
+          <button
+            className="bookmark-action bookmark-open-tab-action"
+            type="button"
+            aria-label={t('bookmarks.actions.switchToOpenTab', {
+              title: node.title,
+            })}
+            title={t('bookmarks.actions.switchToOpenTabShort')}
+            onClick={() => openTabContext?.onActivateTab(openTab)}
+          >
+            <PanelsTopLeft />
+          </button>
+        ) : null}
+        <a
+          className="bookmark-action bookmark-secondary-action"
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={t('bookmarks.actions.openNewTab', { title: node.title })}
+          title={t('bookmarks.actions.openNewTabShort')}
+        >
+          <ExternalLink />
+        </a>
         <button
           className="bookmark-action bookmark-secondary-action"
           type="button"
@@ -528,29 +551,6 @@ export function BookmarkRow({
         >
           {copied ? <Check /> : <Copy />}
         </button>
-        <a
-          className="bookmark-action bookmark-secondary-action"
-          href={url}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={t('bookmarks.actions.openNewTab', { title: node.title })}
-          title={t('bookmarks.actions.openNewTabShort')}
-        >
-          <ExternalLink />
-        </a>
-        {openTab ? (
-          <button
-            className="bookmark-action bookmark-open-tab-action"
-            type="button"
-            aria-label={t('bookmarks.actions.switchToOpenTab', {
-              title: node.title,
-            })}
-            title={t('bookmarks.actions.switchToOpenTabShort')}
-            onClick={() => openTabContext?.onActivateTab(openTab)}
-          >
-            <PanelsTopLeft />
-          </button>
-        ) : null}
         <button
           className="bookmark-action bookmark-direct-action"
           type="button"
