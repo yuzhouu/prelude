@@ -516,71 +516,31 @@ export function BookmarkRow({
             <span className="bookmark-path">{path.join(' / ')}</span>
           ) : null}
         </a>
-        {openTab ? (
-          <Tooltip>
-            <TooltipTrigger
-              render={
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <span className="tooltip-disabled-trigger bookmark-danger-action-group">
                 <button
-                  className="bookmark-action bookmark-open-tab-action"
+                  className="bookmark-action bookmark-direct-action bookmark-delete-action"
                   type="button"
-                  aria-label={t('bookmarks.actions.switchToOpenTab', {
+                  disabled={!canMutate}
+                  aria-label={t('bookmarks.actions.delete', {
                     title: node.title,
                   })}
-                  onClick={() => openTabContext?.onActivateTab(openTab)}
+                  onClick={() => {
+                    setDeleteError(false)
+                    setIsDeleteOpen(true)
+                  }}
                 >
-                  <PanelsTopLeft aria-hidden="true" />
-                  <span className="bookmark-open-tab-label">
-                    {t('bookmarks.actions.openTabStatus')}
-                  </span>
+                  <Trash2 />
                 </button>
-              }
-            />
-            <TooltipContent>
-              {t('bookmarks.actions.switchToOpenTabShort')}
-            </TooltipContent>
-          </Tooltip>
-        ) : null}
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <a
-                className="bookmark-action bookmark-secondary-action"
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={t('bookmarks.actions.openNewTab', {
-                  title: node.title,
-                })}
-              >
-                <ExternalLink />
-              </a>
+              </span>
             }
           />
           <TooltipContent>
-            {t('bookmarks.actions.openNewTabShort')}
-          </TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <button
-                className="bookmark-action bookmark-secondary-action"
-                type="button"
-                aria-label={
-                  copied
-                    ? t('bookmarks.actions.copied')
-                    : t('bookmarks.actions.copy', { title: node.title })
-                }
-                onClick={copyUrl}
-              >
-                {copied ? <Check /> : <Copy />}
-              </button>
-            }
-          />
-          <TooltipContent>
-            {copied
-              ? t('bookmarks.actions.copiedShort')
-              : t('bookmarks.actions.copyShort')}
+            {canMutate
+              ? t('bookmarks.actions.deleteShort')
+              : t('bookmarks.actions.extensionRequiredModify')}
           </TooltipContent>
         </Tooltip>
         <Tooltip>
@@ -610,30 +570,70 @@ export function BookmarkRow({
         <Tooltip>
           <TooltipTrigger
             render={
-              <span className="tooltip-disabled-trigger">
-                <button
-                  className="bookmark-action bookmark-direct-action bookmark-delete-action"
-                  type="button"
-                  disabled={!canMutate}
-                  aria-label={t('bookmarks.actions.delete', {
-                    title: node.title,
-                  })}
-                  onClick={() => {
-                    setDeleteError(false)
-                    setIsDeleteOpen(true)
-                  }}
-                >
-                  <Trash2 />
-                </button>
-              </span>
+              <button
+                className="bookmark-action bookmark-secondary-action"
+                type="button"
+                aria-label={
+                  copied
+                    ? t('bookmarks.actions.copied')
+                    : t('bookmarks.actions.copy', { title: node.title })
+                }
+                onClick={copyUrl}
+              >
+                {copied ? <Check /> : <Copy />}
+              </button>
             }
           />
           <TooltipContent>
-            {canMutate
-              ? t('bookmarks.actions.deleteShort')
-              : t('bookmarks.actions.extensionRequiredModify')}
+            {copied
+              ? t('bookmarks.actions.copiedShort')
+              : t('bookmarks.actions.copyShort')}
           </TooltipContent>
         </Tooltip>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <a
+                className="bookmark-action bookmark-secondary-action"
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('bookmarks.actions.openNewTab', {
+                  title: node.title,
+                })}
+              >
+                <ExternalLink />
+              </a>
+            }
+          />
+          <TooltipContent>
+            {t('bookmarks.actions.openNewTabShort')}
+          </TooltipContent>
+        </Tooltip>
+        {openTab ? (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  className="bookmark-action bookmark-open-tab-action"
+                  type="button"
+                  aria-label={t('bookmarks.actions.switchToOpenTab', {
+                    title: node.title,
+                  })}
+                  onClick={() => openTabContext?.onActivateTab(openTab)}
+                >
+                  <PanelsTopLeft aria-hidden="true" />
+                  <span className="bookmark-open-tab-label">
+                    {t('bookmarks.actions.openTabStatus')}
+                  </span>
+                </button>
+              }
+            />
+            <TooltipContent>
+              {t('bookmarks.actions.switchToOpenTabShort')}
+            </TooltipContent>
+          </Tooltip>
+        ) : null}
       </div>
 
       <Dialog.Root

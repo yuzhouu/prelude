@@ -1897,6 +1897,7 @@ input:focus-visible {
   min-width: 30px;
   height: 26px;
   gap: 4px;
+  margin: 0 4px 0 6px;
   padding: 0 7px;
   background: var(--accent-soft);
   color: var(--accent-strong);
@@ -1919,6 +1920,10 @@ input:focus-visible {
 .bookmark-open-tab-action svg {
   width: 13px;
   height: 13px;
+}
+
+.bookmark-danger-action-group {
+  margin-right: 6px;
 }
 
 .bookmark-direct-action:disabled {
@@ -2968,7 +2973,13 @@ input:focus-visible {
 
   .bookmark-open-tab-action {
     width: 30px;
+    margin-right: 2px;
+    margin-left: 4px;
     padding: 0;
+  }
+
+  .bookmark-danger-action-group {
+    margin-right: 4px;
   }
 
   .bookmark-open-tab-label {
