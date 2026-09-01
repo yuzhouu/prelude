@@ -227,6 +227,7 @@ export const fr = {
       openNewTabShort: 'Ouvrir dans un nouvel onglet',
       switchToOpenTab: 'Basculer vers l’onglet ouvert pour {{title}}',
       switchToOpenTabShort: 'Basculer vers l’onglet ouvert',
+      openTabStatus: 'Ouvert',
       edit: 'Modifier {{title}}',
       editShort: 'Modifier',
       delete: 'Supprimer {{title}}',

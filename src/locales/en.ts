@@ -220,6 +220,7 @@ export const en = {
       openNewTabShort: 'Open in a new tab',
       switchToOpenTab: 'Switch to the open tab for {{title}}',
       switchToOpenTabShort: 'Switch to open tab',
+      openTabStatus: 'Open',
       edit: 'Edit {{title}}',
       editShort: 'Edit',
       delete: 'Delete {{title}}',

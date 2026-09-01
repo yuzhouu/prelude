@@ -223,6 +223,7 @@ export const ja = {
       openNewTabShort: '新しいタブで開く',
       switchToOpenTab: '開いている{{title}}のタブに切り替える',
       switchToOpenTabShort: '開いているタブに切り替える',
+      openTabStatus: '開いている',
       edit: '{{title}}を編集',
       editShort: '編集',
       delete: '{{title}}を削除',

@@ -228,6 +228,7 @@ export const es = {
       openNewTabShort: 'Abrir en una pestaña nueva',
       switchToOpenTab: 'Cambiar a la pestaña abierta de {{title}}',
       switchToOpenTabShort: 'Cambiar a la pestaña abierta',
+      openTabStatus: 'Abierta',
       edit: 'Editar {{title}}',
       editShort: 'Editar',
       delete: 'Eliminar {{title}}',

@@ -198,6 +198,7 @@ export const zhCN = {
       openNewTabShort: '在新标签页打开',
       switchToOpenTab: '切换到已打开的 {{title}} 标签页',
       switchToOpenTabShort: '切换到已打开标签页',
+      openTabStatus: '已打开',
       edit: '编辑 {{title}}',
       editShort: '编辑',
       delete: '删除 {{title}}',

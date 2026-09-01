@@ -516,6 +516,50 @@ export function BookmarkRow({
             <span className="bookmark-path">{path.join(' / ')}</span>
           ) : null}
         </a>
+        {openTab ? (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  className="bookmark-action bookmark-open-tab-action"
+                  type="button"
+                  aria-label={t('bookmarks.actions.switchToOpenTab', {
+                    title: node.title,
+                  })}
+                  onClick={() => openTabContext?.onActivateTab(openTab)}
+                >
+                  <PanelsTopLeft aria-hidden="true" />
+                  <span className="bookmark-open-tab-label">
+                    {t('bookmarks.actions.openTabStatus')}
+                  </span>
+                </button>
+              }
+            />
+            <TooltipContent>
+              {t('bookmarks.actions.switchToOpenTabShort')}
+            </TooltipContent>
+          </Tooltip>
+        ) : null}
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <a
+                className="bookmark-action bookmark-secondary-action"
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={t('bookmarks.actions.openNewTab', {
+                  title: node.title,
+                })}
+              >
+                <ExternalLink />
+              </a>
+            }
+          />
+          <TooltipContent>
+            {t('bookmarks.actions.openNewTabShort')}
+          </TooltipContent>
+        </Tooltip>
         <Tooltip>
           <TooltipTrigger
             render={
@@ -539,47 +583,6 @@ export function BookmarkRow({
               : t('bookmarks.actions.copyShort')}
           </TooltipContent>
         </Tooltip>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <a
-                className="bookmark-action bookmark-secondary-action"
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={t('bookmarks.actions.openNewTab', {
-                  title: node.title,
-                })}
-              >
-                <ExternalLink />
-              </a>
-            }
-          />
-          <TooltipContent>
-            {t('bookmarks.actions.openNewTabShort')}
-          </TooltipContent>
-        </Tooltip>
-        {openTab ? (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <button
-                  className="bookmark-action bookmark-open-tab-action"
-                  type="button"
-                  aria-label={t('bookmarks.actions.switchToOpenTab', {
-                    title: node.title,
-                  })}
-                  onClick={() => openTabContext?.onActivateTab(openTab)}
-                >
-                  <PanelsTopLeft />
-                </button>
-              }
-            />
-            <TooltipContent>
-              {t('bookmarks.actions.switchToOpenTabShort')}
-            </TooltipContent>
-          </Tooltip>
-        ) : null}
         <Tooltip>
           <TooltipTrigger
             render={

@@ -250,6 +250,7 @@ export const ru = {
       openNewTabShort: 'Открыть в новой вкладке',
       switchToOpenTab: 'Перейти к открытой вкладке {{title}}',
       switchToOpenTabShort: 'Перейти к открытой вкладке',
+      openTabStatus: 'Открыта',
       edit: 'Изменить {{title}}',
       editShort: 'Изменить',
       delete: 'Удалить {{title}}',

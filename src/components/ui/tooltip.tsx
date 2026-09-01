@@ -3,7 +3,7 @@ import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip'
 import { cn } from '@/lib/utils'
 
 function TooltipProvider({
-  delay = 0,
+  delay = 600,
   ...props
 }: TooltipPrimitive.Provider.Props) {
   return (
@@ -15,8 +15,17 @@ function TooltipProvider({
   )
 }
 
-function Tooltip(props: TooltipPrimitive.Root.Props) {
-  return <TooltipPrimitive.Root data-slot="tooltip" {...props} />
+function Tooltip({
+  disableHoverablePopup = true,
+  ...props
+}: TooltipPrimitive.Root.Props) {
+  return (
+    <TooltipPrimitive.Root
+      data-slot="tooltip"
+      disableHoverablePopup={disableHoverablePopup}
+      {...props}
+    />
+  )
 }
 
 function TooltipTrigger(props: TooltipPrimitive.Trigger.Props) {
@@ -48,7 +57,7 @@ function TooltipContent({
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
           className={cn(
-            'z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) items-center rounded-md bg-[var(--text-strong)] px-2.5 py-1.5 text-xs leading-tight text-[var(--surface)] shadow-sm data-[side=bottom]:slide-in-from-top-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+            'pointer-events-none z-50 inline-flex w-fit max-w-xs origin-(--transform-origin) select-none items-center rounded-md bg-[var(--text-strong)] px-2.5 py-1.5 text-xs leading-tight text-[var(--surface)] shadow-sm data-[side=bottom]:slide-in-from-top-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
             className,
           )}
           {...props}
