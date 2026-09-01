@@ -1899,8 +1899,8 @@ input:focus-visible {
   gap: 4px;
   margin: 0 4px 0 6px;
   padding: 0 7px;
-  background: var(--accent-soft);
-  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  color: color-mix(in srgb, var(--accent-strong) 72%, var(--subtle));
   font-size: 11.5px;
   font-weight: 500;
   line-height: 1;
@@ -1908,7 +1908,8 @@ input:focus-visible {
 }
 
 .bookmark-open-tab-action:hover {
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent-strong);
 }
 
 .bookmark-action svg {
