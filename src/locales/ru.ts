@@ -248,6 +248,8 @@ export const ru = {
       copyShort: 'Копировать ссылку',
       openNewTab: 'Открыть {{title}} в новой вкладке',
       openNewTabShort: 'Открыть в новой вкладке',
+      switchToOpenTab: 'Перейти к открытой вкладке {{title}}',
+      switchToOpenTabShort: 'Перейти к открытой вкладке',
       edit: 'Изменить {{title}}',
       editShort: 'Изменить',
       delete: 'Удалить {{title}}',

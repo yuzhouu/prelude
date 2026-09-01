@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import {
   AllBookmarkContents,
+  BookmarkOpenTabScope,
   FolderDeleteButton,
   FolderContents,
   MatchList,
@@ -249,35 +250,43 @@ function Home() {
         </nav>
 
         <div className="content-column">
-          <div className="view-content">
-            {isTabView ? (
-              <OpenTabsContents
-                bookmarkedUrlKeys={bookmarkedUrlKeys}
-                canCapture={isChromeSource && areTabsFromChrome}
-                windows={openTabWindows}
-                onActivate={activateTab}
-              />
-            ) : isQuickFoldersView ? (
-              defaultBookmarkContainer ? (
-                <FolderContents
-                  folder={defaultBookmarkContainer}
-                  canCreate={isChromeSource}
+          <BookmarkOpenTabScope
+            openTabWindows={openTabWindows}
+            onActivateTab={activateTab}
+          >
+            <div className="view-content">
+              {isTabView ? (
+                <OpenTabsContents
+                  bookmarkedUrlKeys={bookmarkedUrlKeys}
+                  canCapture={isChromeSource && areTabsFromChrome}
+                  windows={openTabWindows}
+                  onActivate={activateTab}
                 />
-              ) : (
-                <DefaultFoldersSetup isChromeSource={isChromeSource} />
-              )
-            ) : selectedId === 'all' ? (
-              <AllBookmarkContents roots={roots} canCreate={isChromeSource} />
-            ) : selectedId === 'recent' ? (
-              <MatchList matches={recentBookmarks} canMutate={isChromeSource} />
-            ) : selectedNode ? (
-              <FolderContents
-                folder={selectedNode}
-                canCreate={isChromeSource}
-                isInsideManagedTree={selectedLocation.isManaged}
-              />
-            ) : null}
-          </div>
+              ) : isQuickFoldersView ? (
+                defaultBookmarkContainer ? (
+                  <FolderContents
+                    folder={defaultBookmarkContainer}
+                    canCreate={isChromeSource}
+                  />
+                ) : (
+                  <DefaultFoldersSetup isChromeSource={isChromeSource} />
+                )
+              ) : selectedId === 'all' ? (
+                <AllBookmarkContents roots={roots} canCreate={isChromeSource} />
+              ) : selectedId === 'recent' ? (
+                <MatchList
+                  matches={recentBookmarks}
+                  canMutate={isChromeSource}
+                />
+              ) : selectedNode ? (
+                <FolderContents
+                  folder={selectedNode}
+                  canCreate={isChromeSource}
+                  isInsideManagedTree={selectedLocation.isManaged}
+                />
+              ) : null}
+            </div>
+          </BookmarkOpenTabScope>
         </div>
       </main>
     </div>

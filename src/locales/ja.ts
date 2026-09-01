@@ -221,6 +221,8 @@ export const ja = {
       copyShort: 'リンクをコピー',
       openNewTab: '{{title}}を新しいタブで開く',
       openNewTabShort: '新しいタブで開く',
+      switchToOpenTab: '開いている{{title}}のタブに切り替える',
+      switchToOpenTabShort: '開いているタブに切り替える',
       edit: '{{title}}を編集',
       editShort: '編集',
       delete: '{{title}}を削除',

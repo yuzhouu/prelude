@@ -218,6 +218,8 @@ export const en = {
       copyShort: 'Copy link',
       openNewTab: 'Open {{title}} in a new tab',
       openNewTabShort: 'Open in a new tab',
+      switchToOpenTab: 'Switch to the open tab for {{title}}',
+      switchToOpenTabShort: 'Switch to open tab',
       edit: 'Edit {{title}}',
       editShort: 'Edit',
       delete: 'Delete {{title}}',

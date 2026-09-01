@@ -226,6 +226,8 @@ export const es = {
       copyShort: 'Copiar enlace',
       openNewTab: 'Abrir {{title}} en una pestaña nueva',
       openNewTabShort: 'Abrir en una pestaña nueva',
+      switchToOpenTab: 'Cambiar a la pestaña abierta de {{title}}',
+      switchToOpenTabShort: 'Cambiar a la pestaña abierta',
       edit: 'Editar {{title}}',
       editShort: 'Editar',
       delete: 'Eliminar {{title}}',

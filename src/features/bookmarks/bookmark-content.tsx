@@ -4,7 +4,14 @@ import { move } from '@dnd-kit/helpers'
 import { DragDropProvider, DragOverlay, PointerSensor } from '@dnd-kit/react'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/react'
 import { isSortableOperation, useSortable } from '@dnd-kit/react/sortable'
-import { createContext, useContext, useId, useRef, useState } from 'react'
+import {
+  createContext,
+  useContext,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
   Check,
   ChevronRight,
@@ -12,12 +19,15 @@ import {
   ExternalLink,
   FolderOpen,
   LoaderCircle,
+  PanelsTopLeft,
   Pencil,
   Plus,
   Trash2,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { normalizeCapturedUrl } from '../capture/model'
+import type { OpenTab, OpenTabWindow } from '../tabs/model'
 import {
   createBookmark,
   createBookmarkFolder,
@@ -68,6 +78,48 @@ function getDefaultBookmarkTitle(url: string) {
   } catch {
     return url
   }
+}
+
+interface BookmarkOpenTabContextValue {
+  openTabsByUrl: ReadonlyMap<string, OpenTab>
+  onActivateTab: (tab: OpenTab) => void
+}
+
+const BookmarkOpenTabContext = createContext<
+  BookmarkOpenTabContextValue | undefined
+>(undefined)
+
+export function BookmarkOpenTabScope({
+  children,
+  openTabWindows,
+  onActivateTab,
+}: {
+  children: React.ReactNode
+  openTabWindows: Array<OpenTabWindow>
+  onActivateTab: (tab: OpenTab) => void
+}) {
+  const openTabsByUrl = useMemo(() => {
+    const tabsByUrl = new Map<string, OpenTab>()
+
+    for (const window of openTabWindows) {
+      for (const tab of window.tabs) {
+        const urlKey = normalizeCapturedUrl(tab.url)
+        if (!tabsByUrl.has(urlKey)) tabsByUrl.set(urlKey, tab)
+      }
+    }
+
+    return tabsByUrl
+  }, [openTabWindows])
+  const contextValue = useMemo(
+    () => ({ openTabsByUrl, onActivateTab }),
+    [onActivateTab, openTabsByUrl],
+  )
+
+  return (
+    <BookmarkOpenTabContext.Provider value={contextValue}>
+      {children}
+    </BookmarkOpenTabContext.Provider>
+  )
 }
 
 const ActiveQuickAddEditorContext = createContext<string | null>(null)
@@ -369,6 +421,7 @@ export function BookmarkRow({
   sortableProps?: SortableElementProps
 }) {
   const { t } = useTranslation()
+  const openTabContext = useContext(BookmarkOpenTabContext)
   const [copied, setCopied] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
@@ -381,6 +434,9 @@ export function BookmarkRow({
   const editTitleId = useId()
   const editUrlId = useId()
   const url = node.url ?? '#'
+  const openTab = node.url
+    ? openTabContext?.openTabsByUrl.get(normalizeCapturedUrl(node.url))
+    : undefined
 
   const copyUrl = () => {
     void navigator.clipboard.writeText(url).then(() => {
@@ -482,6 +538,19 @@ export function BookmarkRow({
         >
           <ExternalLink />
         </a>
+        {openTab ? (
+          <button
+            className="bookmark-action bookmark-open-tab-action"
+            type="button"
+            aria-label={t('bookmarks.actions.switchToOpenTab', {
+              title: node.title,
+            })}
+            title={t('bookmarks.actions.switchToOpenTabShort')}
+            onClick={() => openTabContext?.onActivateTab(openTab)}
+          >
+            <PanelsTopLeft />
+          </button>
+        ) : null}
         <button
           className="bookmark-action bookmark-direct-action"
           type="button"

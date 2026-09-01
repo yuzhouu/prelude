@@ -225,6 +225,8 @@ export const fr = {
       copyShort: 'Copier le lien',
       openNewTab: 'Ouvrir {{title}} dans un nouvel onglet',
       openNewTabShort: 'Ouvrir dans un nouvel onglet',
+      switchToOpenTab: 'Basculer vers l’onglet ouvert pour {{title}}',
+      switchToOpenTabShort: 'Basculer vers l’onglet ouvert',
       edit: 'Modifier {{title}}',
       editShort: 'Modifier',
       delete: 'Supprimer {{title}}',

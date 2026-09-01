@@ -1883,6 +1883,16 @@ input:focus-visible {
   color: var(--text);
 }
 
+.bookmark-open-tab-action {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.bookmark-open-tab-action:hover {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
 .bookmark-action svg {
   width: 15px;
   height: 15px;
