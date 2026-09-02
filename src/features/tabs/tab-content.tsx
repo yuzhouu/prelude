@@ -1,9 +1,12 @@
 import { AlertDialog } from '@base-ui/react/alert-dialog'
-import { arrayMove } from '@dnd-kit/helpers'
 import { DragDropProvider, DragOverlay } from '@dnd-kit/react'
-import type { DragEndEvent } from '@dnd-kit/react'
+import type {
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+} from '@dnd-kit/react'
 import { isSortableOperation, useSortable } from '@dnd-kit/react/sortable'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   AlertTriangle,
   AudioLines,
@@ -30,8 +33,13 @@ import {
 } from '../capture/chrome-capture'
 import { isCaptureableUrl, normalizeCapturedUrl } from '../capture/model'
 import type { CapturePlan } from '../capture/model'
-import { getNativeTabMoveIndex, getSortableTabEntries } from './model'
-import type { OpenTab, OpenTabWindow, SortableTabEntry } from './model'
+import { getSortableTabEntries, projectOpenTabMove } from './model'
+import type {
+  OpenTab,
+  OpenTabMoveDestination,
+  OpenTabWindow,
+  SortableTabEntry,
+} from './model'
 
 type TabCaptureStatus = 'error' | 'idle' | 'saved' | 'saving'
 type TabCloseStatus = 'closing' | 'error' | 'idle'
@@ -44,13 +52,16 @@ interface PendingDuplicate {
 
 interface SortableTabData {
   sortGroup: string
+  sortIndex: number
+  sortType: string
   tab: OpenTab
   windowId: number
 }
 
-interface OptimisticTabOrder {
-  source: Array<OpenTab>
-  tabs: Array<OpenTab>
+interface OptimisticTabMove {
+  destinationWindowId: number
+  destinationWindowTabIds: Array<number>
+  windows: Array<OpenTabWindow>
 }
 
 function getTabCaptureKey(tab: OpenTab) {
@@ -247,9 +258,19 @@ function SortableTabRow({
     id: entry.tab.id,
     index: entry.sortIndex,
     group: entry.sortGroup,
+    type: entry.sortType,
+    accept: (source) => {
+      const sourceData = source.data as SortableTabData | undefined
+      if (!sourceData) return false
+      return sourceData.windowId === entry.tab.windowId
+        ? sourceData.sortGroup === entry.sortGroup
+        : sourceData.sortType === entry.sortType
+    },
     disabled: !canReorder,
     data: {
       sortGroup: entry.sortGroup,
+      sortIndex: entry.sortIndex,
+      sortType: entry.sortType,
       tab: entry.tab,
       windowId: entry.tab.windowId,
     },
@@ -291,11 +312,12 @@ function SortableTabWindow({
   captureStatuses,
   closeStatuses,
   displayNumber,
+  hasMoveError,
+  hasPendingMove,
   window,
   onActivate,
   onCapture,
   onClose,
-  onReorder,
 }: {
   bookmarkedUrlKeys: ReadonlySet<string>
   canCapture: boolean
@@ -304,127 +326,57 @@ function SortableTabWindow({
   captureStatuses: Record<string, TabCaptureStatus>
   closeStatuses: Record<number, TabCloseStatus>
   displayNumber: number
+  hasMoveError: boolean
+  hasPendingMove: boolean
   window: OpenTabWindow
   onActivate: (tab: OpenTab) => void
   onCapture: (tab: OpenTab) => void
   onClose: (tab: OpenTab) => void
-  onReorder: (tab: OpenTab, index: number) => Promise<void>
 }) {
   const { t } = useTranslation()
-  const [optimisticOrder, setOptimisticOrder] = useState<OptimisticTabOrder>()
-  const [hasMoveError, setHasMoveError] = useState(false)
-  const moveVersionRef = useRef(0)
-  const hasPendingMove = optimisticOrder?.source === window.tabs
-  const tabs = hasPendingMove ? optimisticOrder.tabs : window.tabs
-  const entries = getSortableTabEntries(tabs)
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    if (event.canceled || !isSortableOperation(event.operation)) return
-
-    const { source, target } = event.operation
-    const sourceData = source?.data as SortableTabData | undefined
-    const targetData = target?.data as SortableTabData | undefined
-    if (
-      !source ||
-      !target ||
-      !sourceData ||
-      !targetData ||
-      sourceData.windowId !== window.id ||
-      targetData.windowId !== window.id ||
-      sourceData.sortGroup !== targetData.sortGroup ||
-      source.initialGroup !== sourceData.sortGroup ||
-      source.group !== sourceData.sortGroup ||
-      source.initialIndex === source.index
-    ) {
-      return
-    }
-
-    const regionEntries = entries.filter(
-      (entry) => entry.sortGroup === sourceData.sortGroup,
-    )
-    const nextRegionTabs = arrayMove(
-      regionEntries.map((entry) => entry.tab),
-      source.initialIndex,
-      source.index,
-    )
-    let regionIndex = 0
-    const nextTabs = entries.map((entry) =>
-      entry.sortGroup === sourceData.sortGroup
-        ? nextRegionTabs[regionIndex++]
-        : entry.tab,
-    )
-    const destinationIndex = getNativeTabMoveIndex(sourceData.tab, nextTabs)
-    const version = moveVersionRef.current + 1
-    moveVersionRef.current = version
-    setHasMoveError(false)
-    setOptimisticOrder({ source: window.tabs, tabs: nextTabs })
-
-    void onReorder(sourceData.tab, destinationIndex).catch(() => {
-      if (moveVersionRef.current !== version) return
-      setOptimisticOrder((current) =>
-        current?.tabs === nextTabs ? undefined : current,
-      )
-      setHasMoveError(true)
-    })
-  }
+  const entries = getSortableTabEntries(window.tabs)
 
   return (
-    <DragDropProvider
-      sensors={FULL_ROW_SORTABLE_SENSORS}
-      onDragEnd={handleDragEnd}
-    >
-      <section className="tab-window-group">
-        <header className="tab-window-header">
-          <div>
-            <AppWindow />
-            <h2>
-              {window.focused
-                ? t('tabs.currentWindow')
-                : t('tabs.window', { number: displayNumber })}
-            </h2>
-          </div>
-          <span>{t('common.tabCount', { count: tabs.length })}</span>
-        </header>
-        <div className="open-tab-list">
-          {entries.map((entry) => (
-            <SortableTabRow
-              key={entry.tab.id}
-              entry={entry}
-              isCurrent={window.focused && entry.tab.active}
-              canCapture={canCapture}
-              canClose={canClose}
-              canReorder={canReorder && !hasPendingMove}
-              captureStatus={
-                captureStatuses[getTabCaptureKey(entry.tab)] ?? 'idle'
-              }
-              closeStatus={closeStatuses[entry.tab.id] ?? 'idle'}
-              isBookmarked={bookmarkedUrlKeys.has(
-                normalizeCapturedUrl(entry.tab.url),
-              )}
-              onActivate={onActivate}
-              onCapture={onCapture}
-              onClose={onClose}
-            />
-          ))}
+    <section className="tab-window-group">
+      <header className="tab-window-header">
+        <div>
+          <AppWindow />
+          <h2>
+            {window.focused
+              ? t('tabs.currentWindow')
+              : t('tabs.window', { number: displayNumber })}
+          </h2>
         </div>
-        {hasMoveError ? (
-          <p className="open-tab-sort-error" role="alert">
-            {t('tabs.reorder.failed')}
-          </p>
-        ) : null}
-      </section>
-      <DragOverlay
-        className="open-tab-drag-overlay"
-        dropAnimation={{
-          duration: 180,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        }}
-      >
-        {(source) => (
-          <TabDragPreview tab={(source.data as SortableTabData).tab} />
-        )}
-      </DragOverlay>
-    </DragDropProvider>
+        <span>{t('common.tabCount', { count: window.tabs.length })}</span>
+      </header>
+      <div className="open-tab-list">
+        {entries.map((entry) => (
+          <SortableTabRow
+            key={entry.tab.id}
+            entry={entry}
+            isCurrent={window.focused && entry.tab.active}
+            canCapture={canCapture}
+            canClose={canClose}
+            canReorder={canReorder && !hasPendingMove}
+            captureStatus={
+              captureStatuses[getTabCaptureKey(entry.tab)] ?? 'idle'
+            }
+            closeStatus={closeStatuses[entry.tab.id] ?? 'idle'}
+            isBookmarked={bookmarkedUrlKeys.has(
+              normalizeCapturedUrl(entry.tab.url),
+            )}
+            onActivate={onActivate}
+            onCapture={onCapture}
+            onClose={onClose}
+          />
+        ))}
+      </div>
+      {hasMoveError ? (
+        <p className="open-tab-sort-error" role="alert">
+          {t('tabs.reorder.failed')}
+        </p>
+      ) : null}
+    </section>
   )
 }
 
@@ -445,7 +397,10 @@ export function OpenTabsContents({
   windows: Array<OpenTabWindow>
   onActivate: (tab: OpenTab) => void
   onClose: (tab: OpenTab) => Promise<void>
-  onReorder: (tab: OpenTab, index: number) => Promise<void>
+  onReorder: (
+    tab: OpenTab,
+    destination: OpenTabMoveDestination,
+  ) => Promise<void>
 }) {
   const { t } = useTranslation()
   const [captureStatuses, setCaptureStatuses] = useState<
@@ -455,6 +410,35 @@ export function OpenTabsContents({
   const [closeStatuses, setCloseStatuses] = useState<
     Record<number, TabCloseStatus>
   >({})
+  const [optimisticMove, setOptimisticMove] = useState<OptimisticTabMove>()
+  const [dragPreviewWindows, setDragPreviewWindows] =
+    useState<Array<OpenTabWindow>>()
+  const [moveErrorWindowId, setMoveErrorWindowId] = useState<number>()
+  const moveVersionRef = useRef(0)
+  const dragDestinationRef = useRef<SortableTabData | null>(null)
+  const dragSnapshotWindowsRef = useRef<Array<OpenTabWindow> | null>(null)
+  const dragSourceDataRef = useRef<SortableTabData | null>(null)
+  const displayWindows =
+    dragPreviewWindows ?? optimisticMove?.windows ?? windows
+
+  useEffect(() => {
+    if (!optimisticMove) return
+
+    const destinationWindow = windows.find(
+      (window) => window.id === optimisticMove.destinationWindowId,
+    )
+    const destinationTabIds = destinationWindow?.tabs.map((tab) => tab.id)
+    if (
+      destinationTabIds?.length ===
+        optimisticMove.destinationWindowTabIds.length &&
+      destinationTabIds.every(
+        (tabId, index) =>
+          tabId === optimisticMove.destinationWindowTabIds[index],
+      )
+    ) {
+      setOptimisticMove(undefined)
+    }
+  }, [optimisticMove, windows])
 
   const setCaptureStatus = (captureKey: string, status: TabCaptureStatus) => {
     setCaptureStatuses((current) => ({ ...current, [captureKey]: status }))
@@ -520,6 +504,152 @@ export function OpenTabsContents({
     }
   }
 
+  const handleDragOver = (event: DragOverEvent) => {
+    const { source, target } = event.operation
+    const sourceData = source?.data as SortableTabData | undefined
+    const targetData = target?.data as SortableTabData | undefined
+    if (
+      !source ||
+      !target ||
+      source.id === target.id ||
+      !sourceData ||
+      !targetData
+    ) {
+      return
+    }
+
+    if (sourceData.sortType !== targetData.sortType) return
+    dragDestinationRef.current = targetData
+    if (sourceData.windowId === targetData.windowId) return
+
+    setDragPreviewWindows((current) => {
+      const currentWindows =
+        current ?? dragSnapshotWindowsRef.current ?? windows
+      const sourceWindow = currentWindows.find((window) =>
+        window.tabs.some((tab) => tab.id === sourceData.tab.id),
+      )
+      const sourceEntry = sourceWindow
+        ? getSortableTabEntries(sourceWindow.tabs).find(
+            (entry) => entry.tab.id === sourceData.tab.id,
+          )
+        : undefined
+      if (
+        sourceWindow?.id === targetData.windowId &&
+        sourceEntry?.sortGroup === targetData.sortGroup &&
+        sourceEntry.sortIndex === targetData.sortIndex
+      ) {
+        return current
+      }
+
+      return (
+        projectOpenTabMove({
+          destinationSortGroup: targetData.sortGroup,
+          destinationSortIndex: targetData.sortIndex,
+          destinationWindowId: targetData.windowId,
+          sourceTabId: sourceData.tab.id,
+          windows: currentWindows,
+        })?.windows ?? current
+      )
+    })
+  }
+
+  const handleDragStart = (event: DragStartEvent) => {
+    dragDestinationRef.current = null
+    dragSnapshotWindowsRef.current = windows
+    dragSourceDataRef.current =
+      (event.operation.source?.data as SortableTabData | undefined) ?? null
+    setDragPreviewWindows(undefined)
+  }
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const previewWindows = dragPreviewWindows
+    const snapshotWindows = dragSnapshotWindowsRef.current ?? windows
+    const initialSourceData = dragSourceDataRef.current
+    setDragPreviewWindows(undefined)
+    dragSnapshotWindowsRef.current = null
+    dragSourceDataRef.current = null
+    if (event.canceled || !isSortableOperation(event.operation)) {
+      dragDestinationRef.current = null
+      return
+    }
+
+    const { source } = event.operation
+    const sourceData = source?.data as SortableTabData | undefined
+    if (!source || !sourceData) return
+
+    const originData = initialSourceData ?? sourceData
+    const finalWindows = previewWindows ?? displayWindows
+    const finalSourceWindow = finalWindows.find((window) =>
+      window.tabs.some((tab) => tab.id === sourceData.tab.id),
+    )
+    const finalSourceEntry = finalSourceWindow
+      ? getSortableTabEntries(finalSourceWindow.tabs).find(
+          (entry) => entry.tab.id === sourceData.tab.id,
+        )
+      : undefined
+    const projectedSortGroup =
+      finalSourceEntry?.sortGroup ?? String(source.group)
+    const projectedDestinationEntry = finalWindows
+      .flatMap((window) => getSortableTabEntries(window.tabs))
+      .find((entry) => entry.sortGroup === projectedSortGroup)
+    const observedDestination = dragDestinationRef.current
+    dragDestinationRef.current = null
+    const hasProjectedDestination = projectedDestinationEntry !== undefined
+    const destinationSortGroup = hasProjectedDestination
+      ? projectedSortGroup
+      : (observedDestination?.sortGroup ?? projectedSortGroup)
+    const destinationEntry = hasProjectedDestination
+      ? projectedDestinationEntry
+      : (observedDestination ?? projectedDestinationEntry)
+    if (!destinationEntry) return
+
+    const destinationWindowId = destinationEntry.tab.windowId
+    const isSameWindow = originData.windowId === destinationWindowId
+    const canMoveToTarget = isSameWindow
+      ? originData.sortGroup === destinationSortGroup
+      : originData.sortType === destinationEntry.sortType
+    const destinationSortIndex = hasProjectedDestination
+      ? source.index
+      : destinationEntry.sortIndex
+    if (
+      !canMoveToTarget ||
+      (isSameWindow &&
+        originData.sortIndex === destinationSortIndex &&
+        originData.sortGroup === destinationSortGroup)
+    ) {
+      return
+    }
+
+    const projection = projectOpenTabMove({
+      destinationSortGroup,
+      destinationSortIndex,
+      destinationWindowId,
+      sourceTabId: originData.tab.id,
+      windows: snapshotWindows,
+    })
+    if (!projection) return
+
+    const destinationWindow = projection.windows.find(
+      (window) => window.id === destinationWindowId,
+    )
+    if (!destinationWindow) return
+
+    const version = moveVersionRef.current + 1
+    moveVersionRef.current = version
+    setMoveErrorWindowId(undefined)
+    setOptimisticMove({
+      destinationWindowId,
+      destinationWindowTabIds: destinationWindow.tabs.map((tab) => tab.id),
+      windows: projection.windows,
+    })
+
+    void onReorder(originData.tab, projection.destination).catch(() => {
+      if (moveVersionRef.current !== version) return
+      setOptimisticMove(undefined)
+      setMoveErrorWindowId(destinationWindowId)
+    })
+  }
+
   if (!windows.length) {
     return (
       <div className="empty-state">
@@ -534,25 +664,44 @@ export function OpenTabsContents({
 
   return (
     <>
-      <div className="tab-window-sections">
-        {windows.map((window, index) => (
-          <SortableTabWindow
-            key={window.id}
-            bookmarkedUrlKeys={bookmarkedUrlKeys}
-            canCapture={canCapture}
-            canClose={canClose}
-            canReorder={canReorder}
-            captureStatuses={captureStatuses}
-            closeStatuses={closeStatuses}
-            displayNumber={index + 1}
-            window={window}
-            onActivate={onActivate}
-            onCapture={(candidate) => void captureTab(candidate)}
-            onClose={(candidate) => void closeTab(candidate)}
-            onReorder={onReorder}
-          />
-        ))}
-      </div>
+      <DragDropProvider
+        sensors={FULL_ROW_SORTABLE_SENSORS}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="tab-window-sections">
+          {displayWindows.map((window, index) => (
+            <SortableTabWindow
+              key={window.id}
+              bookmarkedUrlKeys={bookmarkedUrlKeys}
+              canCapture={canCapture}
+              canClose={canClose}
+              canReorder={canReorder}
+              captureStatuses={captureStatuses}
+              closeStatuses={closeStatuses}
+              displayNumber={index + 1}
+              hasMoveError={moveErrorWindowId === window.id}
+              hasPendingMove={optimisticMove !== undefined}
+              window={window}
+              onActivate={onActivate}
+              onCapture={(candidate) => void captureTab(candidate)}
+              onClose={(candidate) => void closeTab(candidate)}
+            />
+          ))}
+        </div>
+        <DragOverlay
+          className="open-tab-drag-overlay"
+          dropAnimation={{
+            duration: 180,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          }}
+        >
+          {(source) => (
+            <TabDragPreview tab={(source.data as SortableTabData).tab} />
+          )}
+        </DragOverlay>
+      </DragDropProvider>
 
       <AlertDialog.Root
         open={pendingDuplicate !== undefined}
