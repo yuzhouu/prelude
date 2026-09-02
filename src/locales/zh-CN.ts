@@ -158,6 +158,15 @@ export const zhCN = {
     emptyDescription: '打开新的网页后，它会自动出现在这里。',
     currentWindow: '当前窗口',
     window: '窗口 {{number}}',
+    reorder: {
+      failed: '无法重排标签页，请重试。',
+    },
+    close: {
+      action: '关闭“{{title}}”标签页',
+      closing: '正在关闭“{{title}}”标签页',
+      failed: '关闭“{{title}}”失败，点击重试',
+      extensionRequired: '加载为 Chrome 扩展后即可关闭标签页',
+    },
     capture: {
       action: '将“{{title}}”收集到待读',
       saving: '正在收集“{{title}}”',

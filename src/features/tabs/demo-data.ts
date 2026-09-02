@@ -8,6 +8,8 @@ export const demoOpenTabWindows: Array<OpenTabWindow> = [
       {
         id: 101,
         windowId: 1,
+        nativeIndex: 0,
+        groupId: -1,
         title: 'Inbox – Linear',
         url: 'https://linear.app/inbox',
         active: true,
@@ -17,6 +19,8 @@ export const demoOpenTabWindows: Array<OpenTabWindow> = [
       {
         id: 102,
         windowId: 1,
+        nativeIndex: 1,
+        groupId: -1,
         title: 'Land – Figma',
         url: 'https://figma.com/design/land',
         active: false,
@@ -26,6 +30,8 @@ export const demoOpenTabWindows: Array<OpenTabWindow> = [
       {
         id: 103,
         windowId: 1,
+        nativeIndex: 2,
+        groupId: -1,
         title: 'Pull requests · GitHub',
         url: 'https://github.com/pulls',
         active: false,
@@ -35,6 +41,8 @@ export const demoOpenTabWindows: Array<OpenTabWindow> = [
       {
         id: 104,
         windowId: 1,
+        nativeIndex: 3,
+        groupId: -1,
         title: 'Ambient focus music',
         url: 'https://youtube.com/watch?v=focus',
         active: false,
@@ -50,6 +58,8 @@ export const demoOpenTabWindows: Array<OpenTabWindow> = [
       {
         id: 201,
         windowId: 2,
+        nativeIndex: 0,
+        groupId: -1,
         title: 'React Reference Overview',
         url: 'https://react.dev/reference/react',
         active: true,
@@ -59,6 +69,8 @@ export const demoOpenTabWindows: Array<OpenTabWindow> = [
       {
         id: 202,
         windowId: 2,
+        nativeIndex: 1,
+        groupId: -1,
         title: 'MDN Web Docs',
         url: 'https://developer.mozilla.org',
         active: false,

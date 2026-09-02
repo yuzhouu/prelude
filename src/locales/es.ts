@@ -183,6 +183,17 @@ export const es = {
       'Las páginas nuevas aparecerán aquí automáticamente cuando las abras.',
     currentWindow: 'Ventana actual',
     window: 'Ventana {{number}}',
+    reorder: {
+      failed: 'No se pudo reordenar la pestaña. Inténtalo de nuevo.',
+    },
+    close: {
+      action: 'Cerrar la pestaña «{{title}}»',
+      closing: 'Cerrando la pestaña «{{title}}»',
+      failed:
+        'No se pudo cerrar «{{title}}». Haz clic para intentarlo de nuevo',
+      extensionRequired:
+        'Carga la aplicación como extensión de Chrome para cerrar pestañas',
+    },
     capture: {
       action: 'Guardar «{{title}}» en Leer más tarde',
       saving: 'Guardando «{{title}}»',

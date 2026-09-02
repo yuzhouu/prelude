@@ -179,6 +179,16 @@ export const ja = {
     emptyDescription: '新しいページを開くと、ここに自動的に表示されます。',
     currentWindow: '現在のウィンドウ',
     window: 'ウィンドウ{{number}}',
+    reorder: {
+      failed: 'タブを並べ替えられませんでした。もう一度お試しください。',
+    },
+    close: {
+      action: '「{{title}}」タブを閉じる',
+      closing: '「{{title}}」タブを閉じています',
+      failed: '「{{title}}」を閉じられませんでした。クリックして再試行',
+      extensionRequired:
+        'タブを閉じるには、Chrome拡張機能として読み込んでください',
+    },
     capture: {
       action: '「{{title}}」を「後で読む」に収集',
       saving: '「{{title}}」を収集中',

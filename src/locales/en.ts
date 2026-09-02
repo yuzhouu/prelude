@@ -178,6 +178,15 @@ export const en = {
       'New pages will appear here automatically after you open them.',
     currentWindow: 'Current window',
     window: 'Window {{number}}',
+    reorder: {
+      failed: 'Could not reorder the tab. Try again.',
+    },
+    close: {
+      action: 'Close the “{{title}}” tab',
+      closing: 'Closing the “{{title}}” tab',
+      failed: 'Could not close “{{title}}”. Click to try again',
+      extensionRequired: 'Load this app as a Chrome extension to close tabs',
+    },
     capture: {
       action: 'Collect “{{title}}” into Read later',
       saving: 'Collecting “{{title}}”',

@@ -1,7 +1,7 @@
 import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { Dialog } from '@base-ui/react/dialog'
 import { move } from '@dnd-kit/helpers'
-import { DragDropProvider, DragOverlay, PointerSensor } from '@dnd-kit/react'
+import { DragDropProvider, DragOverlay } from '@dnd-kit/react'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/react'
 import { isSortableOperation, useSortable } from '@dnd-kit/react/sortable'
 import {
@@ -31,6 +31,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '../../components/ui/tooltip'
+import { FULL_ROW_SORTABLE_SENSORS } from '../../lib/sortable'
 import { normalizeCapturedUrl } from '../capture/model'
 import type { OpenTab, OpenTabWindow } from '../tabs/model'
 import {
@@ -993,12 +994,6 @@ interface OptimisticChildren {
 }
 
 const EMPTY_BOOKMARK_CHILDREN: Array<BookmarkNode> = []
-const FULL_ROW_SORTABLE_SENSORS = [
-  PointerSensor.configure({
-    preventActivation: () => false,
-  }),
-]
-
 function BookmarkDragPreview({ node }: { node: BookmarkNode }) {
   const { t } = useTranslation()
   const isFolderNode = node.url === undefined

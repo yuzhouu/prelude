@@ -182,6 +182,16 @@ export const fr = {
       'Les nouvelles pages apparaîtront automatiquement ici lorsque vous les ouvrirez.',
     currentWindow: 'Fenêtre actuelle',
     window: 'Fenêtre {{number}}',
+    reorder: {
+      failed: 'Impossible de réorganiser l’onglet. Réessayez.',
+    },
+    close: {
+      action: 'Fermer l’onglet « {{title}} »',
+      closing: 'Fermeture de l’onglet « {{title}} »',
+      failed: 'Impossible de fermer « {{title}} ». Cliquez pour réessayer',
+      extensionRequired:
+        'Chargez cette application comme extension Chrome pour fermer des onglets',
+    },
     capture: {
       action: 'Collecter « {{title}} » dans À lire plus tard',
       saving: 'Collecte de « {{title}} »',

@@ -11,6 +11,8 @@ interface ChromeEvent {
 interface ChromeTab {
   id?: number
   windowId: number
+  index: number
+  groupId: number
   title?: string
   url?: string
   active: boolean
@@ -28,6 +30,11 @@ interface ChromeApi {
       tabId: number,
       updateProperties: { active: boolean },
     ) => Promise<ChromeTab | undefined>
+    remove: (tabId: number) => Promise<void>
+    move: (
+      tabId: number,
+      moveProperties: { index: number; windowId: number },
+    ) => Promise<ChromeTab | Array<ChromeTab>>
     onActivated: ChromeEvent
     onAttached: ChromeEvent
     onCreated: ChromeEvent
@@ -75,6 +82,8 @@ function groupTabs(
     window.tabs.push({
       id: tab.id,
       windowId: tab.windowId,
+      nativeIndex: tab.index,
+      groupId: tab.groupId,
       title: tab.title,
       url: tab.url,
       active: tab.active,
@@ -83,6 +92,10 @@ function groupTabs(
     })
     windows.set(tab.windowId, window)
   }
+
+  windows.forEach((window) => {
+    window.tabs.sort((a, b) => a.nativeIndex - b.nativeIndex)
+  })
 
   return [...windows.values()].sort((a, b) => {
     if (a.focused !== b.focused) return a.focused ? -1 : 1
@@ -94,10 +107,14 @@ export function useOpenTabs() {
   const [windows, setWindows] =
     useState<Array<OpenTabWindow>>(demoOpenTabWindows)
   const [isChromeSource, setIsChromeSource] = useState(false)
+  const [isTabSourceReady, setIsTabSourceReady] = useState(false)
 
   useEffect(() => {
     const chromeApi = getChromeApi()
-    if (!chromeApi?.tabs || !chromeApi.windows) return
+    if (!chromeApi?.tabs || !chromeApi.windows) {
+      setIsTabSourceReady(true)
+      return
+    }
 
     const tabsApi = chromeApi.tabs
     const windowsApi = chromeApi.windows
@@ -109,6 +126,7 @@ export function useOpenTabs() {
           if (!active) return
           setWindows(groupTabs(tabs, currentWindow.id, chromeApi.runtime?.id))
           setIsChromeSource(true)
+          setIsTabSourceReady(true)
         },
       )
     }
@@ -160,5 +178,75 @@ export function useOpenTabs() {
     )
   }, [])
 
-  return { windows, isChromeSource, activateTab }
+  const closeTab = useCallback(async (tab: OpenTab) => {
+    const tabsApi = getChromeApi()?.tabs
+    if (!tabsApi) throw new Error('Chrome tabs API is unavailable')
+
+    await tabsApi.remove(tab.id)
+    setWindows((current) =>
+      current.flatMap((window) => {
+        const tabs = window.tabs.filter((candidate) => candidate.id !== tab.id)
+        return tabs.length > 0 ? [{ ...window, tabs }] : []
+      }),
+    )
+  }, [])
+
+  const moveTab = useCallback(async (tab: OpenTab, index: number) => {
+    const tabsApi = getChromeApi()?.tabs
+    if (!tabsApi) {
+      if (!import.meta.env.DEV) {
+        throw new Error('Chrome tabs API is unavailable')
+      }
+
+      setWindows((current) =>
+        current.map((window) => {
+          if (window.id !== tab.windowId) return window
+          const sourceIndex = window.tabs.findIndex(
+            (candidate) => candidate.id === tab.id,
+          )
+          if (sourceIndex < 0) return window
+
+          const tabs = window.tabs.slice()
+          const [source] = tabs.splice(sourceIndex, 1)
+          const destinationIndex = Math.max(0, Math.min(index, tabs.length))
+          tabs.splice(destinationIndex, 0, source)
+          return {
+            ...window,
+            tabs: tabs.map((candidate, nativeIndex) => ({
+              ...candidate,
+              nativeIndex,
+            })),
+          }
+        }),
+      )
+      return
+    }
+
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      try {
+        await tabsApi.move(tab.id, {
+          index,
+          windowId: tab.windowId,
+        })
+        break
+      } catch (error) {
+        const isNativeDragInProgress = String(error).includes(
+          'Tabs cannot be edited right now',
+        )
+        if (!isNativeDragInProgress || attempt === 3) throw error
+        await new Promise<void>((resolve) => {
+          globalThis.setTimeout(resolve, 50)
+        })
+      }
+    }
+  }, [])
+
+  return {
+    windows,
+    isChromeSource,
+    canReorderTabs: isChromeSource || (import.meta.env.DEV && isTabSourceReady),
+    activateTab,
+    closeTab,
+    moveTab,
+  }
 }
