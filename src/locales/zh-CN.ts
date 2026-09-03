@@ -243,6 +243,7 @@ export const zhCN = {
       saveFailed: '保存失败，请重试',
       deleteFailed: '删除失败，请重试',
       deleteFolderFailed: '删除文件夹失败，请重试',
+      sortFailed: '移动失败，请重试',
     },
   },
   defaultFolders: {

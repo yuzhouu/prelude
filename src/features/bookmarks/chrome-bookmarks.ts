@@ -23,6 +23,10 @@ interface ChromeApi {
       url?: string
     }) => Promise<BookmarkNode>
     getTree: () => Promise<Array<BookmarkNode>>
+    move: (
+      id: string,
+      destination: { index?: number; parentId?: string },
+    ) => Promise<BookmarkNode>
     remove: (id: string) => Promise<void>
     removeTree: (id: string) => Promise<void>
     update: (
@@ -267,6 +271,21 @@ export async function deleteBookmarkFolder(id: string) {
   if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
 
   await bookmarksApi.removeTree(id)
+}
+
+export async function moveBookmarkNode({
+  id,
+  index,
+  parentId,
+}: {
+  id: string
+  index: number
+  parentId: string
+}) {
+  const bookmarksApi = getChromeApi()?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  return bookmarksApi.move(id, { index, parentId })
 }
 
 export function useBookmarkTree() {
