@@ -183,9 +183,6 @@ export const es = {
       'Las páginas nuevas aparecerán aquí automáticamente cuando las abras.',
     currentWindow: 'Ventana actual',
     window: 'Ventana {{number}}',
-    reorder: {
-      failed: 'No se pudo reordenar la pestaña. Inténtalo de nuevo.',
-    },
     close: {
       action: 'Cerrar la pestaña «{{title}}»',
       closing: 'Cerrando la pestaña «{{title}}»',
@@ -283,7 +280,6 @@ export const es = {
       saveFailed: 'No se pudieron guardar los cambios. Inténtalo de nuevo.',
       deleteFailed: 'No se pudo eliminar el marcador. Inténtalo de nuevo.',
       deleteFolderFailed: 'No se pudo eliminar la carpeta. Inténtalo de nuevo.',
-      sortFailed: 'No se pudieron reordenar los elementos. Inténtalo de nuevo.',
     },
   },
   defaultFolders: {

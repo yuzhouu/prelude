@@ -158,9 +158,6 @@ export const zhCN = {
     emptyDescription: '打开新的网页后，它会自动出现在这里。',
     currentWindow: '当前窗口',
     window: '窗口 {{number}}',
-    reorder: {
-      failed: '无法重排标签页，请重试。',
-    },
     close: {
       action: '关闭“{{title}}”标签页',
       closing: '正在关闭“{{title}}”标签页',
@@ -246,7 +243,6 @@ export const zhCN = {
       saveFailed: '保存失败，请重试',
       deleteFailed: '删除失败，请重试',
       deleteFolderFailed: '删除文件夹失败，请重试',
-      sortFailed: '排序失败，请重试',
     },
   },
   defaultFolders: {

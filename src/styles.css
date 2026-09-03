@@ -44,7 +44,6 @@
   --backdrop: rgb(32 32 32 / 28%);
   --backdrop-strong: rgb(32 27 25 / 32%);
   --mobile-scrim: rgb(30 26 22 / 27%);
-  --shadow-drag: rgb(40 35 32 / 18%);
   --shadow-card: rgb(42 36 31 / 5%);
   --shadow-dialog: rgb(31 29 28 / 22%);
   --shadow-search: rgb(31 24 21 / 24%);
@@ -104,7 +103,6 @@
   --backdrop: rgb(0 0 0 / 48%);
   --backdrop-strong: rgb(0 0 0 / 58%);
   --mobile-scrim: rgb(0 0 0 / 52%);
-  --shadow-drag: rgb(0 0 0 / 42%);
   --shadow-card: rgb(0 0 0 / 22%);
   --shadow-dialog: rgb(0 0 0 / 48%);
   --shadow-search: rgb(0 0 0 / 58%);
@@ -881,103 +879,6 @@ input:focus-visible {
   contain-intrinsic-size: auto 180px;
   margin-top: 17px;
   margin-left: calc(var(--group-level) * 20px);
-}
-
-.bookmark-group.is-dragging,
-.bookmark-row.is-dragging {
-  opacity: 0.18;
-}
-
-.bookmark-group.is-sortable > .bookmark-group-header,
-.bookmark-row.is-sortable,
-.open-tab-row.is-sortable {
-  cursor: grab;
-}
-
-.bookmark-group.is-sortable > .bookmark-group-header:active,
-.bookmark-row.is-sortable:active,
-.open-tab-row.is-sortable:active {
-  cursor: grabbing;
-}
-
-.bookmark-drag-overlay {
-  pointer-events: none;
-}
-
-.bookmark-drag-preview {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
-  border-radius: 7px;
-  background: var(--surface-translucent);
-  padding: 0 12px;
-  box-shadow: 0 16px 42px var(--shadow-drag);
-  color: var(--text);
-}
-
-.bookmark-drag-preview.is-folder {
-  min-height: 0;
-}
-
-.bookmark-drag-preview-icon {
-  display: grid;
-  width: 26px;
-  flex: 0 0 auto;
-  place-items: center;
-  color: var(--muted);
-}
-
-.bookmark-drag-preview-icon > svg {
-  width: 17px;
-  height: 17px;
-  stroke-width: 1.7;
-}
-
-.bookmark-drag-preview-copy {
-  display: grid;
-  min-width: 0;
-  gap: 1px;
-}
-
-.bookmark-drag-preview-copy strong,
-.bookmark-drag-preview-copy span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.bookmark-drag-preview-copy strong {
-  font-size: 13.5px;
-  font-weight: 590;
-}
-
-.bookmark-drag-preview-copy span {
-  color: var(--subtle);
-  font-size: 12px;
-}
-
-.bookmark-drag-preview.is-folder .bookmark-drag-preview-copy {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.bookmark-drag-preview.is-folder .bookmark-drag-preview-copy strong {
-  min-width: 0;
-}
-
-.bookmark-drag-preview.is-folder .bookmark-drag-preview-copy span {
-  flex: 0 0 auto;
-}
-
-.bookmark-sort-error {
-  margin: 8px 8px 0;
-  color: var(--accent-strong);
-  font-size: 12px;
 }
 
 .bookmark-group:first-child,
@@ -2391,10 +2292,6 @@ input:focus-visible {
   background: var(--accent-soft);
 }
 
-.open-tab-row.is-dragging {
-  opacity: 0.18;
-}
-
 .open-tab-main {
   display: grid;
   min-width: 0;
@@ -2529,31 +2426,6 @@ input:focus-visible {
 .open-tab-capture-action svg.is-spinning,
 .open-tab-close-action svg.is-spinning {
   animation: default-folders-spin 800ms linear infinite;
-}
-
-.open-tab-drag-overlay {
-  pointer-events: none;
-}
-
-.open-tab-drag-preview {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  min-height: 52px;
-  grid-template-columns: 26px minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
-  border-radius: 7px;
-  background: var(--surface-translucent);
-  padding: 0 12px;
-  box-shadow: 0 16px 42px var(--shadow-drag);
-}
-
-.open-tab-sort-error {
-  margin: 8px 8px 0;
-  color: var(--accent-strong);
-  font-size: 12px;
 }
 
 @media (hover: none) {

@@ -16,7 +16,7 @@ Prelude réunit les favoris Chrome, les onglets ouverts et la collecte À lire p
 Prelude lit les favoris Chrome ainsi que les titres et URL des onglets ouverts afin de les afficher, rechercher, gérer et collecter. Ces données restent locales : elles ne sont ni transférées, ni vendues, ni utilisées à des fins publicitaires. Seules les recherches Web envoyées explicitement par l'utilisateur sont confiées au moteur de recherche par défaut de Chrome.
 
 Fonctions principales
-• Conserver l'arborescence Chrome et ajouter, modifier, déplacer ou supprimer directement les éléments
+• Conserver l'arborescence Chrome et ajouter, modifier ou supprimer directement les éléments
 • Regrouper Épinglés, À lire plus tard et Favoris dans Aujourd'hui
 • Afficher les onglets de plusieurs fenêtres et basculer vers chacun d'eux
 • Collecter la page actuelle, une fenêtre entière ou un groupe d'onglets dans son ordre d'origine

@@ -1,17 +1,6 @@
 import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { Dialog } from '@base-ui/react/dialog'
-import { move } from '@dnd-kit/helpers'
-import { DragDropProvider, DragOverlay } from '@dnd-kit/react'
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/react'
-import { isSortableOperation, useSortable } from '@dnd-kit/react/sortable'
-import {
-  createContext,
-  useContext,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { createContext, useContext, useId, useMemo, useState } from 'react'
 import {
   Check,
   ChevronRight,
@@ -31,7 +20,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '../../components/ui/tooltip'
-import { FULL_ROW_SORTABLE_SENSORS } from '../../lib/sortable'
 import { normalizeCapturedUrl } from '../capture/model'
 import type { OpenTab, OpenTabWindow } from '../tabs/model'
 import {
@@ -39,7 +27,6 @@ import {
   createBookmarkFolder,
   deleteBookmark,
   deleteBookmarkFolder,
-  moveBookmarkNode,
   updateBookmark,
 } from './chrome-bookmarks'
 import { BookmarkFavicon } from './bookmark-favicon'
@@ -413,18 +400,14 @@ function QuickAddBookmarkRow({
 
 export function BookmarkRow({
   canMutate,
-  isDragging = false,
   isNested = false,
   node,
   path,
-  sortableProps,
 }: {
   canMutate: boolean
-  isDragging?: boolean
   isNested?: boolean
   node: BookmarkNode
   path?: Array<string>
-  sortableProps?: SortableElementProps
 }) {
   const { t } = useTranslation()
   const openTabContext = useContext(BookmarkOpenTabContext)
@@ -501,13 +484,8 @@ export function BookmarkRow({
 
   return (
     <>
-      <div
-        ref={sortableProps?.itemRef}
-        className={`bookmark-row${sortableProps ? ' is-sortable' : ''}${isDragging ? ' is-dragging' : ''}${isNested ? ' is-nested' : ''}`}
-        data-sortable-id={sortableProps?.id}
-        data-sortable-kind={sortableProps?.kind}
-      >
-        <a className="bookmark-main-link" href={url} draggable={false}>
+      <div className={`bookmark-row${isNested ? ' is-nested' : ''}`}>
+        <a className="bookmark-main-link" href={url}>
           <BookmarkFavicon title={node.title} url={url} />
           <span className="bookmark-copy">
             <strong>{node.title || getHostname(url)}</strong>
@@ -870,49 +848,30 @@ function FolderSection({
   folder,
   level = 0,
   canCreate,
-  expanded,
   isInsideManagedTree = false,
-  isDragging = false,
-  onExpandedChange,
-  sortableProps,
 }: {
   folder: BookmarkNode
   level?: number
   canCreate: boolean
-  expanded?: boolean
   isInsideManagedTree?: boolean
-  isDragging?: boolean
-  onExpandedChange?: (expanded: boolean) => void
-  sortableProps?: SortableElementProps
 }) {
   const { t } = useTranslation()
   const isManagedTree = isInsideManagedTree || folder.folderType === 'managed'
   const canMutateContents = canCreate && !isManagedTree
   const canDeleteFolder = canCreate && !isManagedTree
-  const [internalExpanded, setInternalExpanded] = useState(true)
-  const isExpanded = expanded ?? internalExpanded
+  const [isExpanded, setIsExpanded] = useState(true)
   const folderContentId = useId()
   const folderTitle = folder.title || t('common.unnamedFolder')
   const toggleLabel = t(
     isExpanded ? 'bookmarks.folder.collapse' : 'bookmarks.folder.expand',
     { title: folderTitle },
   )
-
   return (
     <section
-      ref={sortableProps?.itemRef}
-      className={`bookmark-group${sortableProps ? ' is-sortable' : ''}${isDragging ? ' is-dragging' : ''}`}
+      className="bookmark-group"
       style={{ '--group-level': level } as React.CSSProperties}
-      data-sortable-id={sortableProps?.id}
-      data-sortable-kind={sortableProps?.kind}
     >
-      <header
-        ref={(element) => {
-          sortableProps?.dragSourceRef?.(element)
-          sortableProps?.dropTargetRef?.(element)
-        }}
-        className="bookmark-group-header"
-      >
+      <header className="bookmark-group-header">
         <div className="group-title-row">
           <Tooltip>
             <TooltipTrigger
@@ -923,13 +882,7 @@ function FolderSection({
                   aria-label={toggleLabel}
                   aria-expanded={isExpanded}
                   aria-controls={folderContentId}
-                  onClick={() => {
-                    const nextExpanded = !isExpanded
-                    if (expanded === undefined) {
-                      setInternalExpanded(nextExpanded)
-                    }
-                    onExpandedChange?.(nextExpanded)
-                  }}
+                  onClick={() => setIsExpanded((expanded) => !expanded)}
                 >
                   <ChevronRight className={isExpanded ? 'is-expanded' : ''} />
                 </button>
@@ -948,7 +901,7 @@ function FolderSection({
         ) : null}
       </header>
       <div id={folderContentId} hidden={!isExpanded}>
-        <SortableFolderChildren
+        <FolderChildren
           parent={folder}
           folderLevel={level + 1}
           canCreate={canCreate}
@@ -972,130 +925,7 @@ function FolderSection({
   )
 }
 
-type SortableItemKind = 'bookmark' | 'folder'
-
-interface SortableElementProps {
-  id: string
-  kind: SortableItemKind
-  itemRef: (element: Element | null) => void
-  dragSourceRef?: (element: Element | null) => void
-  dropTargetRef?: (element: Element | null) => void
-}
-
-interface SortableItemData {
-  kind: SortableItemKind
-  node: BookmarkNode
-  parentId: string
-}
-
-interface OptimisticChildren {
-  children: Array<BookmarkNode>
-  source: Array<BookmarkNode>
-}
-
-const EMPTY_BOOKMARK_CHILDREN: Array<BookmarkNode> = []
-function BookmarkDragPreview({ node }: { node: BookmarkNode }) {
-  const { t } = useTranslation()
-  const isFolderNode = node.url === undefined
-  const url = node.url ?? '#'
-
-  return (
-    <div
-      className={`bookmark-drag-preview is-${isFolderNode ? 'folder' : 'bookmark'}`}
-    >
-      <span className="bookmark-drag-preview-icon">
-        {isFolderNode ? (
-          <FolderOpen />
-        ) : (
-          <BookmarkFavicon title={node.title} url={url} />
-        )}
-      </span>
-      <span className="bookmark-drag-preview-copy">
-        <strong>
-          {node.title ||
-            (isFolderNode ? t('common.unnamedFolder') : getHostname(url))}
-        </strong>
-        <span>
-          {isFolderNode
-            ? t('common.bookmarkCount', { count: countBookmarks(node) })
-            : getHostname(url)}
-        </span>
-      </span>
-    </div>
-  )
-}
-
-function SortableFolderChild({
-  canCreate,
-  canReorder,
-  child,
-  folderExpanded,
-  folderLevel,
-  indentBookmarks,
-  index,
-  isInsideManagedTree,
-  onFolderExpandedChange,
-  parentId,
-}: {
-  canCreate: boolean
-  canReorder: boolean
-  child: BookmarkNode
-  folderExpanded: boolean
-  folderLevel: number
-  indentBookmarks: boolean
-  index: number
-  isInsideManagedTree: boolean
-  onFolderExpandedChange: (expanded: boolean) => void
-  parentId: string
-}) {
-  const kind: SortableItemKind = child.url === undefined ? 'folder' : 'bookmark'
-  const { isDragging, isDropping, ref, sourceRef, targetRef } =
-    useSortable<SortableItemData>({
-      id: child.id,
-      index,
-      group: parentId,
-      disabled: !canReorder,
-      data: { kind, node: child, parentId },
-      transition: {
-        duration: 220,
-        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        idle: true,
-      },
-    })
-  const sortableProps: SortableElementProps | undefined = canReorder
-    ? {
-        id: child.id,
-        kind,
-        itemRef: ref,
-        dragSourceRef: kind === 'folder' ? sourceRef : undefined,
-        dropTargetRef: kind === 'folder' ? targetRef : undefined,
-      }
-    : undefined
-  const isActive = isDragging || isDropping
-
-  return kind === 'folder' ? (
-    <FolderSection
-      folder={child}
-      level={folderLevel}
-      canCreate={canCreate}
-      expanded={folderExpanded}
-      isInsideManagedTree={isInsideManagedTree}
-      isDragging={isActive}
-      onExpandedChange={onFolderExpandedChange}
-      sortableProps={sortableProps}
-    />
-  ) : (
-    <BookmarkRow
-      node={child}
-      canMutate={canReorder}
-      isDragging={isActive}
-      isNested={indentBookmarks}
-      sortableProps={sortableProps}
-    />
-  )
-}
-
-function SortableFolderChildren({
+function FolderChildren({
   canCreate,
   folderLevel,
   indentBookmarks = false,
@@ -1108,142 +938,31 @@ function SortableFolderChildren({
   isInsideManagedTree?: boolean
   parent: BookmarkNode
 }) {
-  const { t } = useTranslation()
-  const sourceChildren = parent.children ?? EMPTY_BOOKMARK_CHILDREN
-  const canReorder = canCreate && !isInsideManagedTree
-  const [optimisticChildren, setOptimisticChildren] =
-    useState<OptimisticChildren>()
-  const [collapsedFolderIds, setCollapsedFolderIds] = useState<Set<string>>(
-    () => new Set(),
-  )
-  const [hasMoveError, setHasMoveError] = useState(false)
-  const moveVersionRef = useRef(0)
-  const children =
-    optimisticChildren?.source === sourceChildren
-      ? optimisticChildren.children
-      : sourceChildren
-
-  const setFolderExpanded = (folderId: string, expanded: boolean) => {
-    setCollapsedFolderIds((current) => {
-      const shouldCollapse = !expanded
-      if (current.has(folderId) === shouldCollapse) return current
-
-      const next = new Set(current)
-      if (shouldCollapse) next.add(folderId)
-      else next.delete(folderId)
-      return next
-    })
-  }
-
-  const persistMove = async ({
-    destinationIndex,
-    id,
-    nextChildren,
-    version,
-  }: {
-    destinationIndex: number
-    id: string
-    nextChildren: Array<BookmarkNode>
-    version: number
-  }) => {
-    setHasMoveError(false)
-    try {
-      await moveBookmarkNode({
-        id,
-        index: destinationIndex,
-        parentId: parent.id,
-      })
-    } catch {
-      if (moveVersionRef.current !== version) return
-      setOptimisticChildren((current) =>
-        current?.children === nextChildren ? undefined : current,
-      )
-      setHasMoveError(true)
-    }
-  }
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    if (event.canceled || !isSortableOperation(event.operation)) return
-
-    const { source, target } = event.operation
-    if (
-      !source ||
-      !target ||
-      source.initialGroup !== parent.id ||
-      source.group !== parent.id ||
-      source.initialIndex === source.index
-    ) {
-      return
-    }
-
-    const nextChildren = move(children, event)
-    const destinationIndex =
-      source.index > source.initialIndex ? source.index + 1 : source.index
-    const version = moveVersionRef.current + 1
-    moveVersionRef.current = version
-    setOptimisticChildren({ children: nextChildren, source: sourceChildren })
-    void persistMove({
-      destinationIndex,
-      id: String(source.id),
-      nextChildren,
-      version,
-    })
-  }
-
-  const handleDragStart = (event: DragStartEvent) => {
-    setHasMoveError(false)
-    const sourceData = event.operation.source?.data as
-      SortableItemData | undefined
-    if (sourceData?.kind === 'folder') {
-      setFolderExpanded(sourceData.node.id, false)
-    }
-  }
+  const canMutate = canCreate && !isInsideManagedTree
 
   return (
-    <DragDropProvider
-      sensors={FULL_ROW_SORTABLE_SENSORS}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="bookmark-children">
-        {children.map((child, index) => (
-          <SortableFolderChild
+    <div className="bookmark-children">
+      {(parent.children ?? []).map((child) =>
+        child.url === undefined ? (
+          <FolderSection
             key={child.id}
+            folder={child}
+            level={folderLevel}
             canCreate={canCreate}
-            canReorder={canReorder}
-            child={child}
-            folderExpanded={!collapsedFolderIds.has(child.id)}
-            folderLevel={folderLevel}
-            indentBookmarks={indentBookmarks}
-            index={index}
             isInsideManagedTree={isInsideManagedTree}
-            onFolderExpandedChange={(expanded) =>
-              setFolderExpanded(child.id, expanded)
-            }
-            parentId={parent.id}
           />
-        ))}
-        {hasMoveError ? (
-          <p className="bookmark-sort-error" role="alert">
-            {t('bookmarks.errors.sortFailed')}
-          </p>
-        ) : null}
-      </div>
-      <DragOverlay
-        className="bookmark-drag-overlay"
-        dropAnimation={{
-          duration: 180,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        }}
-      >
-        {(source) => (
-          <BookmarkDragPreview node={(source.data as SortableItemData).node} />
-        )}
-      </DragOverlay>
-    </DragDropProvider>
+        ) : (
+          <BookmarkRow
+            key={child.id}
+            node={child}
+            canMutate={canMutate}
+            isNested={indentBookmarks}
+          />
+        ),
+      )}
+    </div>
   )
 }
-
 export function FolderContents({
   folder,
   canCreate,
@@ -1259,7 +978,7 @@ export function FolderContents({
   return (
     <QuickAddEditorScope>
       <div className="bookmark-sections">
-        <SortableFolderChildren
+        <FolderChildren
           parent={folder}
           folderLevel={0}
           canCreate={canCreate}

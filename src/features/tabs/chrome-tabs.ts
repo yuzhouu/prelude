@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { demoOpenTabWindows } from './demo-data'
-import type { OpenTab, OpenTabMoveDestination, OpenTabWindow } from './model'
+import type { OpenTab, OpenTabWindow } from './model'
 
 interface ChromeEvent {
   addListener: (callback: () => void) => void
@@ -31,10 +31,6 @@ interface ChromeApi {
       updateProperties: { active: boolean },
     ) => Promise<ChromeTab | undefined>
     remove: (tabId: number) => Promise<void>
-    move: (
-      tabId: number,
-      moveProperties: { index: number; windowId: number },
-    ) => Promise<ChromeTab | Array<ChromeTab>>
     onActivated: ChromeEvent
     onAttached: ChromeEvent
     onCreated: ChromeEvent
@@ -107,14 +103,10 @@ export function useOpenTabs() {
   const [windows, setWindows] =
     useState<Array<OpenTabWindow>>(demoOpenTabWindows)
   const [isChromeSource, setIsChromeSource] = useState(false)
-  const [isTabSourceReady, setIsTabSourceReady] = useState(false)
 
   useEffect(() => {
     const chromeApi = getChromeApi()
-    if (!chromeApi?.tabs || !chromeApi.windows) {
-      setIsTabSourceReady(true)
-      return
-    }
+    if (!chromeApi?.tabs || !chromeApi.windows) return
 
     const tabsApi = chromeApi.tabs
     const windowsApi = chromeApi.windows
@@ -128,7 +120,6 @@ export function useOpenTabs() {
         if (!active) return
         setWindows(groupTabs(tabs, currentWindow.id, chromeApi.runtime?.id))
         setIsChromeSource(true)
-        setIsTabSourceReady(true)
       })
     }
 
@@ -192,132 +183,10 @@ export function useOpenTabs() {
     )
   }, [])
 
-  const moveTab = useCallback(
-    async (tab: OpenTab, destination: OpenTabMoveDestination) => {
-      const tabsApi = getChromeApi()?.tabs
-      if (!tabsApi) {
-        if (!import.meta.env.DEV) {
-          throw new Error('Chrome tabs API is unavailable')
-        }
-
-        setWindows((current) => {
-          const sourceWindow = current.find((candidate) =>
-            candidate.tabs.some((candidateTab) => candidateTab.id === tab.id),
-          )
-          const destinationWindow = current.find(
-            (candidate) => candidate.id === destination.windowId,
-          )
-          const source = sourceWindow?.tabs.find(
-            (candidate) => candidate.id === tab.id,
-          )
-          if (!sourceWindow || !destinationWindow || !source) return current
-
-          const isCrossWindow = sourceWindow.id !== destinationWindow.id
-          const sourceTabIndex = sourceWindow.tabs.findIndex(
-            (candidate) => candidate.id === tab.id,
-          )
-          let sourceTabs = sourceWindow.tabs.filter(
-            (candidate) => candidate.id !== tab.id,
-          )
-          if (isCrossWindow && source.active && sourceTabs.length) {
-            const nextActiveIndex = Math.min(
-              sourceTabIndex,
-              sourceTabs.length - 1,
-            )
-            sourceTabs = sourceTabs.map((candidate, index) => ({
-              ...candidate,
-              active: index === nextActiveIndex,
-            }))
-          }
-
-          const destinationTabs = (
-            sourceWindow.id === destinationWindow.id
-              ? sourceTabs
-              : destinationWindow.tabs
-          ).map((candidate) =>
-            isCrossWindow && source.active
-              ? { ...candidate, active: false }
-              : candidate,
-          )
-          const destinationIndex = Math.max(
-            0,
-            Math.min(destination.index, destinationTabs.length),
-          )
-          destinationTabs.splice(destinationIndex, 0, {
-            ...source,
-            windowId: destinationWindow.id,
-          })
-
-          const normalizeTabs = (windowId: number, tabs: Array<OpenTab>) =>
-            tabs.map((candidate, nativeIndex) => ({
-              ...candidate,
-              nativeIndex,
-              windowId,
-            }))
-
-          return current.flatMap((window) => {
-            if (
-              sourceWindow.id === destinationWindow.id &&
-              window.id === sourceWindow.id
-            ) {
-              return [
-                {
-                  ...window,
-                  tabs: normalizeTabs(window.id, destinationTabs),
-                },
-              ]
-            }
-            if (window.id === sourceWindow.id) {
-              return sourceTabs.length
-                ? [
-                    {
-                      ...window,
-                      tabs: normalizeTabs(window.id, sourceTabs),
-                    },
-                  ]
-                : []
-            }
-            if (window.id === destinationWindow.id) {
-              return [
-                {
-                  ...window,
-                  tabs: normalizeTabs(window.id, destinationTabs),
-                },
-              ]
-            }
-            return [window]
-          })
-        })
-        return
-      }
-
-      for (let attempt = 0; attempt < 4; attempt += 1) {
-        try {
-          await tabsApi.move(tab.id, {
-            index: destination.index,
-            windowId: destination.windowId,
-          })
-          break
-        } catch (error) {
-          const isNativeDragInProgress = String(error).includes(
-            'Tabs cannot be edited right now',
-          )
-          if (!isNativeDragInProgress || attempt === 3) throw error
-          await new Promise<void>((resolve) => {
-            globalThis.setTimeout(resolve, 50)
-          })
-        }
-      }
-    },
-    [],
-  )
-
   return {
     windows,
     isChromeSource,
-    canReorderTabs: isChromeSource || (import.meta.env.DEV && isTabSourceReady),
     activateTab,
     closeTab,
-    moveTab,
   }
 }

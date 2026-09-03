@@ -178,9 +178,6 @@ export const en = {
       'New pages will appear here automatically after you open them.',
     currentWindow: 'Current window',
     window: 'Window {{number}}',
-    reorder: {
-      failed: 'Could not reorder the tab. Try again.',
-    },
     close: {
       action: 'Close the “{{title}}” tab',
       closing: 'Closing the “{{title}}” tab',
@@ -273,7 +270,6 @@ export const en = {
       saveFailed: 'Could not save your changes. Try again.',
       deleteFailed: 'Could not delete the bookmark. Try again.',
       deleteFolderFailed: 'Could not delete the folder. Try again.',
-      sortFailed: 'Could not reorder the items. Try again.',
     },
   },
   defaultFolders: {

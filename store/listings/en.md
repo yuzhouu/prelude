@@ -16,7 +16,7 @@ Prelude brings Chrome bookmarks, open tabs, and Read later collection into one c
 Prelude reads Chrome bookmarks and the titles and URLs of open tabs to display, search, manage, and collect them. This data stays local—it is not uploaded, sold, or used for advertising. Only a web search explicitly submitted by the user is passed by Chrome to the configured default search provider.
 
 Highlights
-• Keep Chrome's existing bookmark hierarchy and add, edit, move, or delete items directly
+• Keep Chrome's existing bookmark hierarchy and add, edit, or delete items directly
 • Use Today to focus on Pinned, Read later, and Favorites
 • See tabs across browser windows and switch to any tab
 • Collect the current page, a whole window, or a tab group in its original order

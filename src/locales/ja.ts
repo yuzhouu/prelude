@@ -179,9 +179,6 @@ export const ja = {
     emptyDescription: '新しいページを開くと、ここに自動的に表示されます。',
     currentWindow: '現在のウィンドウ',
     window: 'ウィンドウ{{number}}',
-    reorder: {
-      failed: 'タブを並べ替えられませんでした。もう一度お試しください。',
-    },
     close: {
       action: '「{{title}}」タブを閉じる',
       closing: '「{{title}}」タブを閉じています',
@@ -279,7 +276,6 @@ export const ja = {
         'ブックマークを削除できませんでした。もう一度お試しください。',
       deleteFolderFailed:
         'フォルダを削除できませんでした。もう一度お試しください。',
-      sortFailed: '並べ替えできませんでした。もう一度お試しください。',
     },
   },
   defaultFolders: {

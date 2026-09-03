@@ -182,9 +182,6 @@ export const fr = {
       'Les nouvelles pages apparaîtront automatiquement ici lorsque vous les ouvrirez.',
     currentWindow: 'Fenêtre actuelle',
     window: 'Fenêtre {{number}}',
-    reorder: {
-      failed: 'Impossible de réorganiser l’onglet. Réessayez.',
-    },
     close: {
       action: 'Fermer l’onglet « {{title}} »',
       closing: 'Fermeture de l’onglet « {{title}} »',
@@ -281,7 +278,6 @@ export const fr = {
       saveFailed: 'Impossible d’enregistrer les modifications. Réessayez.',
       deleteFailed: 'Impossible de supprimer le favori. Réessayez.',
       deleteFolderFailed: 'Impossible de supprimer le dossier. Réessayez.',
-      sortFailed: 'Impossible de réorganiser les éléments. Réessayez.',
     },
   },
   defaultFolders: {

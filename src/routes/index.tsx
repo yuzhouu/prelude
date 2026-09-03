@@ -52,10 +52,8 @@ function Home() {
   const {
     windows: openTabWindows,
     isChromeSource: areTabsFromChrome,
-    canReorderTabs,
     activateTab,
     closeTab,
-    moveTab,
   } = useOpenTabs()
   const roots = useMemo(() => getVisibleRoots(tree), [tree])
   const bookmarks = useMemo(() => getBookmarkMatches(roots), [roots])
@@ -277,11 +275,9 @@ function Home() {
                   bookmarkedUrlKeys={bookmarkedUrlKeys}
                   canCapture={isChromeSource && areTabsFromChrome}
                   canClose={areTabsFromChrome}
-                  canReorder={canReorderTabs}
                   windows={openTabWindows}
                   onActivate={activateTab}
                   onClose={closeTab}
-                  onReorder={moveTab}
                 />
               ) : isQuickFoldersView ? (
                 defaultBookmarkContainer ? (
