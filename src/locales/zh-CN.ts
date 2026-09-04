@@ -158,6 +158,9 @@ export const zhCN = {
     emptyDescription: '打开新的网页后，它会自动出现在这里。',
     currentWindow: '当前窗口',
     window: '窗口 {{number}}',
+    errors: {
+      sortFailed: '移动标签页失败，已恢复原顺序。',
+    },
     close: {
       action: '关闭“{{title}}”标签页',
       closing: '正在关闭“{{title}}”标签页',

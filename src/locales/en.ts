@@ -178,6 +178,9 @@ export const en = {
       'New pages will appear here automatically after you open them.',
     currentWindow: 'Current window',
     window: 'Window {{number}}',
+    errors: {
+      sortFailed: 'Could not move the tab. The original order was restored.',
+    },
     close: {
       action: 'Close the “{{title}}” tab',
       closing: 'Closing the “{{title}}” tab',

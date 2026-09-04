@@ -26,6 +26,13 @@ import {
 import { isCaptureableUrl, normalizeCapturedUrl } from '../capture/model'
 import type { CapturePlan } from '../capture/model'
 import type { OpenTab, OpenTabWindow } from './model'
+import {
+  OpenTabSortableItem,
+  OpenTabSortableWindows,
+  OpenTabWindowDropZone,
+} from './tab-sortable-windows'
+import type { OpenTabMoveDestination } from './tab-drag'
+import type { SortableTreeItemState } from '../../components/sortable-tree'
 
 type TabCaptureStatus = 'error' | 'idle' | 'saved' | 'saving'
 type TabCloseStatus = 'closing' | 'error' | 'idle'
@@ -78,6 +85,7 @@ interface TabRowProps {
   closeStatus: TabCloseStatus
   isBookmarked: boolean
   isCurrent: boolean
+  sortableState?: SortableTreeItemState
   tab: OpenTab
   onActivate: (tab: OpenTab) => void
   onCapture: (tab: OpenTab) => void
@@ -91,6 +99,7 @@ function TabRow({
   closeStatus,
   isBookmarked,
   isCurrent,
+  sortableState,
   tab,
   onActivate,
   onCapture,
@@ -123,10 +132,15 @@ function TabRow({
 
   return (
     <div
-      className={`open-tab-row${isCurrent ? ' is-active' : ''}`}
+      ref={sortableState?.setNodeRef}
+      className={`open-tab-row${isCurrent ? ' is-active' : ''}${sortableState ? ' is-sortable' : ''}${sortableState?.isDragSource ? ' is-drag-source' : ''}`}
       data-tab-id={tab.id}
+      data-open-tab-drop-id={tab.id}
+      onClickCapture={sortableState?.onClickCapture}
+      onPointerDownCapture={sortableState?.onPointerDownCapture}
     >
       <button
+        ref={sortableState?.setDragHandleRef}
         className="open-tab-main"
         type="button"
         onClick={() => onActivate(tab)}
@@ -149,6 +163,7 @@ function TabRow({
               <span className="tooltip-disabled-trigger">
                 <button
                   className={`open-tab-capture-action is-${displayStatus}`}
+                  data-no-drag
                   type="button"
                   disabled={
                     !canCapture || !isSupported || captureStatus === 'saving'
@@ -183,6 +198,7 @@ function TabRow({
               <span className="tooltip-disabled-trigger">
                 <button
                   className={`open-tab-close-action is-${closeStatus}`}
+                  data-no-drag
                   type="button"
                   disabled={!canClose || closeStatus === 'closing'}
                   aria-label={closeLabel}
@@ -239,32 +255,88 @@ function TabWindow({
   return (
     <section className="tab-window-group">
       <header className="tab-window-header">
-        <div>
-          <AppWindow />
-          <h2>
-            {window.focused
-              ? t('tabs.currentWindow')
-              : t('tabs.window', { number: displayNumber })}
-          </h2>
-        </div>
-        <span>{t('common.tabCount', { count: window.tabs.length })}</span>
+        <OpenTabWindowDropZone
+          edge="start"
+          windowId={window.id}
+          zoneId="header"
+        >
+          {({ isDropTarget, setNodeRef }) => (
+            <div
+              ref={setNodeRef}
+              className={`tab-window-drop-header${isDropTarget ? ' is-drop-target' : ''}`}
+              data-open-tab-drop-edge="start"
+              data-open-tab-drop-window-id={window.id}
+            >
+              <div>
+                <AppWindow />
+                <h2>
+                  {window.focused
+                    ? t('tabs.currentWindow')
+                    : t('tabs.window', { number: displayNumber })}
+                </h2>
+              </div>
+              <span>{t('common.tabCount', { count: window.tabs.length })}</span>
+            </div>
+          )}
+        </OpenTabWindowDropZone>
       </header>
       <div className="open-tab-list">
-        {window.tabs.map((tab) => (
-          <TabRow
+        <OpenTabWindowDropZone
+          edge="start"
+          windowId={window.id}
+          zoneId="list-start"
+        >
+          {({ isDropTarget, setNodeRef }) => (
+            <span
+              ref={setNodeRef}
+              className={`open-tab-list-drop-boundary is-start${isDropTarget ? ' is-drop-target' : ''}`}
+              data-open-tab-drop-edge="start"
+              data-open-tab-drop-window-id={window.id}
+              aria-hidden="true"
+            />
+          )}
+        </OpenTabWindowDropZone>
+        {window.tabs.map((tab, index) => (
+          <OpenTabSortableItem
             key={tab.id}
-            tab={tab}
-            isCurrent={window.focused && tab.active}
-            canCapture={canCapture}
-            canClose={canClose}
-            captureStatus={captureStatuses[getTabCaptureKey(tab)] ?? 'idle'}
-            closeStatus={closeStatuses[tab.id] ?? 'idle'}
-            isBookmarked={bookmarkedUrlKeys.has(normalizeCapturedUrl(tab.url))}
-            onActivate={onActivate}
-            onCapture={onCapture}
-            onClose={onClose}
-          />
+            id={tab.id}
+            index={index}
+            windowId={window.id}
+          >
+            {(sortableState) => (
+              <TabRow
+                tab={tab}
+                isCurrent={window.focused && tab.active}
+                canCapture={canCapture}
+                canClose={canClose}
+                captureStatus={captureStatuses[getTabCaptureKey(tab)] ?? 'idle'}
+                closeStatus={closeStatuses[tab.id] ?? 'idle'}
+                isBookmarked={bookmarkedUrlKeys.has(
+                  normalizeCapturedUrl(tab.url),
+                )}
+                sortableState={sortableState}
+                onActivate={onActivate}
+                onCapture={onCapture}
+                onClose={onClose}
+              />
+            )}
+          </OpenTabSortableItem>
         ))}
+        <OpenTabWindowDropZone
+          edge="end"
+          windowId={window.id}
+          zoneId="list-end"
+        >
+          {({ isDropTarget, setNodeRef }) => (
+            <span
+              ref={setNodeRef}
+              className={`open-tab-list-drop-boundary is-end${isDropTarget ? ' is-drop-target' : ''}`}
+              data-open-tab-drop-edge="end"
+              data-open-tab-drop-window-id={window.id}
+              aria-hidden="true"
+            />
+          )}
+        </OpenTabWindowDropZone>
       </div>
     </section>
   )
@@ -274,16 +346,24 @@ export function OpenTabsContents({
   bookmarkedUrlKeys,
   canCapture,
   canClose,
+  canMove,
   windows,
   onActivate,
   onClose,
+  onMove,
 }: {
   bookmarkedUrlKeys: ReadonlySet<string>
   canCapture: boolean
   canClose: boolean
+  canMove: boolean
   windows: Array<OpenTabWindow>
   onActivate: (tab: OpenTab) => void
   onClose: (tab: OpenTab) => Promise<void>
+  onMove: (
+    tab: OpenTab,
+    destination: OpenTabMoveDestination,
+    projectedWindows: Array<OpenTabWindow>,
+  ) => Promise<void>
 }) {
   const { t } = useTranslation()
   const [captureStatuses, setCaptureStatuses] = useState<
@@ -372,23 +452,41 @@ export function OpenTabsContents({
 
   return (
     <>
-      <div className="tab-window-sections">
-        {windows.map((window, index) => (
-          <TabWindow
-            key={window.id}
-            bookmarkedUrlKeys={bookmarkedUrlKeys}
-            canCapture={canCapture}
-            canClose={canClose}
-            captureStatuses={captureStatuses}
-            closeStatuses={closeStatuses}
-            displayNumber={index + 1}
-            window={window}
-            onActivate={onActivate}
-            onCapture={(candidate) => void captureTab(candidate)}
-            onClose={(candidate) => void closeTab(candidate)}
-          />
-        ))}
-      </div>
+      <OpenTabSortableWindows
+        canMove={canMove}
+        windows={windows}
+        onMove={onMove}
+        renderOverlay={(tab) => (
+          <div className="open-tab-drag-preview">
+            <TabFavicon tab={tab} />
+            <span className="open-tab-copy">
+              <strong>{tab.title || getHostname(tab.url)}</strong>
+              <span>{getHostname(tab.url)}</span>
+            </span>
+            {tab.pinned ? <Pin aria-hidden="true" /> : null}
+          </div>
+        )}
+      >
+        {(previewWindows) => (
+          <div className="tab-window-sections">
+            {previewWindows.map((window, index) => (
+              <TabWindow
+                key={window.id}
+                bookmarkedUrlKeys={bookmarkedUrlKeys}
+                canCapture={canCapture}
+                canClose={canClose}
+                captureStatuses={captureStatuses}
+                closeStatuses={closeStatuses}
+                displayNumber={index + 1}
+                window={window}
+                onActivate={onActivate}
+                onCapture={(candidate) => void captureTab(candidate)}
+                onClose={(candidate) => void closeTab(candidate)}
+              />
+            ))}
+          </div>
+        )}
+      </OpenTabSortableWindows>
 
       <AlertDialog.Root
         open={pendingDuplicate !== undefined}

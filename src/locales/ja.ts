@@ -179,6 +179,9 @@ export const ja = {
     emptyDescription: '新しいページを開くと、ここに自動的に表示されます。',
     currentWindow: '現在のウィンドウ',
     window: 'ウィンドウ{{number}}',
+    errors: {
+      sortFailed: 'タブを移動できませんでした。元の順序に戻しました。',
+    },
     close: {
       action: '「{{title}}」タブを閉じる',
       closing: '「{{title}}」タブを閉じています',

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { demoOpenTabWindows } from './demo-data'
 import type { OpenTab, OpenTabWindow } from './model'
+import type { OpenTabMoveDestination } from './tab-drag'
 
 interface ChromeEvent {
   addListener: (callback: () => void) => void
@@ -31,6 +32,10 @@ interface ChromeApi {
       updateProperties: { active: boolean },
     ) => Promise<ChromeTab | undefined>
     remove: (tabId: number) => Promise<void>
+    move: (
+      tabId: number,
+      moveProperties: OpenTabMoveDestination,
+    ) => Promise<ChromeTab | Array<ChromeTab> | undefined>
     onActivated: ChromeEvent
     onAttached: ChromeEvent
     onCreated: ChromeEvent
@@ -53,6 +58,14 @@ interface ChromeApi {
 
 function getChromeApi() {
   return (globalThis as typeof globalThis & { chrome?: ChromeApi }).chrome
+}
+
+function isTabDndDemoEnabled() {
+  return (
+    import.meta.env.DEV &&
+    typeof globalThis.location !== 'undefined' &&
+    new URLSearchParams(globalThis.location.search).has('tab-dnd-demo')
+  )
 }
 
 function groupTabs(
@@ -183,10 +196,47 @@ export function useOpenTabs() {
     )
   }, [])
 
+  const moveTab = useCallback(
+    async (
+      tab: OpenTab,
+      destination: OpenTabMoveDestination,
+      projectedWindows?: Array<OpenTabWindow>,
+    ) => {
+      const tabsApi = getChromeApi()?.tabs
+      if (tabsApi) {
+        await tabsApi.move(tab.id, destination)
+        return
+      }
+
+      if (!isTabDndDemoEnabled() || !projectedWindows) {
+        throw new Error('Chrome tabs API is unavailable')
+      }
+
+      const root = globalThis.document.documentElement
+      const callCount = Number(root.dataset.tabDndMoveCalls ?? 0) + 1
+      root.dataset.tabDndDemo = 'true'
+      root.dataset.tabDndMoveCalls = String(callCount)
+      root.dataset.tabDndLastMove = [
+        tab.id,
+        destination.windowId,
+        destination.index,
+      ].join(':')
+
+      if (new URLSearchParams(globalThis.location.search).has('tab-dnd-fail')) {
+        throw new Error('Intentional tab move failure.')
+      }
+
+      setWindows(projectedWindows)
+    },
+    [],
+  )
+
   return {
     windows,
     isChromeSource,
+    canMoveTabs: isChromeSource || isTabDndDemoEnabled(),
     activateTab,
     closeTab,
+    moveTab,
   }
 }

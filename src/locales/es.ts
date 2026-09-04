@@ -183,6 +183,9 @@ export const es = {
       'Las páginas nuevas aparecerán aquí automáticamente cuando las abras.',
     currentWindow: 'Ventana actual',
     window: 'Ventana {{number}}',
+    errors: {
+      sortFailed: 'No se pudo mover la pestaña. Se restauró el orden original.',
+    },
     close: {
       action: 'Cerrar la pestaña «{{title}}»',
       closing: 'Cerrando la pestaña «{{title}}»',

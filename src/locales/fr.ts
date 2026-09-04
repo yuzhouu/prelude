@@ -182,6 +182,10 @@ export const fr = {
       'Les nouvelles pages apparaîtront automatiquement ici lorsque vous les ouvrirez.',
     currentWindow: 'Fenêtre actuelle',
     window: 'Fenêtre {{number}}',
+    errors: {
+      sortFailed:
+        'Impossible de déplacer l’onglet. L’ordre initial a été restauré.',
+    },
     close: {
       action: 'Fermer l’onglet « {{title}} »',
       closing: 'Fermeture de l’onglet « {{title}} »',

@@ -13,7 +13,8 @@
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
     "check": "prettier --check .",
-    "test:bookmark-drag": "node --test src/features/bookmarks/bookmark-drag.test.ts"
+    "test:bookmark-drag": "node --test src/features/bookmarks/bookmark-drag.test.ts",
+    "test:tab-drag": "node --test src/features/tabs/tab-drag.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
