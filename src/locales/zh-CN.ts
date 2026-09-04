@@ -126,6 +126,7 @@ export const zhCN = {
   },
   capture: {
     open: '收集',
+    openPrelude: '打开序幕',
     close: '关闭收集面板',
     eyebrow: '收集入口',
     title: '收集到“待读”',

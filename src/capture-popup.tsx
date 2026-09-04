@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client'
-import { X } from 'lucide-react'
+import { ExternalLink, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import './i18n'
@@ -10,7 +10,12 @@ import type { OpenTabWindow } from './features/tabs/model'
 
 interface PopupChromeApi {
   bookmarks?: unknown
-  tabs?: unknown
+  runtime?: {
+    getURL: (path: string) => string
+  }
+  tabs?: {
+    create: (details: { url: string }) => Promise<unknown>
+  }
 }
 
 const EMPTY_WINDOWS: Array<OpenTabWindow> = []
@@ -18,22 +23,47 @@ const chromeApi = (
   globalThis as typeof globalThis & { chrome?: PopupChromeApi }
 ).chrome
 const isChromeSource = Boolean(chromeApi?.bookmarks && chromeApi.tabs)
+const preludeUrl = chromeApi?.runtime?.getURL('index.html') ?? '/'
 
 function CapturePopup() {
   const { t } = useTranslation()
+
+  const openPrelude = async () => {
+    if (!chromeApi?.tabs?.create) {
+      window.location.assign(preludeUrl)
+      return
+    }
+
+    try {
+      await chromeApi.tabs.create({ url: preludeUrl })
+      window.close()
+    } catch {
+      window.location.assign(preludeUrl)
+    }
+  }
 
   return (
     <main className="capture-popup-surface">
       <CapturePanel
         closeButton={
-          <button
-            className="capture-dialog-close"
-            type="button"
-            aria-label={t('capture.close')}
-            onClick={() => window.close()}
-          >
-            <X />
-          </button>
+          <div className="capture-popup-header-actions">
+            <button
+              className="capture-popup-open"
+              type="button"
+              onClick={() => void openPrelude()}
+            >
+              <ExternalLink />
+              <span>{t('capture.openPrelude')}</span>
+            </button>
+            <button
+              className="capture-dialog-close"
+              type="button"
+              aria-label={t('capture.close')}
+              onClick={() => window.close()}
+            >
+              <X />
+            </button>
+          </div>
         }
         fallbackWindows={EMPTY_WINDOWS}
         isActive

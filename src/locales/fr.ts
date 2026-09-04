@@ -140,6 +140,7 @@ export const fr = {
   },
   capture: {
     open: 'Collecter',
+    openPrelude: 'Ouvrir Prelude',
     close: 'Fermer le panneau de collecte',
     eyebrow: 'Options de collecte',
     title: 'Collecter dans À lire plus tard',

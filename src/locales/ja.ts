@@ -140,6 +140,7 @@ export const ja = {
   },
   capture: {
     open: '収集',
+    openPrelude: 'Preludeを開く',
     close: '収集パネルを閉じる',
     eyebrow: '収集メニュー',
     title: '「後で読む」に収集',

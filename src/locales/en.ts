@@ -136,6 +136,7 @@ export const en = {
   },
   capture: {
     open: 'Collect',
+    openPrelude: 'Open Prelude',
     close: 'Close collection panel',
     eyebrow: 'Collection entry',
     title: 'Collect into Read later',

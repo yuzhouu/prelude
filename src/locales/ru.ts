@@ -144,6 +144,7 @@ export const ru = {
   },
   capture: {
     open: 'Собрать',
+    openPrelude: 'Открыть Prelude',
     close: 'Закрыть панель сбора',
     eyebrow: 'Параметры сбора',
     title: 'Добавить в «Прочитать позже»',

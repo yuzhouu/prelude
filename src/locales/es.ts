@@ -141,6 +141,7 @@ export const es = {
   },
   capture: {
     open: 'Guardar',
+    openPrelude: 'Abrir Prelude',
     close: 'Cerrar panel de guardado',
     eyebrow: 'Opciones de guardado',
     title: 'Guardar en Leer más tarde',
