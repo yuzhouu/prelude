@@ -276,6 +276,7 @@ export const ja = {
         'ブックマークを削除できませんでした。もう一度お試しください。',
       deleteFolderFailed:
         'フォルダを削除できませんでした。もう一度お試しください。',
+      sortFailed: 'ブックマークを移動できませんでした。元の順序に戻しました。',
     },
   },
   defaultFolders: {

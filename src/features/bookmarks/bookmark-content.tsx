@@ -1,6 +1,7 @@
 import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { Dialog } from '@base-ui/react/dialog'
 import { createContext, useContext, useId, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
 import {
   Check,
   ChevronRight,
@@ -30,7 +31,20 @@ import {
   updateBookmark,
 } from './chrome-bookmarks'
 import { BookmarkFavicon } from './bookmark-favicon'
-import { countBookmarks, countChildFolders } from './model'
+import {
+  BookmarkContainerDropZone,
+  BookmarkListDropBoundaries,
+  BookmarkNodeDropZone,
+  BookmarkSortableItem,
+  BookmarkSortableTree,
+} from './bookmark-sortable-tree'
+import { useBookmarkSortableTree } from './bookmark-sortable-tree-context'
+import type { SortableTreeItemState } from '../../components/sortable-tree'
+import {
+  countBookmarks,
+  countChildFolders,
+  isManagedBookmarkNode,
+} from './model'
 import type { BookmarkMatch, BookmarkNode } from './model'
 
 function getHostname(url: string) {
@@ -71,6 +85,31 @@ function getDefaultBookmarkTitle(url: string) {
   } catch {
     return url
   }
+}
+
+function BookmarkDragPreview({ node }: { node: BookmarkNode }) {
+  const { t } = useTranslation()
+  const isFolder = node.url === undefined
+
+  return (
+    <div className="bookmark-drag-preview">
+      {isFolder ? (
+        <span className="bookmark-drag-preview-folder">
+          <FolderOpen />
+        </span>
+      ) : (
+        <BookmarkFavicon title={node.title} url={node.url ?? ''} />
+      )}
+      <span className="bookmark-drag-preview-copy">
+        <strong>{node.title || (node.url ? getHostname(node.url) : '')}</strong>
+        <span>
+          {isFolder
+            ? t('common.bookmarkCount', { count: countBookmarks(node) })
+            : getHostname(node.url ?? '')}
+        </span>
+      </span>
+    </div>
+  )
 }
 
 interface BookmarkOpenTabContextValue {
@@ -151,10 +190,12 @@ function useQuickAddEditor(editorId: string) {
 }
 
 function QuickAddFolderRow({
+  dropAfterFolderId,
   canCreate,
   parentId,
   parentTitle,
 }: {
+  dropAfterFolderId?: string
   canCreate: boolean
   parentId: string
   parentTitle: string
@@ -170,6 +211,27 @@ function QuickAddFolderRow({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<'nameRequired' | 'addFailed'>()
   const titleInputId = useId()
+
+  const renderDropZone = (
+    zoneId: string,
+    children: (state: {
+      isDropTarget: boolean
+      setNodeRef: (element: Element | null) => void
+    }) => ReactNode,
+  ) =>
+    dropAfterFolderId ? (
+      <BookmarkNodeDropZone
+        mode="after"
+        nodeId={dropAfterFolderId}
+        zoneId={zoneId}
+      >
+        {children}
+      </BookmarkNodeDropZone>
+    ) : (
+      <BookmarkContainerDropZone edge="end" parentId={parentId} zoneId={zoneId}>
+        {children}
+      </BookmarkContainerDropZone>
+    )
 
   const closeEditor = () => {
     closeActiveEditor()
@@ -200,11 +262,20 @@ function QuickAddFolderRow({
   }
 
   if (!isEditing) {
-    return (
+    return renderDropZone('add-folder', ({ isDropTarget, setNodeRef }) => (
       <button
-        className="folder-quick-add-trigger"
+        ref={setNodeRef}
+        className={`folder-quick-add-trigger${isDropTarget ? ' is-drop-target' : ''}`}
         type="button"
-        aria-label={t('bookmarks.addFolder.actionIn', { parent: parentTitle })}
+        data-bookmark-drop-edge={dropAfterFolderId ? undefined : 'end'}
+        data-bookmark-drop-mode={dropAfterFolderId ? 'after' : undefined}
+        data-bookmark-drop-node-id={dropAfterFolderId}
+        data-bookmark-drop-parent-id={dropAfterFolderId ? undefined : parentId}
+        data-bookmark-drop-zone="add-folder"
+        aria-label={t('bookmarks.addFolder.actionIn', {
+          parent: parentTitle,
+        })}
+        data-no-drag
         onClick={openEditor}
       >
         <span className="folder-quick-add-line" aria-hidden="true" />
@@ -212,12 +283,19 @@ function QuickAddFolderRow({
         <span>{t('bookmarks.addFolder.action')}</span>
         <span className="folder-quick-add-line" aria-hidden="true" />
       </button>
-    )
+    ))
   }
 
-  return (
+  return renderDropZone('add-folder-form', ({ isDropTarget, setNodeRef }) => (
     <form
-      className="folder-quick-add-form"
+      ref={setNodeRef}
+      className={`folder-quick-add-form${isDropTarget ? ' is-drop-target' : ''}`}
+      data-bookmark-drop-edge={dropAfterFolderId ? undefined : 'end'}
+      data-bookmark-drop-mode={dropAfterFolderId ? 'after' : undefined}
+      data-bookmark-drop-node-id={dropAfterFolderId}
+      data-bookmark-drop-parent-id={dropAfterFolderId ? undefined : parentId}
+      data-bookmark-drop-zone="add-folder-form"
+      data-no-drag
       onSubmit={handleSubmit}
       onKeyDown={(event) => {
         if (event.key === 'Escape' && !isSubmitting) closeEditor()
@@ -261,7 +339,7 @@ function QuickAddFolderRow({
         ) : null}
       </div>
     </form>
-  )
+  ))
 }
 
 function QuickAddBookmarkRow({
@@ -325,76 +403,102 @@ function QuickAddBookmarkRow({
 
   if (!isEditing) {
     return (
-      <button
-        className="bookmark-quick-add-trigger"
-        type="button"
-        aria-label={t('bookmarks.addBookmark.actionIn', {
-          folder: folderTitle,
-        })}
-        onClick={openEditor}
+      <BookmarkContainerDropZone
+        edge="end"
+        parentId={folderId}
+        zoneId="add-bookmark"
       >
-        <Plus />
-        <span>{t('bookmarks.addBookmark.action')}</span>
-      </button>
+        {({ isDropTarget, setNodeRef }) => (
+          <button
+            ref={setNodeRef}
+            className={`bookmark-quick-add-trigger${isDropTarget ? ' is-drop-target' : ''}`}
+            type="button"
+            data-bookmark-drop-edge="end"
+            data-bookmark-drop-parent-id={folderId}
+            data-bookmark-drop-zone="add-bookmark"
+            aria-label={t('bookmarks.addBookmark.actionIn', {
+              folder: folderTitle,
+            })}
+            data-no-drag
+            onClick={openEditor}
+          >
+            <Plus />
+            <span>{t('bookmarks.addBookmark.action')}</span>
+          </button>
+        )}
+      </BookmarkContainerDropZone>
     )
   }
 
   return (
-    <form
-      className="bookmark-quick-add-form"
-      onSubmit={handleSubmit}
-      onKeyDown={(event) => {
-        if (event.key === 'Escape' && !isSubmitting) closeEditor()
-      }}
+    <BookmarkContainerDropZone
+      edge="end"
+      parentId={folderId}
+      zoneId="add-bookmark-form"
     >
-      <div className="bookmark-quick-add-fields">
-        <label className="sr-only" htmlFor={urlInputId}>
-          {t('bookmarks.addBookmark.url')}
-        </label>
-        <input
-          id={urlInputId}
-          type="text"
-          inputMode="url"
-          autoFocus
-          autoComplete="url"
-          placeholder={t('bookmarks.addBookmark.urlPlaceholder')}
-          value={url}
-          onChange={(event) => setUrl(event.target.value)}
-        />
-        <label className="sr-only" htmlFor={titleInputId}>
-          {t('bookmarks.addBookmark.title')}
-        </label>
-        <input
-          id={titleInputId}
-          type="text"
-          autoComplete="off"
-          placeholder={t('bookmarks.addBookmark.titlePlaceholder')}
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-      </div>
-      <div className="bookmark-quick-add-actions">
-        <button type="submit" disabled={!canCreate || isSubmitting}>
-          {isSubmitting ? <LoaderCircle className="is-spinning" /> : null}
-          {t('bookmarks.addBookmark.shortAction')}
-        </button>
-        <button type="button" disabled={isSubmitting} onClick={closeEditor}>
-          {t('common.cancel')}
-        </button>
-        {!canCreate ? (
-          <span>{t('bookmarks.addBookmark.extensionRequired')}</span>
-        ) : null}
-        {error ? (
-          <span className="is-error">
-            {t(
-              error === 'invalidUrl'
-                ? 'bookmarks.errors.invalidUrl'
-                : 'bookmarks.errors.addFailed',
-            )}
-          </span>
-        ) : null}
-      </div>
-    </form>
+      {({ isDropTarget, setNodeRef }) => (
+        <form
+          ref={setNodeRef}
+          className={`bookmark-quick-add-form${isDropTarget ? ' is-drop-target' : ''}`}
+          data-bookmark-drop-edge="end"
+          data-bookmark-drop-parent-id={folderId}
+          data-bookmark-drop-zone="add-bookmark-form"
+          data-no-drag
+          onSubmit={handleSubmit}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape' && !isSubmitting) closeEditor()
+          }}
+        >
+          <div className="bookmark-quick-add-fields">
+            <label className="sr-only" htmlFor={urlInputId}>
+              {t('bookmarks.addBookmark.url')}
+            </label>
+            <input
+              id={urlInputId}
+              type="text"
+              inputMode="url"
+              autoFocus
+              autoComplete="url"
+              placeholder={t('bookmarks.addBookmark.urlPlaceholder')}
+              value={url}
+              onChange={(event) => setUrl(event.target.value)}
+            />
+            <label className="sr-only" htmlFor={titleInputId}>
+              {t('bookmarks.addBookmark.title')}
+            </label>
+            <input
+              id={titleInputId}
+              type="text"
+              autoComplete="off"
+              placeholder={t('bookmarks.addBookmark.titlePlaceholder')}
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+            />
+          </div>
+          <div className="bookmark-quick-add-actions">
+            <button type="submit" disabled={!canCreate || isSubmitting}>
+              {isSubmitting ? <LoaderCircle className="is-spinning" /> : null}
+              {t('bookmarks.addBookmark.shortAction')}
+            </button>
+            <button type="button" disabled={isSubmitting} onClick={closeEditor}>
+              {t('common.cancel')}
+            </button>
+            {!canCreate ? (
+              <span>{t('bookmarks.addBookmark.extensionRequired')}</span>
+            ) : null}
+            {error ? (
+              <span className="is-error">
+                {t(
+                  error === 'invalidUrl'
+                    ? 'bookmarks.errors.invalidUrl'
+                    : 'bookmarks.errors.addFailed',
+                )}
+              </span>
+            ) : null}
+          </div>
+        </form>
+      )}
+    </BookmarkContainerDropZone>
   )
 }
 
@@ -403,11 +507,13 @@ export function BookmarkRow({
   isNested = false,
   node,
   path,
+  sortableState,
 }: {
   canMutate: boolean
   isNested?: boolean
   node: BookmarkNode
   path?: Array<string>
+  sortableState?: SortableTreeItemState
 }) {
   const { t } = useTranslation()
   const openTabContext = useContext(BookmarkOpenTabContext)
@@ -484,8 +590,19 @@ export function BookmarkRow({
 
   return (
     <>
-      <div className={`bookmark-row${isNested ? ' is-nested' : ''}`}>
-        <a className="bookmark-main-link" href={url}>
+      <div
+        ref={sortableState?.setNodeRef}
+        className={`bookmark-row${isNested ? ' is-nested' : ''}${sortableState ? ' is-sortable' : ''}${sortableState?.isDragSource ? ' is-drag-source' : ''}`}
+        data-bookmark-id={node.id}
+        onClickCapture={sortableState?.onClickCapture}
+        onPointerDownCapture={sortableState?.onPointerDownCapture}
+      >
+        <a
+          ref={sortableState?.setDragHandleRef}
+          className="bookmark-main-link"
+          href={url}
+          role="link"
+        >
           <BookmarkFavicon title={node.title} url={url} />
           <span className="bookmark-copy">
             <strong>{node.title || getHostname(url)}</strong>
@@ -849,17 +966,23 @@ function FolderSection({
   level = 0,
   canCreate,
   isInsideManagedTree = false,
+  sortableState,
 }: {
   folder: BookmarkNode
   level?: number
   canCreate: boolean
   isInsideManagedTree?: boolean
+  sortableState?: SortableTreeItemState
 }) {
   const { t } = useTranslation()
-  const isManagedTree = isInsideManagedTree || folder.folderType === 'managed'
+  const dragContext = useBookmarkSortableTree()
+  const isManagedTree = isInsideManagedTree || isManagedBookmarkNode(folder)
   const canMutateContents = canCreate && !isManagedTree
   const canDeleteFolder = canCreate && !isManagedTree
-  const [isExpanded, setIsExpanded] = useState(true)
+  const isExpanded = !dragContext.collapsedFolderIds.has(folder.id)
+  const isDropInside =
+    dragContext.projection?.mode === 'inside' &&
+    dragContext.projection.targetId === folder.id
   const folderContentId = useId()
   const folderTitle = folder.title || t('common.unnamedFolder')
   const toggleLabel = t(
@@ -868,11 +991,18 @@ function FolderSection({
   )
   return (
     <section
-      className="bookmark-group"
+      ref={sortableState?.setNodeRef}
+      className={`bookmark-group${sortableState ? ' is-sortable' : ''}${sortableState?.isDragSource ? ' is-drag-source' : ''}`}
+      data-folder-id={folder.id}
       style={{ '--group-level': level } as React.CSSProperties}
+      onClickCapture={sortableState?.onClickCapture}
+      onPointerDownCapture={sortableState?.onPointerDownCapture}
     >
-      <header className="bookmark-group-header">
-        <div className="group-title-row">
+      <header
+        ref={sortableState?.setDragTargetRef}
+        className={`bookmark-group-header${isDropInside ? ' is-drop-inside' : ''}`}
+      >
+        <div ref={sortableState?.setDragHandleRef} className="group-title-row">
           <Tooltip>
             <TooltipTrigger
               render={
@@ -882,7 +1012,10 @@ function FolderSection({
                   aria-label={toggleLabel}
                   aria-expanded={isExpanded}
                   aria-controls={folderContentId}
-                  onClick={() => setIsExpanded((expanded) => !expanded)}
+                  data-no-drag
+                  onClick={() =>
+                    dragContext.setFolderExpanded(folder.id, !isExpanded)
+                  }
                 >
                   <ChevronRight className={isExpanded ? 'is-expanded' : ''} />
                 </button>
@@ -916,6 +1049,9 @@ function FolderSection({
           />
         </div>
         <QuickAddFolderRow
+          dropAfterFolderId={
+            folder.folderType === undefined ? folder.id : undefined
+          }
           parentId={folder.id}
           parentTitle={folderTitle}
           canCreate={canMutateContents}
@@ -942,24 +1078,34 @@ function FolderChildren({
 
   return (
     <div className="bookmark-children">
-      {(parent.children ?? []).map((child) =>
-        child.url === undefined ? (
-          <FolderSection
-            key={child.id}
-            folder={child}
-            level={folderLevel}
-            canCreate={canCreate}
-            isInsideManagedTree={isInsideManagedTree}
-          />
-        ) : (
-          <BookmarkRow
-            key={child.id}
-            node={child}
-            canMutate={canMutate}
-            isNested={indentBookmarks}
-          />
-        ),
-      )}
+      <BookmarkListDropBoundaries parentId={parent.id} />
+      {(parent.children ?? []).map((child, index) => (
+        <BookmarkSortableItem
+          key={child.id}
+          id={child.id}
+          index={index}
+          parentId={parent.id}
+        >
+          {(sortableState) =>
+            child.url === undefined ? (
+              <FolderSection
+                folder={child}
+                level={folderLevel}
+                canCreate={canCreate}
+                isInsideManagedTree={isInsideManagedTree}
+                sortableState={sortableState}
+              />
+            ) : (
+              <BookmarkRow
+                node={child}
+                canMutate={canMutate}
+                isNested={indentBookmarks}
+                sortableState={sortableState}
+              />
+            )
+          }
+        </BookmarkSortableItem>
+      ))}
     </div>
   )
 }
@@ -976,30 +1122,42 @@ export function FolderContents({
   const folderTitle = folder.title || t('common.unnamedFolder')
 
   return (
-    <QuickAddEditorScope>
-      <div className="bookmark-sections">
-        <FolderChildren
-          parent={folder}
-          folderLevel={0}
-          canCreate={canCreate}
-          isInsideManagedTree={isInsideManagedTree}
-        />
-        <section className="bookmark-group root-bookmarks">
-          <div className="bookmark-list">
-            <QuickAddBookmarkRow
-              folderId={folder.id}
-              folderTitle={folderTitle}
-              canCreate={canCreate && !isInsideManagedTree}
-            />
-          </div>
-        </section>
-        <QuickAddFolderRow
-          parentId={folder.id}
-          parentTitle={folderTitle}
-          canCreate={canCreate && !isInsideManagedTree}
-        />
-      </div>
-    </QuickAddEditorScope>
+    <BookmarkSortableTree
+      roots={[folder]}
+      canMove={canCreate && !isInsideManagedTree}
+      isInsideManagedTree={isInsideManagedTree}
+      renderOverlay={(node) => <BookmarkDragPreview node={node} />}
+    >
+      {(previewRoots) => {
+        const previewFolder = previewRoots[0] ?? folder
+        return (
+          <QuickAddEditorScope>
+            <div className="bookmark-sections">
+              <FolderChildren
+                parent={previewFolder}
+                folderLevel={0}
+                canCreate={canCreate}
+                isInsideManagedTree={isInsideManagedTree}
+              />
+              <section className="bookmark-group root-bookmarks">
+                <div className="bookmark-list">
+                  <QuickAddBookmarkRow
+                    folderId={previewFolder.id}
+                    folderTitle={folderTitle}
+                    canCreate={canCreate && !isInsideManagedTree}
+                  />
+                </div>
+              </section>
+              <QuickAddFolderRow
+                parentId={previewFolder.id}
+                parentTitle={folderTitle}
+                canCreate={canCreate && !isInsideManagedTree}
+              />
+            </div>
+          </QuickAddEditorScope>
+        )
+      }}
+    </BookmarkSortableTree>
   )
 }
 
@@ -1011,18 +1169,35 @@ export function AllBookmarkContents({
   canCreate: boolean
 }) {
   return (
-    <QuickAddEditorScope>
-      <div className="bookmark-sections">
-        {roots.map((root) => (
-          <FolderSection
-            key={root.id}
-            folder={root}
-            canCreate={canCreate}
-            isInsideManagedTree={root.folderType === 'managed'}
-          />
-        ))}
-      </div>
-    </QuickAddEditorScope>
+    <BookmarkSortableTree
+      roots={roots}
+      canMove={canCreate}
+      renderOverlay={(node) => <BookmarkDragPreview node={node} />}
+    >
+      {(previewRoots) => (
+        <QuickAddEditorScope>
+          <div className="bookmark-sections">
+            {previewRoots.map((root, index) => (
+              <BookmarkSortableItem
+                key={root.id}
+                id={root.id}
+                index={index}
+                parentId="__bookmark-visible-root__"
+              >
+                {(sortableState) => (
+                  <FolderSection
+                    folder={root}
+                    canCreate={canCreate}
+                    isInsideManagedTree={isManagedBookmarkNode(root)}
+                    sortableState={sortableState}
+                  />
+                )}
+              </BookmarkSortableItem>
+            ))}
+          </div>
+        </QuickAddEditorScope>
+      )}
+    </BookmarkSortableTree>
   )
 }
 

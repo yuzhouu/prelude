@@ -891,11 +891,37 @@ input:focus-visible {
 }
 
 .bookmark-group-header {
+  position: relative;
   display: flex;
   min-height: 35px;
   align-items: center;
   justify-content: space-between;
   padding: 0 8px;
+}
+
+.bookmark-sortable-tree {
+  display: contents;
+}
+
+.bookmark-sortable-tree.is-dragging .bookmark-group {
+  content-visibility: visible;
+}
+
+.bookmark-group.is-sortable .group-title-row,
+.bookmark-row.is-sortable .bookmark-main-link {
+  cursor: grab;
+  touch-action: manipulation;
+}
+
+.bookmark-group.is-drag-source,
+.bookmark-row.is-drag-source {
+  opacity: 0.42;
+}
+
+.bookmark-group-header.is-drop-inside {
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 42%, transparent);
 }
 
 .folder-delete-button {
@@ -1397,6 +1423,31 @@ input:focus-visible {
   border-top: 1px solid var(--line);
 }
 
+.bookmark-children {
+  position: relative;
+}
+
+.bookmark-list-drop-boundary {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  left: 0;
+  height: 18px;
+  pointer-events: none;
+}
+
+.bookmark-sortable-tree.is-dragging .bookmark-list-drop-boundary {
+  pointer-events: auto;
+}
+
+.bookmark-list-drop-boundary.is-start {
+  top: -9px;
+}
+
+.bookmark-list-drop-boundary.is-end {
+  bottom: -9px;
+}
+
 .bookmark-group:not(.root-bookmarks) > div > .bookmark-list {
   margin-left: 26px;
 }
@@ -1452,7 +1503,7 @@ input:focus-visible {
   width: 100%;
 }
 
-.folder-quick-add-trigger:hover,
+.bookmark-sortable-tree:not(.is-dragging) .folder-quick-add-trigger:hover,
 .folder-quick-add-trigger:focus-visible {
   color: var(--accent-strong);
   opacity: 1;
@@ -1480,6 +1531,16 @@ input:focus-visible {
 
 .folder-quick-add-trigger:hover .folder-quick-add-line {
   background: color-mix(in srgb, var(--accent) 52%, transparent);
+}
+
+.folder-quick-add-trigger.is-drop-target .folder-quick-add-line {
+  background: var(--accent);
+}
+
+.folder-quick-add-form.is-drop-target {
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 36%, transparent);
 }
 
 .folder-quick-add-form {
@@ -1587,10 +1648,86 @@ input:focus-visible {
   text-align: left;
 }
 
-.bookmark-quick-add-trigger:hover {
+.bookmark-sortable-tree:not(.is-dragging) .bookmark-quick-add-trigger:hover {
   border-radius: 5px;
   background: var(--row-hover);
   color: var(--accent-strong);
+}
+
+.sortable-tree-overlay {
+  z-index: 120;
+  max-width: min(540px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.bookmark-drag-preview {
+  display: flex;
+  min-width: 260px;
+  max-width: 520px;
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  padding: 7px 11px;
+  box-shadow: 0 14px 34px rgb(32 27 25 / 18%);
+}
+
+.bookmark-drag-preview-folder {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 5px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.bookmark-drag-preview-folder svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bookmark-drag-preview-copy {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+}
+
+.bookmark-drag-preview-copy strong,
+.bookmark-drag-preview-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bookmark-drag-preview-copy strong {
+  color: var(--text-strong);
+  font-size: 13.5px;
+  font-weight: 580;
+}
+
+.bookmark-drag-preview-copy span {
+  color: var(--subtle);
+  font-size: 12px;
+}
+
+.bookmark-sort-error {
+  position: fixed;
+  z-index: 140;
+  right: 24px;
+  bottom: 24px;
+  max-width: min(360px, calc(100vw - 48px));
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 10px 12px;
+  color: var(--accent-strong);
+  box-shadow: 0 12px 28px rgb(32 27 25 / 16%);
+  font-size: 12.5px;
 }
 
 .bookmark-quick-add-trigger svg {

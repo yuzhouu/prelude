@@ -280,6 +280,8 @@ export const es = {
       saveFailed: 'No se pudieron guardar los cambios. Inténtalo de nuevo.',
       deleteFailed: 'No se pudo eliminar el marcador. Inténtalo de nuevo.',
       deleteFolderFailed: 'No se pudo eliminar la carpeta. Inténtalo de nuevo.',
+      sortFailed:
+        'No se pudo mover el marcador. Se restauró el orden original.',
     },
   },
   defaultFolders: {

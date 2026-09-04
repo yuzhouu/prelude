@@ -4,6 +4,7 @@ export interface BookmarkNode {
   url?: string
   dateAdded?: number
   folderType?: 'bookmarks-bar' | 'managed' | 'mobile' | 'other'
+  unmodifiable?: 'managed'
   syncing?: boolean
   children?: Array<BookmarkNode>
 }
@@ -21,6 +22,10 @@ export interface BookmarkNodeLocation {
 
 export function isFolder(node: BookmarkNode) {
   return node.url === undefined
+}
+
+export function isManagedBookmarkNode(node: BookmarkNode) {
+  return node.folderType === 'managed' || node.unmodifiable === 'managed'
 }
 
 export function getVisibleRoots(tree: Array<BookmarkNode>) {
@@ -75,7 +80,7 @@ export function findNodeLocation(
     isInsideManagedTree: boolean,
   ): BookmarkNodeLocation | undefined {
     for (const node of nodes) {
-      const isManaged = isInsideManagedTree || node.folderType === 'managed'
+      const isManaged = isInsideManagedTree || isManagedBookmarkNode(node)
       if (node.id === id) return { node, parentId, isManaged }
 
       const found = node.children

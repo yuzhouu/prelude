@@ -278,6 +278,8 @@ export const fr = {
       saveFailed: 'Impossible d’enregistrer les modifications. Réessayez.',
       deleteFailed: 'Impossible de supprimer le favori. Réessayez.',
       deleteFolderFailed: 'Impossible de supprimer le dossier. Réessayez.',
+      sortFailed:
+        'Impossible de déplacer le favori. L’ordre initial a été restauré.',
     },
   },
   defaultFolders: {

@@ -270,6 +270,8 @@ export const en = {
       saveFailed: 'Could not save your changes. Try again.',
       deleteFailed: 'Could not delete the bookmark. Try again.',
       deleteFolderFailed: 'Could not delete the folder. Try again.',
+      sortFailed:
+        'Could not move the bookmark. The original order was restored.',
     },
   },
   defaultFolders: {

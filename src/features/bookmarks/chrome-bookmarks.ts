@@ -7,7 +7,9 @@ import {
   getOpenTabAutoTitle,
   normalizeAutoTitleUrl,
 } from './auto-title'
+import { moveBookmarkNodeToPosition } from './bookmark-drag'
 import { demoBookmarkTree } from './demo-data'
+import { findNode } from './model'
 import type { BookmarkNode } from './model'
 
 interface ChromeEvent {
@@ -23,6 +25,10 @@ interface ChromeApi {
       url?: string
     }) => Promise<BookmarkNode>
     getTree: () => Promise<Array<BookmarkNode>>
+    move: (
+      id: string,
+      destination: { index?: number; parentId?: string },
+    ) => Promise<BookmarkNode>
     remove: (id: string) => Promise<void>
     removeTree: (id: string) => Promise<void>
     update: (
@@ -67,9 +73,178 @@ const LEGACY_DEFAULT_BOOKMARK_CONTAINER_TITLES = [
 ] as const
 
 let defaultFolderCreationPromise: Promise<BookmarkNode> | undefined
+let bookmarkDndDemoApi: ChromeApi | undefined
+
+interface BookmarkDndDemoDiagnostics {
+  moveCalls: Array<{
+    id: string
+    index: number
+    parentId: string
+  }>
+}
+
+function cloneBookmarkTree(tree: ReadonlyArray<BookmarkNode>) {
+  return structuredClone(tree) as Array<BookmarkNode>
+}
+
+function updateBookmarkTreeNode(
+  nodes: ReadonlyArray<BookmarkNode>,
+  id: string,
+  update: (node: BookmarkNode) => BookmarkNode | null,
+): { changed: boolean; nodes: Array<BookmarkNode> } {
+  for (let index = 0; index < nodes.length; index += 1) {
+    const node = nodes[index]
+    if (node.id === id) {
+      const updated = update(node)
+      return {
+        changed: true,
+        nodes: updated
+          ? [...nodes.slice(0, index), updated, ...nodes.slice(index + 1)]
+          : [...nodes.slice(0, index), ...nodes.slice(index + 1)],
+      }
+    }
+
+    if (!node.children) continue
+    const children = updateBookmarkTreeNode(node.children, id, update)
+    if (!children.changed) continue
+
+    const nextNodes = [...nodes]
+    nextNodes[index] = { ...node, children: children.nodes }
+    return { changed: true, nodes: nextNodes }
+  }
+
+  return { changed: false, nodes: [...nodes] }
+}
+
+function createBookmarkDndDemoApi() {
+  let tree = cloneBookmarkTree(demoBookmarkTree)
+  let nextId = 1
+  const listeners = new Set<() => void>()
+  const moveCalls: BookmarkDndDemoDiagnostics['moveCalls'] = []
+  const event: ChromeEvent = {
+    addListener: (listener) => listeners.add(listener),
+    removeListener: (listener) => listeners.delete(listener),
+  }
+  const notify = () => queueMicrotask(() => listeners.forEach((run) => run()))
+  const diagnostics: BookmarkDndDemoDiagnostics = { moveCalls }
+
+  const bookmarks: NonNullable<ChromeApi['bookmarks']> = {
+    create: async ({ parentId, title, url }) => {
+      const node: BookmarkNode = {
+        id: `bookmark-dnd-demo-${nextId++}`,
+        title,
+        ...(url ? { url } : { children: [] }),
+      }
+      if (!parentId) throw new Error('The demo requires a parent folder.')
+
+      const result = updateBookmarkTreeNode(tree, parentId, (parent) => ({
+        ...parent,
+        children: [...(parent.children ?? []), node],
+      }))
+      if (!result.changed) throw new Error('Parent folder not found.')
+      tree = result.nodes
+      notify()
+      return structuredClone(node)
+    },
+    getTree: async () => cloneBookmarkTree(tree),
+    move: async (id, destination) => {
+      if (
+        destination.parentId === undefined ||
+        destination.index === undefined
+      ) {
+        throw new Error('The demo requires an exact destination.')
+      }
+
+      moveCalls.push({
+        id,
+        index: destination.index,
+        parentId: destination.parentId,
+      })
+      globalThis.document.documentElement.dataset.bookmarkDndMoveCalls = String(
+        moveCalls.length,
+      )
+      globalThis.document.documentElement.dataset.bookmarkDndLastMove = [
+        id,
+        destination.parentId,
+        destination.index,
+      ].join(':')
+      if (
+        new URLSearchParams(globalThis.location.search).has('bookmark-dnd-fail')
+      ) {
+        throw new Error('Intentional bookmark move failure.')
+      }
+
+      const nextTree = moveBookmarkNodeToPosition({
+        draggedId: id,
+        position: {
+          index: destination.index,
+          parentId: destination.parentId,
+        },
+        roots: tree,
+      })
+      if (!nextTree) throw new Error('Invalid bookmark destination.')
+
+      tree = nextTree
+      const moved = findNode(tree, id)
+      if (!moved) throw new Error('Moved bookmark not found.')
+      notify()
+      return structuredClone(moved)
+    },
+    remove: async (id) => {
+      const result = updateBookmarkTreeNode(tree, id, () => null)
+      if (!result.changed) throw new Error('Bookmark not found.')
+      tree = result.nodes
+      notify()
+    },
+    removeTree: async (id) => {
+      const result = updateBookmarkTreeNode(tree, id, () => null)
+      if (!result.changed) throw new Error('Folder not found.')
+      tree = result.nodes
+      notify()
+    },
+    update: async (id, changes) => {
+      let updated: BookmarkNode | undefined
+      const result = updateBookmarkTreeNode(tree, id, (node) => {
+        updated = { ...node, ...changes }
+        return updated
+      })
+      if (!result.changed || !updated) throw new Error('Bookmark not found.')
+      tree = result.nodes
+      notify()
+      return structuredClone(updated)
+    },
+    onChanged: event,
+    onChildrenReordered: event,
+    onCreated: event,
+    onMoved: event,
+    onRemoved: event,
+  }
+
+  ;(
+    globalThis as typeof globalThis & {
+      __PRELUDE_BOOKMARK_DND_DEMO__?: BookmarkDndDemoDiagnostics
+    }
+  ).__PRELUDE_BOOKMARK_DND_DEMO__ = diagnostics
+  globalThis.document.documentElement.dataset.bookmarkDndDemo = 'true'
+  globalThis.document.documentElement.dataset.bookmarkDndMoveCalls = '0'
+
+  return { bookmarks } satisfies ChromeApi
+}
 
 function getChromeApi() {
-  return (globalThis as typeof globalThis & { chrome?: ChromeApi }).chrome
+  const chromeApi = (globalThis as typeof globalThis & { chrome?: ChromeApi })
+    .chrome
+  if (chromeApi?.bookmarks) return chromeApi
+
+  if (
+    import.meta.env.DEV &&
+    new URLSearchParams(globalThis.location.search).has('bookmark-dnd-demo')
+  ) {
+    bookmarkDndDemoApi ??= createBookmarkDndDemoApi()
+    return bookmarkDndDemoApi
+  }
+
+  return chromeApi
 }
 
 function findFolderByTitle(
@@ -267,6 +442,21 @@ export async function deleteBookmarkFolder(id: string) {
   if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
 
   await bookmarksApi.removeTree(id)
+}
+
+export async function moveBookmarkNode({
+  id,
+  index,
+  parentId,
+}: {
+  id: string
+  index: number
+  parentId: string
+}) {
+  const bookmarksApi = getChromeApi()?.bookmarks
+  if (!bookmarksApi) throw new Error('Chrome 书签 API 不可用')
+
+  return bookmarksApi.move(id, { index, parentId })
 }
 
 export function useBookmarkTree() {
