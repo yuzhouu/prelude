@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Menu, PanelLeftOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -28,26 +28,36 @@ import {
   getVisibleRoots,
 } from '../features/bookmarks/model'
 import { Sidebar } from '../features/bookmarks/sidebar'
+import {
+  getInitialSidebarExpanded,
+  persistSidebarExpanded,
+} from '../features/bookmarks/sidebar-preference'
 import { normalizeCapturedUrl } from '../features/capture/model'
 import { BookmarkSearchDialog } from '../features/search/bookmark-search-dialog'
 import { useOpenTabs } from '../features/tabs/chrome-tabs'
 import { OpenTabsContents } from '../features/tabs/tab-content'
 import { countOpenTabs } from '../features/tabs/model'
 
-export const Route = createFileRoute('/')({ component: Home })
-
-const SIDEBAR_EXPANDED_STORAGE_KEY = 'prelude:sidebar-expanded:v1'
-
-function getInitialSidebarExpanded() {
-  try {
-    return window.localStorage.getItem(SIDEBAR_EXPANDED_STORAGE_KEY) !== 'false'
-  } catch {
-    return true
-  }
+interface HomeSearch {
+  openSearch?: boolean
+  view?: string
 }
+
+export const Route = createFileRoute('/')({
+  validateSearch: (search: Record<string, unknown>): HomeSearch => ({
+    openSearch:
+      search.openSearch === true || search.openSearch === 'true'
+        ? true
+        : undefined,
+    view: typeof search.view === 'string' ? search.view : undefined,
+  }),
+  component: Home,
+})
 
 function Home() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { openSearch, view } = Route.useSearch()
   const { tree, isChromeSource } = useBookmarkTree()
   const {
     windows: openTabWindows,
@@ -78,7 +88,7 @@ function Home() {
     [roots],
   )
 
-  const [selectedId, setSelectedId] = useState('quick-folders')
+  const [selectedId, setSelectedId] = useState(view ?? 'quick-folders')
   const [expandedIds, setExpandedIds] = useState(
     () => new Set<string>(['1', 'work']),
   )
@@ -86,7 +96,7 @@ function Home() {
     getInitialSidebarExpanded,
   )
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(openSearch ?? false)
 
   const selectedLocation = useMemo(
     () =>
@@ -126,14 +136,7 @@ function Home() {
   }, [roots])
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        SIDEBAR_EXPANDED_STORAGE_KEY,
-        String(isSidebarExpanded),
-      )
-    } catch {
-      // Keep the in-memory preference when browser storage is unavailable.
-    }
+    persistSidebarExpanded(isSidebarExpanded)
   }, [isSidebarExpanded])
 
   const toggleFolder = (id: string) => {
@@ -148,6 +151,21 @@ function Home() {
   const selectView = (id: string) => {
     setSelectedId(id)
     setIsMobileSidebarOpen(false)
+    void navigate({
+      to: '/',
+      search: id === 'quick-folders' ? {} : { view: id },
+      replace: true,
+    })
+  }
+  const handleSearchOpenChange = (isOpen: boolean) => {
+    setSearchOpen(isOpen)
+    if (!isOpen && openSearch) {
+      void navigate({
+        to: '/',
+        search: view ? { view } : {},
+        replace: true,
+      })
+    }
   }
   const handleSelectedFolderDeleted = () => {
     if (selectedNode?.id === defaultBookmarkContainer?.id) {
@@ -205,7 +223,7 @@ function Home() {
         openTabWindows={openTabWindows}
         isOpen={searchOpen}
         onActivateTab={activateTab}
-        onOpenChange={setSearchOpen}
+        onOpenChange={handleSearchOpenChange}
       />
 
       <main className="main-surface">

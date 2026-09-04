@@ -76,7 +76,35 @@ export const es = {
     open: 'Abrir configuración',
     close: 'Cerrar configuración',
     title: 'Configuración',
-    description: 'Gestiona la interfaz de Prelude y consulta el uso de datos.',
+    description:
+      'Ajusta el idioma y los atajos, y consulta cómo trata Prelude tus datos.',
+    shortcuts: {
+      title: 'Atajos de teclado',
+      summary:
+        'Personaliza acciones de la página; Chrome gestiona los comandos de la extensión.',
+      reset: 'Restaurar valores',
+      change: 'Cambiar',
+      recording: 'Pulsa un nuevo atajo',
+      cancelHint: 'Esc para cancelar',
+      unassigned: 'Sin asignar',
+      search: {
+        title: 'Buscar marcadores y pestañas',
+        description: 'Abre la búsqueda desde cualquier vista de Prelude.',
+      },
+      capture: {
+        title: 'Guardar la página actual',
+        description:
+          'Añade la pestaña actual a Leer más tarde desde cualquier página de Chrome.',
+        action: 'Cambiar en Chrome',
+        extensionRequired: 'Disponible en la extensión',
+      },
+      errors: {
+        modifier: 'Incluye Ctrl, Command o Alt en el atajo.',
+        reserved: 'El navegador reserva esta combinación. Elige otra.',
+        conflict:
+          'Entra en conflicto con Guardar la página actual. Elige otro atajo.',
+      },
+    },
     privacy: {
       title: 'Datos y privacidad',
       summary:
@@ -90,6 +118,26 @@ export const es = {
         'Solo las búsquedas web que envías se entregan al buscador predeterminado de Chrome.',
       action: 'Leer la política de privacidad',
     },
+    about: {
+      summary:
+        'Consulta la descripción, la versión y los enlaces del proyecto.',
+      action: 'Abrir Acerca de',
+    },
+  },
+  about: {
+    title: 'Acerca de Prelude',
+    introduction:
+      'Una nueva pestaña tranquila para organizar los marcadores de Chrome, las pestañas abiertas y Leer más tarde.',
+    privacyTitle: 'Tu espacio de navegación',
+    privacyStatement:
+      'No tiene cuentas, anuncios ni analíticas. Los datos de marcadores y pestañas permanecen en tu navegador, bajo tu control.',
+    links: {
+      label: 'Enlaces del proyecto',
+      github: 'GitHub',
+      support: 'Soporte y comentarios',
+      privacy: 'Política de privacidad',
+    },
+    version: 'Prelude {{version}}',
   },
   capture: {
     open: 'Guardar',
@@ -136,7 +184,9 @@ export const es = {
     extensionRequired:
       'Carga la aplicación como extensión de Chrome para usar el guardado real.',
     shortcutHint:
-      'Usa Alt + Mayús + S o el menú contextual de la página para guardar.',
+      'Usa {{shortcut}} o el menú contextual de la página para guardar.',
+    shortcutUnassignedHint:
+      'No hay un atajo asignado; el menú contextual sigue disponible.',
     newTabHint:
       'En la página de nueva pestaña de Prelude, Pestaña actual usa la página vista más recientemente.',
     result: {

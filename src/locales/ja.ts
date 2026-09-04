@@ -75,7 +75,36 @@ export const ja = {
     open: '設定を開く',
     close: '設定を閉じる',
     title: '設定',
-    description: 'Preludeの表示設定とデータに関する説明を確認します。',
+    description:
+      '表示言語とショートカットを調整し、Preludeがデータをどのように扱うか確認できます。',
+    shortcuts: {
+      title: 'キーボードショートカット',
+      summary:
+        'ページ内操作を変更できます。拡張機能のコマンドはChromeが管理します。',
+      reset: '初期設定に戻す',
+      change: '変更',
+      recording: '新しいショートカットを入力',
+      cancelHint: 'Escでキャンセル',
+      unassigned: '未設定',
+      search: {
+        title: 'ブックマークとタブを検索',
+        description: 'Preludeのどの画面からでも検索をすぐに開きます。',
+      },
+      capture: {
+        title: '現在のページを収集',
+        description:
+          'Chromeの任意のページから現在のタブを「後で読む」に追加します。',
+        action: 'Chromeで変更',
+        extensionRequired: '拡張機能で変更できます',
+      },
+      errors: {
+        modifier: 'Ctrl、Command、またはAltを同時に押してください。',
+        reserved:
+          'この組み合わせはブラウザが使用します。別のキーを選んでください。',
+        conflict:
+          '「現在のページを収集」と重複しています。別のキーを選んでください。',
+      },
+    },
     privacy: {
       title: 'データとプライバシー',
       summary:
@@ -89,6 +118,25 @@ export const ja = {
         'ユーザーが実行したウェブ検索だけが、Chromeから既定の検索プロバイダへ渡されます。',
       action: 'プライバシーポリシーを読む',
     },
+    about: {
+      summary: '製品の説明、バージョン、プロジェクトリンクを確認します。',
+      action: '概要を開く',
+    },
+  },
+  about: {
+    title: 'Preludeについて',
+    introduction:
+      'Chromeのブックマーク、開いているタブ、あとで読む項目を整理するための静かな新しいタブです。',
+    privacyTitle: 'あなたのブラウジング空間',
+    privacyStatement:
+      'アカウント、広告、分析ツールはありません。ブックマークとタブのデータはブラウザ内にとどまり、あなたが管理できます。',
+    links: {
+      label: 'プロジェクトリンク',
+      github: 'GitHub',
+      support: 'サポートとフィードバック',
+      privacy: 'プライバシーポリシー',
+    },
+    version: 'Prelude {{version}}',
   },
   capture: {
     open: '収集',
@@ -134,7 +182,9 @@ export const ja = {
     extensionRequired:
       '実際の収集機能を使用するには、Chrome拡張機能として読み込んでください。',
     shortcutHint:
-      'Alt + Shift + S、またはページのコンテキストメニューから収集できます。',
+      '{{shortcut}}、またはページのコンテキストメニューから収集できます。',
+    shortcutUnassignedHint:
+      'ショートカットは未設定です。ページのコンテキストメニューから収集できます。',
     newTabHint:
       'Preludeの新しいタブページでは、「現在のタブ」に直前に表示したページが使われます。',
     result: {

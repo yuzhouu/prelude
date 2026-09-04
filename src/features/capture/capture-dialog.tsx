@@ -11,6 +11,8 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { useCaptureCommandShortcut } from '../shortcuts/chrome-commands'
+import { formatChromeCommandShortcut } from '../shortcuts/shortcut-preferences'
 import type { OpenTabWindow } from '../tabs/model'
 import {
   executeCapture,
@@ -109,6 +111,7 @@ export function CapturePanel({
   isChromeSource: boolean
 }) {
   const { t } = useTranslation()
+  const captureCommand = useCaptureCommandShortcut()
   const [snapshot, setSnapshot] = useState<CaptureSnapshot>(() =>
     getFallbackSnapshot(fallbackWindows),
   )
@@ -375,7 +378,13 @@ export function CapturePanel({
         ) : (
           <span>
             <Keyboard />
-            {t('capture.shortcutHint')}
+            {captureCommand.shortcut
+              ? t('capture.shortcutHint', {
+                  shortcut: formatChromeCommandShortcut(
+                    captureCommand.shortcut,
+                  ),
+                })
+              : t('capture.shortcutUnassignedHint')}
           </span>
         )}
       </div>

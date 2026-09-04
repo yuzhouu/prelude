@@ -30,15 +30,21 @@ const LANGUAGE_LABEL_KEYS = {
   ru: 'language.ru',
 } as const satisfies Record<SupportedLanguage, `language.${string}`>
 
-export function LanguageToggle() {
+interface LanguageToggleProps {
+  showLabel?: boolean
+}
+
+export function LanguageToggle({ showLabel = true }: LanguageToggleProps) {
   const { t, i18n } = useTranslation()
   const currentLanguage = resolveSupportedLanguage(
     i18n.resolvedLanguage ?? i18n.language,
   )
 
   return (
-    <div className="language-control">
-      <span className="language-control-label">{t('language.label')}</span>
+    <div className={`language-control${showLabel ? '' : ' is-label-hidden'}`}>
+      {showLabel ? (
+        <span className="language-control-label">{t('language.label')}</span>
+      ) : null}
       <div
         className="language-options"
         role="group"

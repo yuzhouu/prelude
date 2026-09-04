@@ -70,7 +70,31 @@ export const zhCN = {
     open: '打开设置',
     close: '关闭设置',
     title: '设置',
-    description: '管理序幕的界面偏好与数据说明。',
+    description: '调整界面语言与快捷键，了解序幕如何处理你的数据。',
+    shortcuts: {
+      title: '快捷键',
+      summary: '自定义页内操作；扩展级快捷键由 Chrome 管理。',
+      reset: '恢复默认',
+      change: '更改',
+      recording: '请按下新快捷键',
+      cancelHint: 'Esc 取消',
+      unassigned: '未设置',
+      search: {
+        title: '搜索书签与标签页',
+        description: '在序幕页面内快速打开搜索。',
+      },
+      capture: {
+        title: '收集当前页面',
+        description: '在任意 Chrome 页面将当前标签页加入待读。',
+        action: '在 Chrome 中修改',
+        extensionRequired: '加载扩展后可修改',
+      },
+      errors: {
+        modifier: '请同时按下 Ctrl、Command 或 Alt。',
+        reserved: '这个组合由浏览器保留，请换一个快捷键。',
+        conflict: '与“收集当前页面”快捷键冲突，请换一个组合。',
+      },
+    },
     privacy: {
       title: '数据与隐私',
       summary: '序幕只为管理书签、标签页与待读内容而处理必要的浏览器数据。',
@@ -80,6 +104,25 @@ export const zhCN = {
       search: '只有你主动提交的网页搜索会由 Chrome 交给默认搜索引擎。',
       action: '查看完整隐私政策',
     },
+    about: {
+      summary: '查看产品说明、版本信息与项目链接。',
+      action: '打开关于页面',
+    },
+  },
+  about: {
+    title: '关于 Prelude',
+    introduction:
+      '一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。',
+    privacyTitle: '属于你的浏览空间',
+    privacyStatement:
+      '它没有账号、广告或分析工具。书签与标签页数据留在浏览器中，由你掌控。',
+    links: {
+      label: '项目链接',
+      github: 'GitHub',
+      support: '支持与反馈',
+      privacy: '隐私政策',
+    },
+    version: 'Prelude {{version}}',
   },
   capture: {
     open: '收集',
@@ -119,7 +162,8 @@ export const zhCN = {
     saving: '正在保存…',
     failed: '保存失败，请确认扩展仍拥有书签和标签页权限。',
     extensionRequired: '加载为 Chrome 扩展后即可使用真实收集入口。',
-    shortcutHint: '快捷键 Alt + Shift + S；右键菜单也可收集。',
+    shortcutHint: '快捷键 {{shortcut}}；右键菜单也可收集。',
+    shortcutUnassignedHint: '当前未分配快捷键；右键菜单仍可收集。',
     newTabHint: '在序幕新标签页中，“当前标签页”会取最近浏览的网页。',
     result: {
       saved_one: '已加入待读：{{count}} 个页面。',

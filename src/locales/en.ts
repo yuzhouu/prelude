@@ -74,7 +74,33 @@ export const en = {
     open: 'Open settings',
     close: 'Close settings',
     title: 'Settings',
-    description: 'Manage Prelude’s interface preferences and data notice.',
+    description:
+      'Adjust the interface language and shortcuts, and see how Prelude handles your data.',
+    shortcuts: {
+      title: 'Keyboard shortcuts',
+      summary: 'Customize in-page actions; Chrome manages extension commands.',
+      reset: 'Restore defaults',
+      change: 'Change',
+      recording: 'Press a new shortcut',
+      cancelHint: 'Esc to cancel',
+      unassigned: 'Not set',
+      search: {
+        title: 'Search bookmarks and tabs',
+        description: 'Open search quickly from any Prelude view.',
+      },
+      capture: {
+        title: 'Collect current page',
+        description: 'Add the current tab to Read later from any Chrome page.',
+        action: 'Change in Chrome',
+        extensionRequired: 'Available in the extension',
+      },
+      errors: {
+        modifier: 'Include Ctrl, Command, or Alt in the shortcut.',
+        reserved: 'The browser reserves this combination. Choose another.',
+        conflict:
+          'This conflicts with Collect current page. Choose another shortcut.',
+      },
+    },
     privacy: {
       title: 'Data and privacy',
       summary:
@@ -88,6 +114,25 @@ export const en = {
         'Only a web search you submit is passed by Chrome to the default search provider.',
       action: 'Read the full privacy policy',
     },
+    about: {
+      summary: 'View the product story, version, and project links.',
+      action: 'Open About',
+    },
+  },
+  about: {
+    title: 'About Prelude',
+    introduction:
+      'A calm new tab for organizing Chrome bookmarks, open tabs, and Read later.',
+    privacyTitle: 'Your browsing space',
+    privacyStatement:
+      'It has no accounts, ads, or analytics. Bookmark and tab data stays in your browser, under your control.',
+    links: {
+      label: 'Project links',
+      github: 'GitHub',
+      support: 'Support and feedback',
+      privacy: 'Privacy policy',
+    },
+    version: 'Prelude {{version}}',
   },
   capture: {
     open: 'Collect',
@@ -132,7 +177,9 @@ export const en = {
       'Could not save. Check the extension’s bookmark and tab permissions.',
     extensionRequired:
       'Load this app as a Chrome extension to use the live collection entry.',
-    shortcutHint: 'Use Alt + Shift + S or the page context menu to collect.',
+    shortcutHint: 'Use {{shortcut}} or the page context menu to collect.',
+    shortcutUnassignedHint:
+      'No shortcut is assigned; the page context menu is still available.',
     newTabHint:
       'On Prelude’s new tab page, Current tab uses the most recently viewed page.',
     result: {

@@ -4,6 +4,8 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { BookmarkMatch } from '../bookmarks/model'
+import { isKeyboardShortcutMatch } from '../shortcuts/shortcut-preferences'
+import { useShortcutPreferences } from '../shortcuts/use-shortcut-preferences'
 import type { OpenTab, OpenTabWindow } from '../tabs/model'
 import { searchWithDefaultProvider } from './chrome-search'
 import { buildOmniboxSuggestions } from './omnibox-model'
@@ -24,6 +26,7 @@ export function BookmarkSearchDialog({
   onOpenChange: (open: boolean) => void
 }) {
   const { t } = useTranslation()
+  const shortcutPreferences = useShortcutPreferences()
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -49,7 +52,10 @@ export function BookmarkSearchDialog({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      if (
+        !event.defaultPrevented &&
+        isKeyboardShortcutMatch(event, shortcutPreferences.search)
+      ) {
         event.preventDefault()
         if (isOpen) inputRef.current?.focus()
         else onOpenChange(true)
@@ -58,7 +64,7 @@ export function BookmarkSearchDialog({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onOpenChange])
+  }, [isOpen, onOpenChange, shortcutPreferences.search])
 
   const closeDialog = () => {
     setQuery('')

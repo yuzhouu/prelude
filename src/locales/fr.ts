@@ -76,7 +76,35 @@ export const fr = {
     close: 'Fermer les paramètres',
     title: 'Paramètres',
     description:
-      'Gérez l’interface de Prelude et consultez l’usage des données.',
+      'Réglez la langue et les raccourcis, puis découvrez comment Prelude traite vos données.',
+    shortcuts: {
+      title: 'Raccourcis clavier',
+      summary:
+        'Personnalisez les actions de la page ; Chrome gère les commandes de l’extension.',
+      reset: 'Rétablir les valeurs',
+      change: 'Modifier',
+      recording: 'Saisissez un nouveau raccourci',
+      cancelHint: 'Échap pour annuler',
+      unassigned: 'Non défini',
+      search: {
+        title: 'Rechercher favoris et onglets',
+        description: 'Ouvrez rapidement la recherche depuis toute vue Prelude.',
+      },
+      capture: {
+        title: 'Collecter la page actuelle',
+        description:
+          'Ajoutez l’onglet actuel à À lire plus tard depuis toute page Chrome.',
+        action: 'Modifier dans Chrome',
+        extensionRequired: 'Disponible dans l’extension',
+      },
+      errors: {
+        modifier: 'Ajoutez Ctrl, Command ou Alt au raccourci.',
+        reserved:
+          'Le navigateur réserve cette combinaison. Choisissez-en une autre.',
+        conflict:
+          'Ce raccourci entre en conflit avec Collecter la page actuelle.',
+      },
+    },
     privacy: {
       title: 'Données et confidentialité',
       summary:
@@ -90,6 +118,25 @@ export const fr = {
         'Seules les recherches Web que vous envoyez sont confiées au moteur par défaut de Chrome.',
       action: 'Lire la politique de confidentialité',
     },
+    about: {
+      summary: 'Consultez la présentation, la version et les liens du projet.',
+      action: 'Ouvrir À propos',
+    },
+  },
+  about: {
+    title: 'À propos de Prelude',
+    introduction:
+      'Un nouvel onglet calme pour organiser les favoris Chrome, les onglets ouverts et À lire plus tard.',
+    privacyTitle: 'Votre espace de navigation',
+    privacyStatement:
+      'Il n’utilise ni compte, ni publicité, ni outil d’analyse. Les données de favoris et d’onglets restent dans votre navigateur, sous votre contrôle.',
+    links: {
+      label: 'Liens du projet',
+      github: 'GitHub',
+      support: 'Assistance et commentaires',
+      privacy: 'Politique de confidentialité',
+    },
+    version: 'Prelude {{version}}',
   },
   capture: {
     open: 'Collecter',
@@ -136,7 +183,9 @@ export const fr = {
     extensionRequired:
       'Chargez cette application comme extension Chrome pour utiliser la collecte réelle.',
     shortcutHint:
-      'Utilisez Alt + Maj + S ou le menu contextuel de la page pour collecter.',
+      'Utilisez {{shortcut}} ou le menu contextuel de la page pour collecter.',
+    shortcutUnassignedHint:
+      'Aucun raccourci n’est attribué ; le menu contextuel reste disponible.',
     newTabHint:
       'Sur la page Nouvel onglet de Prelude, Onglet actuel utilise la dernière page consultée.',
     result: {
