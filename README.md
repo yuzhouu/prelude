@@ -1,54 +1,33 @@
-# 序幕 · Prelude
+# Prelude
 
-> 江流天地外，山色有无中
+[English](./README.md) · [简体中文](./README.zh-CN.md)
 
-序幕（Prelude）是一个将固定网站变成每日浏览任务、并顺手管理书签与标签页的 Chrome 新标签页扩展。它直接读取 Chrome 的书签树，并在侧栏和主内容区保留原有文件夹层级。
+> A calm starting point for everything you want to keep, revisit, or finish on the web.
 
-[隐私政策](./PRIVACY.md) · [支持](https://github.com/yuzhouu/supposed/issues)
+Prelude is a Chrome new-tab extension that brings bookmarks, open tabs, and Read later into one focused workspace. It works with the Chrome data you already have, preserves your bookmark hierarchy, and keeps your browsing data in your browser.
 
-## 功能
+![Prelude bookmark workspace](./store/assets/screenshots/zh-CN/01-bookmarks-1280x800.png)
 
-- 使用 `chrome.bookmarks.getTree()` 读取真实书签与文件夹结构
-- 在「快捷文件夹」页面确认后，于「其他书签」下创建「序幕」，内含可改名的「置顶」、「待读」和「收藏」文件夹
-- 在每个书签文件夹下原位快捷添加书签
-- 像 Todoist 添加分类一样，在每个文件夹下行内创建子文件夹
-- 在文件夹标题行删除普通文件夹，确认时显示将一并删除的子文件夹和书签数量
-- 通过书签条目右侧菜单编辑标题与网址，或在确认后删除书签
-- 添加时留空标题会优先读取已打开的同网址标签页标题；未命中时先使用域名，并在以后打开该网址时自动替换为真实页面标题。明确填写或手动修改的标题不会被覆盖
-- 书签发生新增、移动、重命名或删除时自动刷新
-- 像 Chrome 地址栏一样搜索：识别网址直接访问，普通文本使用默认搜索引擎，并提供书签与已打开标签页建议
-- 使用 Chrome Extension Favicon API 显示站点图标
-- 文件夹切换、最近添加、复制链接和窄屏抽屉导航
-- 在侧边栏品牌区汇总显示全部书签的 Chrome 账号同步状态
-- 按浏览器窗口展示当前打开的标签页，并可直接切换
-- 点击扩展工具栏图标打开收集面板；也可通过 `Alt + Shift + S` 快捷键或页面右键菜单，把当前标签页直接加入「待读」
-- 在扩展图标打开的收集面板或右键菜单中批量保存当前窗口、当前标签组，并保留原标签顺序
-- 保存前检查整棵书签树中的重复网址；界面可选择跳过或仍然保存，后台入口会跳过并发出提醒
-- 可记住「保存后关闭原标签页」偏好，只关闭本次成功保存的页面
-- 普通浏览器开发环境使用示例书签，便于本地预览
+## Start each session with a clear view
 
-## 本地开发
+Your saved pages and open tabs should feel useful, not buried. Prelude gives them a quiet, structured home:
 
-```bash
-pnpm install
-pnpm dev
-```
+- **Today** brings Pinned, Read later, and Favorites together for a focused daily view.
+- **Bookmarks** keep their existing Chrome folder hierarchy and can be added, edited, deleted, or reordered directly.
+- **Current tabs** shows tabs across browser windows, lets you switch or close them, and supports drag-and-drop reordering between windows.
+- **Recently added** makes it easy to return to pages you just saved.
+- **Unified search** finds bookmarks and open tabs, opens addresses, and sends other queries to Chrome's default search engine.
 
-## 安装到 Chrome
+## Collect now, decide later
 
-1. 构建扩展：
+Save the current page, an entire window, or a tab group to Read later from the toolbar, the page context menu, or the `Alt + Shift + S` shortcut. Prelude preserves tab order, checks for duplicate URLs, and can close only the tabs that were successfully saved.
 
-   ```bash
-   pnpm build
-   ```
+Missing bookmark titles are completed automatically when possible. Titles you enter or edit yourself are always preserved.
 
-2. 打开 `chrome://extensions/`。
-3. 开启右上角「开发者模式」。
-4. 点击「加载已解压的扩展程序」，选择本项目的 `dist` 目录。
-5. 打开新标签页。扩展会请求书签读取权限，并用真实 Chrome 书签替换预览数据。
+## Made to stay out of the way
 
-重新构建后，在 `chrome://extensions/` 中点击该扩展的刷新按钮即可更新。
+Prelude supports light, dark, and system themes, a compact responsive sidebar, and interfaces in Simplified Chinese, English, Japanese, Spanish, French, and Russian.
 
-## 数据与权限
+There is no Prelude account, remote service, analytics, or advertising. Bookmark and tab data stays in your browser. Bookmarks remain ordinary Chrome bookmarks and continue to follow your own Chrome Sync settings. Only a web search you submit is passed by Chrome to your configured default search provider.
 
-扩展声明 `bookmarks`、`contextMenus`、`favicon`、`notifications`、`search`、`storage`、`tabGroups`、`tabs` 和 `webNavigation` 权限。`search` 只用于把普通文本交给 Chrome 的默认搜索引擎；`tabs` 与 `tabGroups` 用于读取当前页面、窗口和标签组，并在用户开启选项后关闭已保存的原标签页；`contextMenus` 提供右键收集入口，`notifications` 反馈后台保存与重复网址结果；`storage` 只记录自动标题状态、待读文件夹位置和关闭标签页偏好；`webNavigation` 用于在网址发生重定向时关联原始书签与最终页面标题，不读取页面正文。经用户触发建立的文件夹是普通 Chrome 书签文件夹，用户可以随时改名、移动或删除。书签、标签页、导航元数据和偏好仅在本地处理，没有远程数据服务；只有用户主动提交的网页搜索会由 Chrome 交给默认搜索引擎。完整说明见[隐私政策](./PRIVACY.md)。
+[Privacy policy](./PRIVACY.md) · [Support and feedback](https://github.com/yuzhouu/supposed/issues)
