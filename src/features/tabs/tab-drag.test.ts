@@ -157,8 +157,10 @@ test('window boundaries respect the pinned partition', () => {
     windows,
   })
 
+  assert.ok(pinned)
+  assert.ok(regular)
   assert.deepEqual(
-    pinned?.windows[0].tabs.map(({ id }) => id),
+    pinned.windows[0].tabs.map(({ id }) => id),
     [2],
   )
   assert.deepEqual(

@@ -82,7 +82,10 @@ function isOpenTabDragData(value: unknown): value is OpenTabDragData {
   )
 }
 
-function getDomOpenTabDropTargetAtPoint({ x, y }: { x: number; y: number }) {
+function getDomOpenTabDropTargetAtPoint({ x, y }: { x: number; y: number }): {
+  rectangle: DOMRect
+  target: OpenTabDropTarget
+} | null {
   if (
     typeof document === 'undefined' ||
     typeof document.elementsFromPoint !== 'function'

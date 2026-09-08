@@ -15,7 +15,10 @@ A calm new tab for organizing Chrome bookmarks, open tabs, and Read later.
 
 Prelude makes your Chrome new-tab page a home for everyday browsing. Open a favorite site, find a tab from another window, or return to a page you saved for later.
 
-Prelude reads Chrome bookmarks and the titles and URLs of open tabs to display, search, manage, and collect them. This data stays local—it is not uploaded, sold, or used for advertising. Only a web search explicitly submitted by the user is passed by Chrome to the configured default search provider.
+Prelude reads Chrome bookmarks and the titles and URLs of open tabs, and reads frequently visited sites only after you enable the feature and grant permission. It uses these data to display, open, search, manage, and collect pages. The data stays local: it is not uploaded, sold, or used for advertising. Only a web search explicitly submitted by the user is passed by Chrome to the configured default search provider.
+
+Frequently visited sites, when you want them
+This feature is off by default. Enable it in Settings and grant permission to see frequent sites in the sidebar and search. Hide unwanted sites or turn the feature off at any time. Prelude does not read your full browsing history or count visits.
 
 Your bookmarks, ready when you are
 Keep your existing Chrome bookmark folders. Add, edit, delete, and reorder pages right from a new tab. Today brings Pinned, Read later, and Favorites together; Recently added helps you find a page you just saved.

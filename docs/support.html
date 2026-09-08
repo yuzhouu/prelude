@@ -20,6 +20,37 @@
       <p class="eyebrow">Support</p>
       <h1>让序幕用起来更顺手</h1>
       <p class="lede">从书签整理到待读收集，这里是一些常见问题的说明。</p>
+      <section id="install">
+        <h2>获取与安装</h2>
+        <p>
+          当前提供 Chrome 扩展安装包。下载后解压到一个固定位置，再由 Chrome
+          加载；这不是 Chrome Web Store 的一键安装。
+        </p>
+        <div class="actions">
+          <a href="./downloads/prelude-chrome-extension.zip" download
+            >下载扩展 ZIP</a
+          >
+          <a href="./downloads/prelude-chrome-extension.zip.sha256" download
+            >SHA-256 校验值</a
+          >
+        </div>
+        <ol>
+          <li>
+            下载并解压 ZIP，确认解压后的文件夹内有 <code>manifest.json</code>。
+          </li>
+          <li>
+            在 Chrome 地址栏输入
+            <code>chrome://extensions</code>，打开右上角「开发者模式」。
+          </li>
+          <li>点击「加载已解压的扩展程序」，选择刚才解压的文件夹。</li>
+          <li>
+            打开新标签页即可使用序幕，也可以将工具栏中的序幕图标固定以方便收集页面。
+          </li>
+        </ol>
+        <p>
+          更新时，用新安装包替换原文件夹内容，再在扩展管理页点击「重新加载」。保留原文件夹路径，避免卸载导致偏好设置丢失。
+        </p>
+      </section>
       <section>
         <h2>日常使用</h2>
         <h3>需要重新导入书签吗？</h3>
@@ -42,6 +73,15 @@
         <p>
           搜索框会先展示匹配的书签和当前标签页。提交网页搜索时使用 Chrome
           当前配置的默认搜索引擎；序幕不会更改你的搜索设置。
+        </p>
+        <h3>如何显示或关闭常用网站？</h3>
+        <p>
+          在设置中打开「常用网站」，并在 Chrome
+          提示中允许访问，即可在侧边栏和搜索框查看。它默认关闭；拒绝授权不会影响书签和标签页功能。
+        </p>
+        <p>
+          关闭开关会停止读取和展示，但保留 Chrome
+          已授予的权限。隐藏的网站可在搜索框中恢复。序幕不读取完整浏览历史，也不自行统计访问次数。
         </p>
         <h3>书签会同步吗？卸载后还在吗？</h3>
         <p>

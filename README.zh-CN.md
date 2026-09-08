@@ -1,5 +1,7 @@
 # 序幕 · 新标签页
 
+[项目官网](https://yuzhouu.github.io/prelude/) · [获取序幕](https://yuzhouu.github.io/prelude/support.html#install)
+
 [English](./README.md) · [简体中文](./README.zh-CN.md)
 
 > 一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。

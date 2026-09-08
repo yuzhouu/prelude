@@ -1,6 +1,7 @@
 {
   "name": "prelude",
   "private": true,
+  "packageManager": "pnpm@11.1.1",
   "type": "module",
   "imports": {
     "#/*": "./src/*"
@@ -9,6 +10,13 @@
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
     "build": "vite build",
+    "build:site": "vite build --config vite.pages.config.ts && node scripts/finalize-site.mjs",
+    "preview:site": "vite preview --config vite.pages.config.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test src/features/*/*.test.ts",
+    "validate": "pnpm typecheck && pnpm lint && pnpm check && pnpm test",
+    "check:store": "node scripts/check-release.mjs",
+    "release:extension": "pnpm validate && pnpm build && pnpm check:store && node scripts/package-extension.mjs",
     "preview": "vite preview",
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",

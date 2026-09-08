@@ -15,7 +15,10 @@ Una nueva pestaña tranquila para organizar los marcadores de Chrome, las pesta�
 
 Prelude convierte la nueva pestaña de Chrome en tu punto de partida diario. Abre un sitio habitual, encuentra una pestaña de otra ventana o vuelve a una página que guardaste para después.
 
-Prelude lee los marcadores de Chrome y los títulos y URL de las pestañas abiertas para mostrarlos, buscarlos, gestionarlos y guardarlos. Estos datos permanecen en local: no se suben, venden ni utilizan para publicidad. Solo las búsquedas web enviadas expresamente por el usuario se entregan al buscador predeterminado de Chrome.
+Prelude lee los marcadores de Chrome y los títulos y URL de las pestañas abiertas para mostrarlos, abrirlos, buscarlos, gestionarlos y guardarlos. Solo accede a los sitios más visitados cuando activas la función y concedes el permiso. Estos datos permanecen en local: no se suben, venden ni utilizan para publicidad. Solo las búsquedas web enviadas expresamente por el usuario se entregan al buscador predeterminado de Chrome.
+
+Sitios frecuentes, cuando tú quieras
+La función está desactivada de forma predeterminada. Actívala en Ajustes y concede el permiso para ver sitios frecuentes en la barra lateral y en la búsqueda. Puedes ocultar sitios o desactivarla cuando quieras. Prelude no lee todo tu historial ni cuenta visitas.
 
 Tus marcadores, a mano
 Conserva las carpetas que ya tienes en Chrome. Añade, edita, elimina y reordena páginas desde la nueva pestaña. Hoy reúne Fijados, Leer más tarde y Favoritos; Añadidos recientemente te ayuda a encontrar lo que acabas de guardar.

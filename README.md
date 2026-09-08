@@ -2,6 +2,8 @@
 
 [English](./README.md) · [简体中文](./README.zh-CN.md)
 
+[Website](https://yuzhouu.github.io/prelude/) · [Get Prelude](https://yuzhouu.github.io/prelude/support.html#install)
+
 > A calm new tab for organizing Chrome bookmarks, open tabs, and Read later.
 
 Prelude makes your Chrome new-tab page a home for the pages you use every day. Open a bookmark, find a tab from another window, or pick up something you saved for later. It works directly with your existing Chrome bookmarks, so your folders stay familiar.
@@ -15,6 +17,8 @@ Keep your Chrome bookmark folders and organize them right from a new tab. Add, e
 ## Pick up where you left off
 
 See open tabs across your browser windows. Switch to a page, close a finished tab, or drag tabs into a different order or window. Search bookmarks and open tabs together; enter an address to open it, or submit a query to Chrome's default search engine.
+
+Frequently visited sites is off by default. Enable it in Settings and grant Chrome permission to include your frequent sites in the sidebar and search. You can hide sites or turn it off at any time.
 
 ## Save it for later
 

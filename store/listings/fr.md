@@ -15,7 +15,10 @@ Un nouvel onglet calme pour organiser les favoris Chrome, les onglets ouverts et
 
 Prelude fait du nouvel onglet Chrome le point de départ de votre navigation quotidienne. Ouvrez un site habituel, retrouvez un onglet dans une autre fenêtre ou reprenez une page enregistrée pour plus tard.
 
-Prelude lit les favoris Chrome ainsi que les titres et URL des onglets ouverts afin de les afficher, rechercher, gérer et collecter. Ces données restent locales : elles ne sont ni transférées, ni vendues, ni utilisées à des fins publicitaires. Seules les recherches Web envoyées explicitement par l'utilisateur sont confiées au moteur de recherche par défaut de Chrome.
+Prelude lit les favoris Chrome ainsi que les titres et URL des onglets ouverts afin de les afficher, ouvrir, rechercher, gérer et collecter. Les sites fréquemment visités ne sont consultés qu’après activation de la fonction et autorisation de votre part. Ces données restent locales : elles ne sont ni transférées, ni vendues, ni utilisées à des fins publicitaires. Seules les recherches Web envoyées explicitement par l'utilisateur sont confiées au moteur de recherche par défaut de Chrome.
+
+Vos sites fréquents, si vous le souhaitez
+Cette fonction est désactivée par défaut. Activez-la dans les paramètres et accordez l’autorisation pour retrouver vos sites fréquents dans la barre latérale et la recherche. Masquez des sites ou désactivez la fonction à tout moment. Prelude ne consulte pas l’ensemble de votre historique et ne compte pas les visites.
 
 Vos favoris à portée de main
 Conservez vos dossiers Chrome. Ajoutez, modifiez, supprimez et réorganisez les pages depuis un nouvel onglet. Aujourd’hui rassemble Épinglés, À lire plus tard et Favoris ; Ajoutés récemment vous aide à retrouver ce que vous venez d’enregistrer.

@@ -17,7 +17,23 @@ The Chinese public title is **序幕 · 新标签页**. The brand remains **序�
 - Privacy declarations: `./privacy-practices.md`
 - Localized descriptions: `./listings/`
 
-The public URLs above are served from `docs/`. Before submission, push these files and enable GitHub Pages with the `main` branch `/docs` directory as its source, then open all three URLs without signing in.
+The public URLs above are built from `docs/` with `vite.pages.config.ts`. In repository Settings → Pages, choose **GitHub Actions** as the source. The `Validate and publish Prelude` workflow validates the extension, creates its ZIP, builds the website, and deploys it on each push to `main`. Pull requests run the same build without publishing. `workflow_dispatch` supports a manual retry.
+
+## Build and release
+
+```sh
+pnpm install --frozen-lockfile
+pnpm release:extension
+pnpm build:site
+pnpm preview:site
+```
+
+- `release:extension` runs TypeScript, ESLint, Prettier, all unit tests, the production build, and release checks before creating `release/prelude-<version>.zip` and its SHA-256 file.
+- Release checks cover manifest entries, all extension locales, icon and screenshot dimensions/hashes, matching public/in-extension policies, and package file layout. ZIP contents have `manifest.json` at the root and omit hidden files.
+- The website build checks local links and assets and includes the ZIP under `downloads/prelude-chrome-extension.zip`. Its relative URLs support both a repository path and a custom domain.
+- Actions saves the release files as the `prelude-chrome-extension` artifact and publishes only `dist-site/` to Pages. No personal access token is needed for deployment.
+
+Before submitting to the store, verify the installed extension using [the acceptance checklist](./acceptance.md), confirm that the public policy URL works without signing in, and complete the Store listing, Privacy practices, and Distribution fields in the developer dashboard. Publishing this website does not submit the extension to Chrome Web Store.
 
 ## Artwork
 

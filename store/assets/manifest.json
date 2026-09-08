@@ -7,7 +7,7 @@
   "provenance": {
     "screenshots": "Captured at 1280×800 CSS pixels and 1× pixel ratio from the actual Vite-rendered product at http://127.0.0.1:4318 using the existing repository demo bookmarks and open tabs. No user browser data, fabricated interface elements, or compositing. Bookmark names remain as defined in the demo dataset in both interface languages.",
     "promotionalImages": "Rendered in headless Google Chrome from the SVG sources in ./source, the approved vermilion folder SVG at public/icons/prelude.svg, the unchanged slogan, and the Chinese bookmark screenshot. Fonts and referenced images were loaded before export.",
-    "privacyScreenshot": "The actual Settings dialog with Data and privacy expanded; demonstrates the UI disclosure, not live extension permission behavior.",
+    "privacyScreenshot": "Recaptured from the production build at http://127.0.0.1:4325 at 1280×800, 1× pixel ratio, using repository demo data. Settings is scrolled to the expanded Data and privacy disclosure including optional frequently visited sites. Validates UI disclosure, not a live permission prompt.",
     "homepageScreenshot": "Exact copy of screenshots/zh-CN/01-bookmarks-1280x800.png. Stored within docs/ so the public site works independently.",
     "iconSourceSha256": "813efdb4b591a1aed1e83f131b29940a563632b23321bdaca183d79501c1fcae"
   },
@@ -74,7 +74,7 @@
       "state": "Settings with expanded data and privacy disclosure",
       "width": 1280,
       "height": 800,
-      "sha256": "fd1bb95096f4de4c7aab97d087a869e336d4dacb749b85153f7814fb6a9efcef"
+      "sha256": "b579ca78573bfcab03577eb4d4675c4d326926c5df2a7ae5456f3e3ff200c88e"
     },
     {
       "path": "screenshots/zh-CN/05-recent-1280x800.png",
@@ -119,7 +119,7 @@
       "state": "Settings with expanded data and privacy disclosure",
       "width": 1280,
       "height": 800,
-      "sha256": "28a131b282fc1a2d1f6b77ea34ab2530173ff79004a51375bfedab99a3ea306e"
+      "sha256": "1f477f30802e501320c472f89cb4993853d6f6048b038b92c8d1fc1dc9f5e2ad"
     },
     {
       "path": "screenshots/en/05-recent-1280x800.png",
