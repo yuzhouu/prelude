@@ -26,6 +26,7 @@ import {
   getInitialSidebarExpanded,
   persistSidebarExpanded,
 } from '../features/bookmarks/sidebar-preference'
+import { BookmarkSearchDialog } from '../features/search/bookmark-search-dialog'
 import { useOpenTabs } from '../features/tabs/chrome-tabs'
 import { countOpenTabs } from '../features/tabs/model'
 
@@ -53,7 +54,7 @@ function About() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { tree, isChromeSource } = useBookmarkTree()
-  const { windows: openTabWindows } = useOpenTabs()
+  const { windows: openTabWindows, activateTab } = useOpenTabs()
   const roots = useMemo(() => getVisibleRoots(tree), [tree])
   const bookmarks = useMemo(() => getBookmarkMatches(roots), [roots])
   const recentBookmarks = useMemo(
@@ -73,6 +74,7 @@ function About() {
     getInitialSidebarExpanded,
   )
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
 
   useEffect(() => {
     setExpandedIds((current) => {
@@ -121,10 +123,18 @@ function About() {
         onMobileClose={() => setIsMobileSidebarOpen(false)}
         onSearchOpen={() => {
           setIsMobileSidebarOpen(false)
-          void navigate({ to: '/', search: { openSearch: true } })
+          setSearchOpen(true)
         }}
         onSelect={selectView}
         onToggle={toggleFolder}
+      />
+
+      <BookmarkSearchDialog
+        bookmarks={bookmarks}
+        openTabWindows={openTabWindows}
+        isOpen={searchOpen}
+        onActivateTab={activateTab}
+        onOpenChange={setSearchOpen}
       />
 
       <main className="main-surface">
