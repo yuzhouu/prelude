@@ -70,13 +70,21 @@ test('explicit URLs navigate first; unmatched text still offers web search', () 
   )
 })
 
-test('empty query shows four newest bookmarks without mutating source order', () => {
-  const bookmarks = Array.from({ length: 6 }, (_, i) =>
+test('empty query fills seven recent bookmarks when frequent sites are off without mutating source order', () => {
+  const bookmarks = Array.from({ length: 10 }, (_, i) =>
     bookmark(`${i}`, `Link ${i}`, i),
   )
   assert.deepEqual(
     suggestions('  ', bookmarks).map((item) => item.id),
-    ['bookmark:5', 'bookmark:4', 'bookmark:3', 'bookmark:2'],
+    [
+      'bookmark:9',
+      'bookmark:8',
+      'bookmark:7',
+      'bookmark:6',
+      'bookmark:5',
+      'bookmark:4',
+      'bookmark:3',
+    ],
   )
   assert.equal(bookmarks[0].node.id, '0')
   assert.deepEqual(suggestions('', []), [])
@@ -90,6 +98,42 @@ const topSites: Array<TopSite> = [
     hostname: 'alpha.example',
   },
 ]
+
+test('recent bookmarks fill unused frequent-site slots after hiding and deduplication', () => {
+  const bookmarks = [
+    {
+      node: {
+        id: 'same',
+        title: 'Saved Zeta',
+        url: topSites[0].url,
+        dateAdded: 20,
+      },
+      path: [],
+    },
+    ...Array.from({ length: 10 }, (_, i) => bookmark(`${i}`, `Link ${i}`, i)),
+  ]
+  for (const hiddenTopSiteUrls of [
+    [],
+    [topSites[0].url],
+    topSites.map((site) => site.url),
+  ]) {
+    const result = buildOmniboxSuggestions({
+      bookmarks,
+      openTabWindows: [],
+      rawQuery: '',
+      topSites,
+      hiddenTopSiteUrls,
+      t,
+    })
+    assert.equal(result.length, 7)
+    assert.equal(
+      result.filter((item) => item.kind === 'top-site').length,
+      2 - hiddenTopSiteUrls.length,
+    )
+    const urls = result.flatMap((item) => ('url' in item ? [item.url] : []))
+    assert.equal(new Set(urls).size, urls.length)
+  }
+})
 
 test('default frequent sites are limited to three while typed queries search the full source', () => {
   const sites = Array.from({ length: 8 }, (_, i) => ({

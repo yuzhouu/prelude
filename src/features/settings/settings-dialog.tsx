@@ -18,6 +18,7 @@ import {
 } from '../../components/ui/tooltip'
 import { LanguageToggle } from '../language/language-toggle'
 import { ShortcutSettings } from '../shortcuts/shortcut-settings'
+import { TopSitesSettings } from '../top-sites/top-sites-settings'
 
 export function SettingsDialog() {
   const { t } = useTranslation()
@@ -84,6 +85,8 @@ export function SettingsDialog() {
                 </div>
                 <LanguageToggle showLabel={false} />
               </section>
+
+              <TopSitesSettings />
 
               <ShortcutSettings />
 

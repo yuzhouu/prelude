@@ -45,7 +45,11 @@ export function BookmarkSearchDialog({
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
   const [preferenceError, setPreferenceError] = useState(false)
-  const { state: topSitesState, refresh: refreshTopSites } = useTopSites(isOpen)
+  const {
+    state: topSitesState,
+    refresh: refreshTopSites,
+    access: topSitesAccess,
+  } = useTopSites(isOpen)
   const hiddenSnapshot = useSyncExternalStore(
     subscribeToHiddenTopSites,
     getHiddenTopSitesSnapshot,
@@ -232,13 +236,14 @@ export function BookmarkSearchDialog({
               )}
             </div>
 
-            {preferenceError ? (
+            {topSitesAccess.enabled && preferenceError ? (
               <p className="search-top-sites-notice" role="alert">
                 {t('topSites.saveError')}
               </p>
             ) : null}
-            {topSitesState.status === 'error' ||
-            hiddenTopSiteUrls.length > 0 ? (
+            {topSitesAccess.enabled &&
+            (topSitesState.status === 'error' ||
+              hiddenTopSiteUrls.length > 0) ? (
               <div className="search-top-sites-tools">
                 {topSitesState.status === 'error' ? (
                   <span role="status">

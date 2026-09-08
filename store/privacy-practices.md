@@ -18,9 +18,9 @@ English reference: Manage Chrome bookmarks and open tabs in a calm new tab, and 
 
 读取打开标签页的标题、网址、窗口、固定、活动与音频状态，以在新标签页中展示、搜索、切换和收集标签页；按用户操作关闭标签页、调整顺序或移到其他窗口。收集时，只有用户启用“保存后关闭”且保存成功，才会自动关闭对应标签页。
 
-### `topSites`
+### `topSites` (optional)
 
-读取 Chrome 提供的常访问网站标题和网址，整合进现有搜索框；未输入关键词时按 Chrome 返回的顺序显示，输入后按相关性匹配。列表只在本机内存中使用，隐藏的网址作为本地偏好保存并可在搜索内恢复，不上传；不读取完整浏览历史，不自行统计访问次数。
+默认关闭；仅在用户从设置中主动开启时请求 Chrome 的可选权限，授权后读取常用网站标题和网址，显示于侧边栏列表和搜索框。关闭时停止读取和展示，保留已授予的 Chrome 权限；未输入关键词时按 Chrome 返回的顺序显示，输入后按相关性匹配。列表只在本机内存中使用，隐藏的网址作为本地偏好保存并可在搜索内恢复，不上传；不读取完整浏览历史，不自行统计访问次数。
 
 ### `tabGroups`
 
@@ -40,7 +40,7 @@ English reference: Manage Chrome bookmarks and open tabs in a calm new tab, and 
 
 ### `favicon`
 
-通过 Chrome Extension Favicon API 为用户的书签、打开标签页和常访问网站显示对应站点图标。
+通过 Chrome Extension Favicon API 为用户的书签、打开标签页和常用网站显示对应站点图标。
 
 ### `contextMenus`
 
@@ -87,6 +87,6 @@ Certify all of the following:
 
 Use this sentence near the beginning of every store description:
 
-> 序幕会读取 Chrome 书签、打开标签页及常访问网站的标题和网址，用于展示、打开、搜索、管理与收集；这些数据仅在本机处理，不上传、不出售，也不用于广告。只有用户主动提交的网页搜索会由 Chrome 交给当前配置的默认搜索引擎。
+> 序幕会读取 Chrome 书签与打开标签页的标题和网址，并仅在开启和授权后读取常用网站，用于展示、打开、搜索、管理与收集；这些数据仅在本机处理，不上传、不出售，也不用于广告。只有用户主动提交的网页搜索会由 Chrome 交给当前配置的默认搜索引擎。
 
 The same disclosure appears inside Settings → Data and privacy before the link to the full policy.

@@ -34,12 +34,23 @@ export const fr = {
     expandSidebar: 'Développer la barre latérale',
   },
   topSites: {
+    loading: 'Chargement des sites fréquents…',
+    empty: 'Aucun site fréquent pour le moment',
+    listDescription: 'Sites fournis et classés par Chrome.',
+    accessError:
+      'Impossible de modifier le réglage ou l’autorisation. Réessayez.',
+    denied:
+      'L’autorisation n’a pas été accordée. Les sites fréquents restent désactivés.',
+    unavailable:
+      'Utilisez l’extension Chrome pour activer les sites fréquents.',
+    description:
+      'Affiche les sites fréquents dans la barre latérale et la recherche. Une autorisation est nécessaire à la première activation.',
     title: 'Sites fréquents',
     hide: 'Masquer « {{title}} »',
     restore: 'Restaurer les sites masqués ({{count}})',
     saveError: 'Impossible d’enregistrer la préférence. Réessayez.',
     privacy:
-      'Lit les titres et URL des sites fréquents de Chrome pour la recherche locale. Seules les URL masquées sont enregistrées, sans envoi de données.',
+      'Uniquement après activation et autorisation, lit les titres et URL de Chrome pour la barre latérale et la recherche locale. Le réglage et les URL masquées sont enregistrés localement ; aucune donnée n’est envoyée.',
     error: 'Impossible de charger les sites fréquents.',
     retry: 'Réessayer',
   },

@@ -13,10 +13,10 @@ afterEach(() => {
   }
 })
 
-function setChrome(chrome: unknown) {
+function setChrome(chrome: Record<string, unknown>) {
   Object.defineProperty(globalThis, 'chrome', {
     configurable: true,
-    value: chrome,
+    value: { permissions: { contains: async () => true }, ...chrome },
   })
 }
 
@@ -25,6 +25,21 @@ test('distinguishes an unavailable API from an empty Chrome result', async () =>
   assert.equal(await getTopSites(), undefined)
   setChrome({ topSites: { get: async () => [] } })
   assert.deepEqual(await getTopSites(), [])
+})
+
+test('does not read sites when Chrome permission has not been granted', async () => {
+  let calls = 0
+  setChrome({
+    permissions: { contains: async () => false },
+    topSites: {
+      get: async () => {
+        calls++
+        return []
+      },
+    },
+  })
+  assert.equal(await getTopSites(), undefined)
+  assert.equal(calls, 0)
 })
 
 test('preserves Chrome order and exact destinations without sorting by title', async () => {

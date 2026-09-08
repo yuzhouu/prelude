@@ -34,12 +34,23 @@ export const es = {
     expandSidebar: 'Expandir barra lateral',
   },
   topSites: {
+    loading: 'Cargando sitios frecuentes…',
+    empty: 'Aún no hay sitios frecuentes',
+    listDescription: 'Proporcionados y ordenados por Chrome.',
+    accessError:
+      'No se pudo actualizar el ajuste o el permiso. Inténtalo de nuevo.',
+    denied:
+      'No se concedió el permiso. Los sitios frecuentes siguen desactivados.',
+    unavailable:
+      'Usa la extensión de Chrome para activar los sitios frecuentes.',
+    description:
+      'Muestra los sitios frecuentes en la barra lateral y la búsqueda. Se necesita permiso al activar esta función por primera vez.',
     title: 'Sitios frecuentes',
     hide: 'Ocultar «{{title}}»',
     restore: 'Restaurar sitios ocultos ({{count}})',
     saveError: 'No se pudo guardar la preferencia. Inténtalo de nuevo.',
     privacy:
-      'Lee títulos y URL de sitios frecuentes de Chrome para búsquedas locales. Solo guarda las URL ocultas y no sube datos.',
+      'Solo tras activar y autorizar esta función se leen títulos y URL de Chrome para la barra lateral y la búsqueda local. El ajuste y las URL ocultas se guardan localmente; no se sube ningún dato.',
     error: 'No se pudieron cargar los sitios frecuentes.',
     retry: 'Reintentar',
   },

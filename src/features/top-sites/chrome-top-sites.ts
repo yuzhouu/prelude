@@ -1,3 +1,5 @@
+import { hasTopSitesPermission } from './top-sites-access.ts'
+
 export interface TopSite {
   title: string
   url: string
@@ -13,7 +15,7 @@ interface ChromeApi {
 export async function getTopSites(): Promise<Array<TopSite> | undefined> {
   const chromeApi = (globalThis as typeof globalThis & { chrome?: ChromeApi })
     .chrome
-  if (!chromeApi?.topSites) return undefined
+  if (!chromeApi?.topSites || !(await hasTopSitesPermission())) return undefined
 
   const sites = await chromeApi.topSites.get()
   return sites.flatMap((site) => {

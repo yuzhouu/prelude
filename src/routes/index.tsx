@@ -37,6 +37,8 @@ import { BookmarkSearchDialog } from '../features/search/bookmark-search-dialog'
 import { useOpenTabs } from '../features/tabs/chrome-tabs'
 import { OpenTabsContents } from '../features/tabs/tab-content'
 import { countOpenTabs } from '../features/tabs/model'
+import { TopSitesContents } from '../features/top-sites/top-sites-content'
+import { useTopSitesAccess } from '../features/top-sites/use-top-sites-access'
 
 interface HomeSearch {
   openSearch?: boolean
@@ -46,15 +48,10 @@ interface HomeSearch {
 export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>): HomeSearch => ({
     openSearch:
-      search.view === 'top-sites' ||
-      search.openSearch === true ||
-      search.openSearch === 'true'
+      search.openSearch === true || search.openSearch === 'true'
         ? true
         : undefined,
-    view:
-      typeof search.view === 'string' && search.view !== 'top-sites'
-        ? search.view
-        : undefined,
+    view: typeof search.view === 'string' ? search.view : undefined,
   }),
   component: Home,
 })
@@ -63,6 +60,7 @@ function Home() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { openSearch, view } = Route.useSearch()
+  const topSitesAccess = useTopSitesAccess()
   const { tree, isChromeSource } = useBookmarkTree()
   const {
     windows: openTabWindows,
@@ -108,6 +106,7 @@ function Home() {
       selectedId === 'all' ||
       selectedId === 'recent' ||
       selectedId === 'tabs' ||
+      selectedId === 'top-sites' ||
       selectedId === 'quick-folders'
         ? undefined
         : findNodeLocation(roots, selectedId),
@@ -125,12 +124,24 @@ function Home() {
       selectedId === 'all' ||
       selectedId === 'recent' ||
       selectedId === 'tabs' ||
+      selectedId === 'top-sites' ||
       selectedId === 'quick-folders' ||
       selectedNode
     )
       return
     setSelectedId(roots.find((node) => !node.url)?.id ?? 'all')
   }, [roots, selectedId, selectedNode])
+
+  useEffect(() => {
+    if (
+      selectedId === 'top-sites' &&
+      topSitesAccess.ready &&
+      !topSitesAccess.enabled
+    ) {
+      setSelectedId('quick-folders')
+      void navigate({ to: '/', search: {}, replace: true })
+    }
+  }, [navigate, selectedId, topSitesAccess.enabled, topSitesAccess.ready])
 
   useEffect(() => {
     setExpandedIds((current) => {
@@ -189,6 +200,7 @@ function Home() {
   const canDeleteSelectedFolder =
     isChromeSource && selectedFolderDeleteTarget !== undefined
   const isTabView = selectedId === 'tabs'
+  const isTopSitesView = selectedId === 'top-sites'
   const isQuickFoldersView = selectedId === 'quick-folders'
   const viewTitle =
     selectedId === 'all'
@@ -199,7 +211,9 @@ function Home() {
           ? t('navigation.quickFolders')
           : isTabView
             ? t('navigation.currentTabs')
-            : selectedNode?.title || t('navigation.bookmarks')
+            : isTopSitesView
+              ? t('topSites.title')
+              : selectedNode?.title || t('navigation.bookmarks')
   return (
     <div
       className={`app-shell${isSidebarExpanded ? ' is-sidebar-expanded' : ''}`}
@@ -296,7 +310,11 @@ function Home() {
             onActivateTab={activateTab}
           >
             <div className="view-content">
-              {isTabView ? (
+              {isTopSitesView ? (
+                topSitesAccess.enabled ? (
+                  <TopSitesContents />
+                ) : null
+              ) : isTabView ? (
                 <OpenTabsContents
                   bookmarkedUrlKeys={bookmarkedUrlKeys}
                   canCapture={isChromeSource && areTabsFromChrome}

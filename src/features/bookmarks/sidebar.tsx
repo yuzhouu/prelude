@@ -4,6 +4,7 @@ import {
   CalendarDays,
   ChevronRight,
   Clock3,
+  Compass,
   Folder,
   Info,
   PanelLeftClose,
@@ -21,6 +22,7 @@ import {
 import { SearchTrigger } from '../search/search-trigger'
 import { SettingsDialog } from '../settings/settings-dialog'
 import { ThemeToggle } from '../theme/theme-toggle'
+import { useTopSitesAccess } from '../top-sites/use-top-sites-access'
 import { countBookmarks, isFolder } from './model'
 import type { BookmarkNode } from './model'
 
@@ -183,6 +185,7 @@ export function Sidebar({
   onToggle,
 }: SidebarProps) {
   const { t } = useTranslation()
+  const { enabled: topSitesEnabled } = useTopSitesAccess()
   const syncSummary = getBookmarkSyncSummary(roots, t)
 
   return (
@@ -304,6 +307,16 @@ export function Sidebar({
             <span>{t('navigation.currentTabs')}</span>
             <span className="utility-count">{tabCount}</span>
           </button>
+          {topSitesEnabled ? (
+            <button
+              className={`utility-row${selectedId === 'top-sites' ? ' is-selected' : ''}`}
+              type="button"
+              onClick={() => onSelect('top-sites')}
+            >
+              <Compass />
+              <span>{t('topSites.title')}</span>
+            </button>
+          ) : null}
           <button
             className={`utility-row${selectedId === 'recent' ? ' is-selected' : ''}`}
             type="button"

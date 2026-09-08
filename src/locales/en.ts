@@ -34,12 +34,21 @@ export const en = {
     expandSidebar: 'Expand sidebar',
   },
   topSites: {
+    loading: 'Loading frequently visited sites…',
+    empty: 'No frequently visited sites yet',
+    listDescription: 'Provided and ordered by Chrome.',
+    accessError:
+      'Could not update the setting or permission. Please try again.',
+    denied: 'Permission was not granted. Frequently visited sites remain off.',
+    unavailable: 'Use the Chrome extension to enable frequently visited sites.',
+    description:
+      'Show frequently visited sites in the sidebar and search. Permission is needed the first time you enable this.',
     title: 'Frequently visited',
     hide: 'Hide “{{title}}”',
     restore: 'Restore hidden sites ({{count}})',
     saveError: 'Could not save your hidden-site preference. Please try again.',
     privacy:
-      'Reads frequently visited site titles and URLs from Chrome for local search. Only hidden URLs are saved; nothing is uploaded.',
+      'Only after you enable and authorize this feature, reads site titles and URLs from Chrome for the sidebar and local search. The toggle and hidden URLs are saved locally; nothing is uploaded.',
     error: 'Could not load frequently visited sites.',
     retry: 'Retry',
   },

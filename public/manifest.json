@@ -19,9 +19,9 @@
     "storage",
     "tabGroups",
     "tabs",
-    "topSites",
     "webNavigation"
   ],
+  "optional_permissions": ["topSites"],
   "action": {
     "default_icon": {
       "16": "icons/prelude-16.png",

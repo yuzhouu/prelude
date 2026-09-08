@@ -2,13 +2,18 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { getTopSites } from './chrome-top-sites'
 import type { TopSite } from './chrome-top-sites'
+import { useTopSitesAccess } from './use-top-sites-access'
 
 interface TopSitesState {
   status: 'idle' | 'loading' | 'unavailable' | 'error' | 'ready'
   sites: Array<TopSite>
 }
 
+const EMPTY_STATE: TopSitesState = { status: 'idle', sites: [] }
+
 export function useTopSites(enabled: boolean) {
+  const access = useTopSitesAccess()
+  const shouldLoad = enabled && access.enabled
   const [state, setState] = useState<TopSitesState>({
     status: 'idle',
     sites: [],
@@ -17,7 +22,10 @@ export function useTopSites(enabled: boolean) {
   const refresh = useCallback(() => setRevision((value) => value + 1), [])
 
   useEffect(() => {
-    if (!enabled) return
+    if (!shouldLoad) {
+      setState(EMPTY_STATE)
+      return
+    }
     let active = true
     let requestId = 0
 
@@ -50,7 +58,7 @@ export function useTopSites(enabled: boolean) {
       window.removeEventListener('focus', onVisible)
       document.removeEventListener('visibilitychange', onVisible)
     }
-  }, [enabled, revision])
+  }, [shouldLoad, revision])
 
-  return { state, refresh }
+  return { state: shouldLoad ? state : EMPTY_STATE, refresh, access }
 }

@@ -621,6 +621,76 @@ summary:focus-visible {
   gap: 12px;
 }
 
+.settings-top-sites-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.settings-switch {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  width: 38px;
+  height: 23px;
+  padding: 3px;
+  border: 0;
+  border-radius: 99px;
+  background: var(--line-input);
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.settings-switch > span {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px #0002;
+  transition: transform 120ms ease;
+}
+
+.settings-switch[aria-checked='true'] {
+  background: var(--accent);
+}
+
+.settings-switch[aria-checked='true'] > span {
+  transform: translateX(15px);
+}
+
+.settings-switch:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.settings-switch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.settings-top-sites-error {
+  margin: 10px 0 0 48px;
+  color: var(--danger);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.top-sites-toolbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 0 8px 16px;
+}
+
+.top-sites-toolbar p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
 .settings-section-icon {
   display: grid;
   flex: 0 0 auto;

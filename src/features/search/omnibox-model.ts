@@ -9,6 +9,7 @@ import { normalizeCapturedUrl } from '../capture/model.ts'
 
 const BOOKMARK_RESULT_LIMIT = 8
 const TAB_RESULT_LIMIT = 6
+const DEFAULT_RESULT_LIMIT = 7
 const DEFAULT_TOP_SITE_RESULT_LIMIT = 3
 const SUPPORTED_EXPLICIT_URL = /^(?:https?:\/\/|chrome:\/\/|file:\/\/)/i
 const LOCAL_URL =
@@ -107,7 +108,7 @@ export function buildOmniboxSuggestions({
       .filter(
         ({ node }) => !frequentUrls.has(normalizeCapturedUrl(node.url ?? '')),
       )
-      .slice(0, 4)
+      .slice(0, DEFAULT_RESULT_LIMIT - frequent.length)
       .map(({ node, path }): OmniboxSuggestion => ({
         id: `bookmark:${node.id}`,
         kind: 'bookmark',
