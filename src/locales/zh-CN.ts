@@ -32,6 +32,12 @@ export const zhCN = {
     expandSidebar: '展开侧边栏',
   },
   sync: {
+    previewLabel: '网页预览',
+    previewTitle:
+      '当前展示示例数据。加载为 Chrome 扩展后，这里会显示真实书签的同步范围。',
+    explanation:
+      '同步由 Chrome 管理；“部分同步”表示同时存在账号书签和本地书签，不代表同步失败。',
+
     allBookmarksStatus: '全部书签同步状态：{{status}}',
     unknown: {
       label: '状态未知',
@@ -96,6 +102,8 @@ export const zhCN = {
       },
     },
     privacy: {
+      details: '查看数据使用详情',
+
       title: '数据与隐私',
       summary: '序幕只为管理书签、标签页与待读内容而处理必要的浏览器数据。',
       bookmarks: '读取并修改你主动管理的 Chrome 书签与文件夹。',
@@ -182,6 +190,13 @@ export const zhCN = {
     },
   },
   search: {
+    recentTitle: '最近添加的书签',
+    actionBookmark: '打开书签',
+    actionTab: '切换标签页',
+    actionSearch: '搜索网页',
+    actionNavigate: '访问网址',
+    enterAction: 'Enter · {{action}}',
+
     trigger: '搜索',
     triggerLabel: '搜索书签与标签页',
     dialogTitle: '搜索或输入网址',
@@ -295,6 +310,9 @@ export const zhCN = {
     },
   },
   defaultFolders: {
+    browseTabs: '先查看当前标签页',
+    benefit: '把常用、待读和值得收藏的页面分开，之后可以直接从“今日”访问。',
+
     names: {
       container: '序幕',
       pinned: '置顶',

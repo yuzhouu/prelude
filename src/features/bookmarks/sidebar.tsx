@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Clock3,
   Folder,
+  Info,
   PanelLeftClose,
   PanelsTopLeft,
   X,
@@ -149,6 +150,7 @@ function FolderTreeRow({
 }
 
 interface SidebarProps {
+  isChromeSource: boolean
   roots: Array<BookmarkNode>
   selectedId: string
   expandedIds: Set<string>
@@ -165,6 +167,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({
+  isChromeSource,
   roots,
   selectedId,
   expandedIds,
@@ -200,25 +203,53 @@ export function Sidebar({
             </span>
             <div className="app-brand-copy">
               <strong className="app-name">{t('app.name')}</strong>
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <span
-                      className={`bookmark-sync-summary ${syncSummary.className}`}
-                      aria-label={t('sync.allBookmarksStatus', {
-                        status: syncSummary.label,
-                      })}
-                      tabIndex={0}
-                    >
-                      <span className="bookmark-sync-dot" aria-hidden="true" />
-                      {syncSummary.label}
-                    </span>
-                  }
-                />
-                <TooltipContent side="bottom">
-                  {syncSummary.title}
-                </TooltipContent>
-              </Tooltip>
+              <details className="bookmark-sync-details">
+                <summary
+                  className={`bookmark-sync-summary ${isChromeSource ? syncSummary.className : 'is-unknown'}`}
+                >
+                  <span className="bookmark-sync-dot" aria-hidden="true" />
+                  {isChromeSource ? syncSummary.label : t('sync.previewLabel')}
+                  <Info aria-hidden="true" />
+                </summary>
+                <div className="bookmark-sync-explanation">
+                  <strong>
+                    {isChromeSource
+                      ? syncSummary.label
+                      : t('sync.previewLabel')}
+                  </strong>
+                  <p>
+                    {isChromeSource
+                      ? syncSummary.title
+                      : t('sync.previewTitle')}
+                  </p>
+                  {isChromeSource ? (
+                    <>
+                      <ul>
+                        {roots
+                          .filter(
+                            (node) =>
+                              isFolder(node) && node.folderType !== undefined,
+                          )
+                          .map((node) => (
+                            <li key={node.id}>
+                              <span>{node.title}</span>
+                              <span>
+                                {t(
+                                  node.syncing === undefined
+                                    ? 'sync.unknown.label'
+                                    : node.syncing
+                                      ? 'sync.synced.label'
+                                      : 'sync.local.label',
+                                )}
+                              </span>
+                            </li>
+                          ))}
+                      </ul>
+                      <p>{t('sync.explanation')}</p>
+                    </>
+                  ) : null}
+                </div>
+              </details>
             </div>
           </div>
           <div className="profile-actions">

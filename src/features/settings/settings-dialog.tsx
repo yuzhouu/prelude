@@ -99,24 +99,26 @@ export function SettingsDialog() {
                     <h2 id="settings-privacy-title">
                       {t('settings.privacy.title')}
                     </h2>
-                    <p>{t('settings.privacy.summary')}</p>
+                    <p>{t('settings.privacy.local')}</p>
                   </div>
                 </div>
-                <ul className="settings-privacy-points">
-                  <li>{t('settings.privacy.bookmarks')}</li>
-                  <li>{t('settings.privacy.tabs')}</li>
-                  <li>{t('settings.privacy.local')}</li>
-                  <li>{t('settings.privacy.search')}</li>
-                </ul>
-                <a
-                  className="settings-text-link"
-                  href="/privacy.html"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {t('settings.privacy.action')}
-                  <ExternalLink aria-hidden="true" />
-                </a>
+                <details className="settings-privacy-details">
+                  <summary>{t('settings.privacy.details')}</summary>
+                  <ul className="settings-privacy-points">
+                    <li>{t('settings.privacy.bookmarks')}</li>
+                    <li>{t('settings.privacy.tabs')}</li>
+                    <li>{t('settings.privacy.search')}</li>
+                  </ul>
+                  <a
+                    className="settings-text-link"
+                    href="/privacy.html"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {t('settings.privacy.action')}
+                    <ExternalLink aria-hidden="true" />
+                  </a>
+                </details>
               </section>
 
               <section

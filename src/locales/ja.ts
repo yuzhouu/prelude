@@ -34,6 +34,12 @@ export const ja = {
     expandSidebar: 'サイドバーを展開する',
   },
   sync: {
+    previewLabel: 'ウェブプレビュー',
+    previewTitle:
+      'サンプルデータを表示しています。Chrome 拡張機能では実際のブックマークの同期範囲を表示します。',
+    explanation:
+      '同期は Chrome が管理します。一部同期はアカウントとローカルのブックマークが混在している状態で、同期エラーではありません。',
+
     allBookmarksStatus: 'すべてのブックマークの同期状態：{{status}}',
     unknown: {
       label: '状態不明',
@@ -106,6 +112,8 @@ export const ja = {
       },
     },
     privacy: {
+      details: 'データの利用方法',
+
       title: 'データとプライバシー',
       summary:
         'Preludeは、ブックマーク、タブ、「後で読む」の管理に必要なブラウザデータだけを処理します。',
@@ -208,6 +216,13 @@ export const ja = {
     },
   },
   search: {
+    recentTitle: '最近追加したブックマーク',
+    actionBookmark: 'ブックマークを開く',
+    actionTab: 'タブに切り替え',
+    actionSearch: 'ウェブを検索',
+    actionNavigate: 'URLに移動',
+    enterAction: 'Enter · {{action}}',
+
     trigger: '検索',
     triggerLabel: 'ブックマークとタブを検索',
     dialogTitle: '検索またはアドレスを入力',
@@ -334,6 +349,10 @@ export const ja = {
     },
   },
   defaultFolders: {
+    browseTabs: '先に現在のタブを見る',
+    benefit:
+      'よく使うページ、後で読むページ、お気に入りを「今日」から開けます。',
+
     names: {
       container: 'Prelude',
       pinned: '固定',

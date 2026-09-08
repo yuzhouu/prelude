@@ -10,7 +10,7 @@ import type { OpenTab, OpenTabWindow } from '../tabs/model'
 import { searchWithDefaultProvider } from './chrome-search'
 import { buildOmniboxSuggestions } from './omnibox-model'
 import type { OmniboxSuggestion } from './omnibox-model'
-import { OmniboxResults } from './omnibox-results'
+import { getSuggestionActionKey, OmniboxResults } from './omnibox-results'
 
 export function BookmarkSearchDialog({
   bookmarks,
@@ -103,7 +103,7 @@ export function BookmarkSearchDialog({
   }
 
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!suggestions.length) return
+    if (event.nativeEvent.isComposing || !suggestions.length) return
 
     if (event.key === 'ArrowDown') {
       event.preventDefault()
@@ -164,7 +164,12 @@ export function BookmarkSearchDialog({
             </form>
 
             <div className="search-dialog-results" aria-live="polite">
-              {!trimmedQuery ? (
+              {!trimmedQuery && suggestions.length > 0 ? (
+                <p className="search-section-label">
+                  {t('search.recentTitle')}
+                </p>
+              ) : null}
+              {suggestions.length === 0 ? (
                 <div className="search-dialog-hint">
                   <span className="search-dialog-hint-icon">
                     <Search aria-hidden="true" />
@@ -184,7 +189,15 @@ export function BookmarkSearchDialog({
             </div>
 
             <footer className="search-dialog-footer">
-              <span>{t('search.sources')}</span>
+              <span className="search-enter-hint">
+                {suggestions[selectedIndex]
+                  ? t('search.enterAction', {
+                      action: t(
+                        getSuggestionActionKey(suggestions[selectedIndex].kind),
+                      ),
+                    })
+                  : t('search.sources')}
+              </span>
               <span>{t('search.keyboardHelp')}</span>
             </footer>
           </Dialog.Popup>

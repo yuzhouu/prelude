@@ -34,6 +34,12 @@ export const es = {
     expandSidebar: 'Expandir barra lateral',
   },
   sync: {
+    previewLabel: 'Vista previa web',
+    previewTitle:
+      'Esta vista usa datos de ejemplo. Carga la extensión de Chrome para ver el alcance de sincronización de tus marcadores.',
+    explanation:
+      'Chrome gestiona la sincronización. La sincronización parcial indica que coexisten marcadores de cuenta y locales, no un error.',
+
     allBookmarksStatus:
       'Estado de sincronización de los marcadores: {{status}}',
     unknown: {
@@ -106,6 +112,8 @@ export const es = {
       },
     },
     privacy: {
+      details: 'Cómo se usan tus datos',
+
       title: 'Datos y privacidad',
       summary:
         'Prelude solo trata los datos del navegador necesarios para gestionar marcadores, pestañas y Leer más tarde.',
@@ -210,6 +218,13 @@ export const es = {
     },
   },
   search: {
+    recentTitle: 'Marcadores añadidos recientemente',
+    actionBookmark: 'Abrir marcador',
+    actionTab: 'Cambiar a la pestaña',
+    actionSearch: 'Buscar en la web',
+    actionNavigate: 'Visitar URL',
+    enterAction: 'Enter · {{action}}',
+
     trigger: 'Buscar',
     triggerLabel: 'Buscar marcadores y pestañas',
     dialogTitle: 'Buscar o escribir una dirección',
@@ -339,6 +354,10 @@ export const es = {
     },
   },
   defaultFolders: {
+    browseTabs: 'Ver primero las pestañas actuales',
+    benefit:
+      'Accede a tus enlaces habituales, lecturas pendientes y favoritos desde Hoy.',
+
     names: {
       container: 'Prelude',
       pinned: 'Fijados',

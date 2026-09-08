@@ -994,6 +994,7 @@ function FolderSection({
       ref={sortableState?.setNodeRef}
       className={`bookmark-group${sortableState ? ' is-sortable' : ''}${sortableState?.isDragSource ? ' is-drag-source' : ''}`}
       data-folder-id={folder.id}
+      data-group-level={level}
       style={{ '--group-level': level } as React.CSSProperties}
       onClickCapture={sortableState?.onClickCapture}
       onPointerDownCapture={sortableState?.onPointerDownCapture}

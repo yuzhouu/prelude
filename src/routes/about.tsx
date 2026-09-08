@@ -52,7 +52,7 @@ function GitHubIcon() {
 function About() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { tree } = useBookmarkTree()
+  const { tree, isChromeSource } = useBookmarkTree()
   const { windows: openTabWindows } = useOpenTabs()
   const roots = useMemo(() => getVisibleRoots(tree), [tree])
   const bookmarks = useMemo(() => getBookmarkMatches(roots), [roots])
@@ -109,6 +109,7 @@ function About() {
     >
       <Sidebar
         roots={roots}
+        isChromeSource={isChromeSource}
         selectedId="about"
         expandedIds={expandedIds}
         totalCount={totalCount}

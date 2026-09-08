@@ -19,8 +19,10 @@ type CreationStatus = 'idle' | 'creating' | 'created' | 'error'
 
 export function DefaultFoldersSetup({
   isChromeSource,
+  onBrowseTabs,
 }: {
   isChromeSource: boolean
+  onBrowseTabs: () => void
 }) {
   const { t } = useTranslation()
   const [status, setStatus] = useState<CreationStatus>('idle')
@@ -62,39 +64,47 @@ export function DefaultFoldersSetup({
           )}
         </p>
 
-        <div
-          className="default-folders-preview"
-          aria-label={t('defaultFolders.previewLabel')}
-        >
-          <div className="default-folder-preview-row is-root">
-            <Folder />
-            <div>
-              <strong>{folderTitles.container}</strong>
-              <span>{t('defaultFolders.containerDescription')}</span>
+        {!isCreated ? (
+          <p className="default-folders-benefit">
+            {t('defaultFolders.benefit')}
+          </p>
+        ) : null}
+        <details className="default-folders-details">
+          <summary>{t('defaultFolders.previewLabel')}</summary>
+          <div
+            className="default-folders-preview"
+            aria-label={t('defaultFolders.previewLabel')}
+          >
+            <div className="default-folder-preview-row is-root">
+              <Folder />
+              <div>
+                <strong>{folderTitles.container}</strong>
+                <span>{t('defaultFolders.containerDescription')}</span>
+              </div>
+            </div>
+            <div className="default-folder-preview-row is-child">
+              <Pin />
+              <div>
+                <strong>{folderTitles.pinned}</strong>
+                <span>{t('defaultFolders.pinnedDescription')}</span>
+              </div>
+            </div>
+            <div className="default-folder-preview-row is-child">
+              <BookOpen />
+              <div>
+                <strong>{folderTitles.readLater}</strong>
+                <span>{t('defaultFolders.readLaterDescription')}</span>
+              </div>
+            </div>
+            <div className="default-folder-preview-row is-child">
+              <Star />
+              <div>
+                <strong>{folderTitles.favorites}</strong>
+                <span>{t('defaultFolders.favoritesDescription')}</span>
+              </div>
             </div>
           </div>
-          <div className="default-folder-preview-row is-child">
-            <Pin />
-            <div>
-              <strong>{folderTitles.pinned}</strong>
-              <span>{t('defaultFolders.pinnedDescription')}</span>
-            </div>
-          </div>
-          <div className="default-folder-preview-row is-child">
-            <BookOpen />
-            <div>
-              <strong>{folderTitles.readLater}</strong>
-              <span>{t('defaultFolders.readLaterDescription')}</span>
-            </div>
-          </div>
-          <div className="default-folder-preview-row is-child">
-            <Star />
-            <div>
-              <strong>{folderTitles.favorites}</strong>
-              <span>{t('defaultFolders.favoritesDescription')}</span>
-            </div>
-          </div>
-        </div>
+        </details>
 
         <div className="default-folders-actions" aria-live="polite">
           {isCreated ? (
@@ -123,6 +133,13 @@ export function DefaultFoldersSetup({
             </button>
           )}
 
+          <button
+            className="default-folders-browse-button"
+            type="button"
+            onClick={onBrowseTabs}
+          >
+            {t('defaultFolders.browseTabs')}
+          </button>
           {!isChromeSource && !isCreated ? (
             <p className="default-folders-note">
               {t('defaultFolders.extensionRequired')}

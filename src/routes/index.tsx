@@ -201,6 +201,7 @@ function Home() {
     >
       <Sidebar
         roots={roots}
+        isChromeSource={isChromeSource}
         selectedId={selectedId}
         expandedIds={expandedIds}
         totalCount={totalCount}
@@ -308,7 +309,22 @@ function Home() {
                     canCreate={isChromeSource}
                   />
                 ) : (
-                  <DefaultFoldersSetup isChromeSource={isChromeSource} />
+                  <>
+                    <DefaultFoldersSetup
+                      isChromeSource={isChromeSource}
+                      onBrowseTabs={() => selectView('tabs')}
+                    />
+                    <OpenTabsContents
+                      bookmarkedUrlKeys={bookmarkedUrlKeys}
+                      canCapture={isChromeSource && areTabsFromChrome}
+                      canClose={areTabsFromChrome}
+                      canMove={canMoveTabs}
+                      windows={openTabWindows}
+                      onActivate={activateTab}
+                      onClose={closeTab}
+                      onMove={moveTab}
+                    />
+                  </>
                 )
               ) : selectedId === 'all' ? (
                 <AllBookmarkContents roots={roots} canCreate={isChromeSource} />

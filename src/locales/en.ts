@@ -34,6 +34,12 @@ export const en = {
     expandSidebar: 'Expand sidebar',
   },
   sync: {
+    previewLabel: 'Web preview',
+    previewTitle:
+      'This preview uses sample data. Load the Chrome extension to see the sync scope of your bookmarks.',
+    explanation:
+      'Chrome manages sync. Partial sync means account and local bookmarks coexist; it does not indicate a sync failure.',
+
     allBookmarksStatus: 'All-bookmark sync status: {{status}}',
     unknown: {
       label: 'Status unknown',
@@ -102,6 +108,8 @@ export const en = {
       },
     },
     privacy: {
+      details: 'How your data is used',
+
       title: 'Data and privacy',
       summary:
         'Prelude handles only the browser data needed to manage bookmarks, tabs, and Read later.',
@@ -203,6 +211,13 @@ export const en = {
     },
   },
   search: {
+    recentTitle: 'Recently added bookmarks',
+    actionBookmark: 'Open bookmark',
+    actionTab: 'Switch to tab',
+    actionSearch: 'Search the web',
+    actionNavigate: 'Visit URL',
+    enterAction: 'Enter · {{action}}',
+
     trigger: 'Search',
     triggerLabel: 'Search bookmarks and tabs',
     dialogTitle: 'Search or enter an address',
@@ -326,6 +341,10 @@ export const en = {
     },
   },
   defaultFolders: {
+    browseTabs: 'Browse current tabs first',
+    benefit:
+      'Keep everyday links, reading for later, and favorites together in Today.',
+
     names: {
       container: 'Prelude',
       pinned: 'Pinned',

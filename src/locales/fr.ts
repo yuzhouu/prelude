@@ -34,6 +34,12 @@ export const fr = {
     expandSidebar: 'Développer la barre latérale',
   },
   sync: {
+    previewLabel: 'Aperçu Web',
+    previewTitle:
+      'Cet aperçu utilise des exemples. Chargez l’extension Chrome pour voir la portée de synchronisation de vos favoris.',
+    explanation:
+      'Chrome gère la synchronisation. Une synchronisation partielle signifie que des favoris locaux et de compte coexistent, sans indiquer une erreur.',
+
     allBookmarksStatus: 'État de synchronisation des favoris : {{status}}',
     unknown: {
       label: 'État inconnu',
@@ -106,6 +112,8 @@ export const fr = {
       },
     },
     privacy: {
+      details: 'Utilisation de vos données',
+
       title: 'Données et confidentialité',
       summary:
         'Prelude traite uniquement les données du navigateur nécessaires aux favoris, onglets et éléments À lire plus tard.',
@@ -209,6 +217,13 @@ export const fr = {
     },
   },
   search: {
+    recentTitle: 'Favoris récemment ajoutés',
+    actionBookmark: 'Ouvrir le favori',
+    actionTab: 'Afficher cet onglet',
+    actionSearch: 'Rechercher sur le Web',
+    actionNavigate: 'Ouvrir cette URL',
+    enterAction: 'Entrée · {{action}}',
+
     trigger: 'Rechercher',
     triggerLabel: 'Rechercher dans les favoris et les onglets',
     dialogTitle: 'Rechercher ou saisir une adresse',
@@ -337,6 +352,10 @@ export const fr = {
     },
   },
   defaultFolders: {
+    browseTabs: 'Voir les onglets actuels',
+    benefit:
+      'Retrouvez vos liens habituels, lectures à venir et favoris dans Aujourd’hui.',
+
     names: {
       container: 'Prelude',
       pinned: 'Épinglés',

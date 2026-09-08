@@ -27,6 +27,16 @@ function SuggestionIcon({ suggestion }: { suggestion: OmniboxSuggestion }) {
   )
 }
 
+export function getSuggestionActionKey(kind: OmniboxSuggestion['kind']) {
+  const keys = {
+    bookmark: 'search.actionBookmark',
+    tab: 'search.actionTab',
+    search: 'search.actionSearch',
+    navigate: 'search.actionNavigate',
+  } as const satisfies Record<OmniboxSuggestion['kind'], `search.${string}`>
+  return keys[kind]
+}
+
 function SuggestionTail({ suggestion }: { suggestion: OmniboxSuggestion }) {
   if (suggestion.kind === 'tab') return <PanelsTopLeft aria-hidden="true" />
   if (suggestion.kind === 'bookmark') return <ArrowUpRight aria-hidden="true" />
@@ -68,9 +78,10 @@ export function OmniboxResults({
         return (
           <button
             id={`${listboxId}-option-${index}`}
-            className={`search-result-row${isActive ? ' is-active' : ''}${index === 0 ? ' is-primary' : ''}`}
+            className={`search-result-row${isActive ? ' is-active' : ''}`}
             type="button"
             role="option"
+            tabIndex={-1}
             aria-selected={isActive}
             data-active={isActive}
             key={suggestion.id}
@@ -82,7 +93,10 @@ export function OmniboxResults({
               <strong>{suggestion.title}</strong>
               <span>{suggestion.description}</span>
             </span>
-            <SuggestionTail suggestion={suggestion} />
+            <span className="search-result-action">
+              <span>{t(getSuggestionActionKey(suggestion.kind))}</span>
+              <SuggestionTail suggestion={suggestion} />
+            </span>
           </button>
         )
       })}
