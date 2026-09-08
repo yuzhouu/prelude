@@ -52,6 +52,6 @@ Prelude's use of information received from Chrome APIs adheres to the Chrome Web
 
 ## 政策更新与联系 / Changes and contact
 
-如果数据处理方式发生变化，序幕会在扩展界面和商店页面中显著说明，并在此更新政策。问题或隐私请求可通过 [GitHub Issues](https://github.com/yuzhouu/supposed/issues) 提交。
+如果数据处理方式发生变化，序幕会在扩展界面和商店页面中显著说明，并在此更新政策。问题或隐私请求可通过 [GitHub Issues](https://github.com/yuzhouu/prelude/issues) 提交。
 
-If data practices change, Prelude will prominently disclose the change in the extension and its store listing and update this policy. Questions or privacy requests can be submitted through [GitHub Issues](https://github.com/yuzhouu/supposed/issues).
+If data practices change, Prelude will prominently disclose the change in the extension and its store listing and update this policy. Questions or privacy requests can be submitted through [GitHub Issues](https://github.com/yuzhouu/prelude/issues).

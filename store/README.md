@@ -10,9 +10,9 @@ The Chinese public title is **序幕 · 新标签页**. The brand remains **序�
 
 - Primary language: `zh_CN`
 - Primary category: `Productivity`
-- Homepage URL: `https://yuzhouu.github.io/supposed/`
-- Privacy policy URL: `https://yuzhouu.github.io/supposed/privacy.html`
-- Support URL: `https://yuzhouu.github.io/supposed/support.html`
+- Homepage URL: `https://yuzhouu.github.io/prelude/`
+- Privacy policy URL: `https://yuzhouu.github.io/prelude/privacy.html`
+- Support URL: `https://yuzhouu.github.io/prelude/support.html`
 - Store icon: `../public/icons/prelude-128.png`
 - Privacy declarations: `./privacy-practices.md`
 - Localized descriptions: `./listings/`

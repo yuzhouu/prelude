@@ -28,4 +28,4 @@ Choose a light, dark, or system theme. The sidebar adapts to smaller windows, an
 
 No account to create, no ads, and no analytics. Prelude processes bookmark and tab data locally. Your bookmarks remain ordinary Chrome bookmarks and follow your own Chrome Sync settings. Web searches you submit are passed by Chrome to your configured default search provider.
 
-[中文产品介绍](./README.zh-CN.md) · [Privacy policy](./PRIVACY.md) · [Support and feedback](https://github.com/yuzhouu/supposed/issues)
+[中文产品介绍](./README.zh-CN.md) · [Privacy policy](./PRIVACY.md) · [Support and feedback](https://github.com/yuzhouu/prelude/issues)

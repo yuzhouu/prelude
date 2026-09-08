@@ -28,4 +28,4 @@
 
 无需注册，没有广告和分析工具。序幕在本机处理书签与标签页数据；书签仍保存在 Chrome 中，并遵循你自己的 Chrome 同步设置。你主动提交的网页搜索会由 Chrome 交给当前配置的默认搜索引擎。
 
-[隐私政策](./PRIVACY.md) · [支持与反馈](https://github.com/yuzhouu/supposed/issues)
+[隐私政策](./PRIVACY.md) · [支持与反馈](https://github.com/yuzhouu/prelude/issues)

@@ -81,7 +81,7 @@ Certify all of the following:
 
 ## Privacy policy
 
-`https://yuzhouu.github.io/supposed/privacy.html`
+`https://yuzhouu.github.io/prelude/privacy.html`
 
 ## Prominent disclosure
 

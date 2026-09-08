@@ -195,7 +195,7 @@ function About() {
               <p>{t('about.privacyStatement')}</p>
               <nav className="about-links" aria-label={t('about.links.label')}>
                 <a
-                  href="https://github.com/yuzhouu/supposed"
+                  href="https://github.com/yuzhouu/prelude"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -204,7 +204,7 @@ function About() {
                   <ExternalLink className="about-link-external" />
                 </a>
                 <a
-                  href="https://github.com/yuzhouu/supposed/issues"
+                  href="https://github.com/yuzhouu/prelude/issues"
                   target="_blank"
                   rel="noreferrer"
                 >
