@@ -33,6 +33,16 @@ export const ja = {
     collapseSidebar: 'サイドバーを折りたたむ',
     expandSidebar: 'サイドバーを展開する',
   },
+  topSites: {
+    title: 'よくアクセスするサイト',
+    hide: '「{{title}}」を非表示',
+    restore: '非表示の項目を復元（{{count}}）',
+    saveError: '非表示の設定を保存できませんでした。再試行してください。',
+    privacy:
+      'Chrome が提供するサイトのタイトルと URL を端末内で検索します。非表示にした URL のみ保存し、アップロードしません。',
+    error: 'サイトを読み込めませんでした。',
+    retry: '再試行',
+  },
   sync: {
     previewLabel: 'ウェブプレビュー',
     previewTitle:
@@ -224,14 +234,14 @@ export const ja = {
     enterAction: 'Enter · {{action}}',
 
     trigger: '検索',
-    triggerLabel: 'ブックマークとタブを検索',
+    triggerLabel: 'ブックマーク、タブ、よくアクセスするサイトを検索',
     dialogTitle: '検索またはアドレスを入力',
     close: '検索を閉じる',
     suggestions: '検索候補',
     hintTitle: 'ブックマーク、タブ、ウェブを検索',
     hintDescription:
       'アドレスを入力すると直接開き、それ以外は既定の検索エンジンで検索します。',
-    sources: 'ブックマーク、タブ、Chromeの既定の検索エンジン',
+    sources: 'ブックマーク、タブ、よくアクセスするサイト、既定の検索エンジン',
     keyboardHelp: '↑↓ 選択 · Enter 開く · Esc 閉じる',
     visitUrl: 'アドレスを開く',
     searchFor: '「{{query}}」を検索',

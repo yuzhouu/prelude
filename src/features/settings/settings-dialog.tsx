@@ -107,6 +107,7 @@ export function SettingsDialog() {
                   <ul className="settings-privacy-points">
                     <li>{t('settings.privacy.bookmarks')}</li>
                     <li>{t('settings.privacy.tabs')}</li>
+                    <li>{t('topSites.privacy')}</li>
                     <li>{t('settings.privacy.search')}</li>
                   </ul>
                   <a

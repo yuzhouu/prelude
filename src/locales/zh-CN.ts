@@ -31,6 +31,16 @@ export const zhCN = {
     collapseSidebar: '收起侧边栏',
     expandSidebar: '展开侧边栏',
   },
+  topSites: {
+    title: '常访问',
+    hide: '隐藏“{{title}}”',
+    restore: '恢复隐藏项（{{count}}）',
+    saveError: '隐藏偏好未能保存，请重试。',
+    privacy:
+      '读取 Chrome 提供的常访问网站标题和网址，用于本机搜索；仅保存你隐藏的网址，不上传。',
+    error: '常访问网站加载失败。',
+    retry: '重试',
+  },
   sync: {
     previewLabel: '网页预览',
     previewTitle:
@@ -198,13 +208,13 @@ export const zhCN = {
     enterAction: 'Enter · {{action}}',
 
     trigger: '搜索',
-    triggerLabel: '搜索书签与标签页',
+    triggerLabel: '搜索书签、标签页与常访问网站',
     dialogTitle: '搜索或输入网址',
     close: '关闭搜索',
     suggestions: '搜索建议',
     hintTitle: '搜索书签、标签页或网页',
     hintDescription: '输入网址直接访问，其他内容使用默认搜索引擎搜索。',
-    sources: '书签、标签页与 Chrome 默认搜索引擎',
+    sources: '书签、标签页、常访问网站与默认搜索引擎',
     keyboardHelp: '↑↓ 选择 · Enter 打开 · Esc 关闭',
     visitUrl: '访问网址',
     searchFor: '搜索“{{query}}”',

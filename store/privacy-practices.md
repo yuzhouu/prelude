@@ -18,6 +18,10 @@ English reference: Manage Chrome bookmarks and open tabs in a calm new tab, and 
 
 读取打开标签页的标题、网址、窗口、固定、活动与音频状态，以在新标签页中展示、搜索、切换和收集标签页；按用户操作关闭标签页、调整顺序或移到其他窗口。收集时，只有用户启用“保存后关闭”且保存成功，才会自动关闭对应标签页。
 
+### `topSites`
+
+读取 Chrome 提供的常访问网站标题和网址，整合进现有搜索框；未输入关键词时按 Chrome 返回的顺序显示，输入后按相关性匹配。列表只在本机内存中使用，隐藏的网址作为本地偏好保存并可在搜索内恢复，不上传；不读取完整浏览历史，不自行统计访问次数。
+
 ### `tabGroups`
 
 读取当前标签组的标题和成员关系，以便用户主动把整个标签组按原顺序保存为书签文件夹。
@@ -36,7 +40,7 @@ English reference: Manage Chrome bookmarks and open tabs in a calm new tab, and 
 
 ### `favicon`
 
-通过 Chrome Extension Favicon API 为用户的书签和打开标签页显示对应站点图标。
+通过 Chrome Extension Favicon API 为用户的书签、打开标签页和常访问网站显示对应站点图标。
 
 ### `contextMenus`
 
@@ -62,7 +66,7 @@ All executable JavaScript and CSS is bundled in the uploaded Manifest V3 package
 - Authentication information: **No**
 - Personal communications: **No**
 - Location: **No**
-- Web history: **Yes** — bookmark URLs and titles, open-tab URLs and titles, and short-lived top-level navigation URLs are processed locally for the disclosed features.
+- Web history: **Yes** — bookmark URLs and titles, open-tab URLs and titles, frequently visited site URLs and titles provided by Chrome, and short-lived top-level navigation URLs are processed locally for the disclosed features.
 - User activity: **No** — no clickstream, keystroke, mouse, scroll, or interaction analytics are collected.
 - Website content: **No** — Prelude does not read page bodies, images, forms, cookies, or other page content. Page titles and URLs are disclosed under Web history.
 
@@ -83,6 +87,6 @@ Certify all of the following:
 
 Use this sentence near the beginning of every store description:
 
-> 序幕会读取 Chrome 书签及打开标签页的标题和网址，用于展示、搜索、管理与收集；书签与标签页数据仅在本机处理，不上传、不出售，也不用于广告。只有用户主动提交的网页搜索会由 Chrome 交给当前配置的默认搜索引擎。
+> 序幕会读取 Chrome 书签、打开标签页及常访问网站的标题和网址，用于展示、打开、搜索、管理与收集；这些数据仅在本机处理，不上传、不出售，也不用于广告。只有用户主动提交的网页搜索会由 Chrome 交给当前配置的默认搜索引擎。
 
 The same disclosure appears inside Settings → Data and privacy before the link to the full policy.

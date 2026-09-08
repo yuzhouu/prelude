@@ -46,10 +46,15 @@ interface HomeSearch {
 export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>): HomeSearch => ({
     openSearch:
-      search.openSearch === true || search.openSearch === 'true'
+      search.view === 'top-sites' ||
+      search.openSearch === true ||
+      search.openSearch === 'true'
         ? true
         : undefined,
-    view: typeof search.view === 'string' ? search.view : undefined,
+    view:
+      typeof search.view === 'string' && search.view !== 'top-sites'
+        ? search.view
+        : undefined,
   }),
   component: Home,
 })

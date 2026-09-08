@@ -33,6 +33,16 @@ export const es = {
     collapseSidebar: 'Contraer barra lateral',
     expandSidebar: 'Expandir barra lateral',
   },
+  topSites: {
+    title: 'Sitios frecuentes',
+    hide: 'Ocultar «{{title}}»',
+    restore: 'Restaurar sitios ocultos ({{count}})',
+    saveError: 'No se pudo guardar la preferencia. Inténtalo de nuevo.',
+    privacy:
+      'Lee títulos y URL de sitios frecuentes de Chrome para búsquedas locales. Solo guarda las URL ocultas y no sube datos.',
+    error: 'No se pudieron cargar los sitios frecuentes.',
+    retry: 'Reintentar',
+  },
   sync: {
     previewLabel: 'Vista previa web',
     previewTitle:
@@ -226,7 +236,7 @@ export const es = {
     enterAction: 'Enter · {{action}}',
 
     trigger: 'Buscar',
-    triggerLabel: 'Buscar marcadores y pestañas',
+    triggerLabel: 'Buscar marcadores, pestañas y sitios frecuentes',
     dialogTitle: 'Buscar o escribir una dirección',
     close: 'Cerrar búsqueda',
     suggestions: 'Sugerencias de búsqueda',

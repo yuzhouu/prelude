@@ -1,12 +1,27 @@
 import { Dialog } from '@base-ui/react/dialog'
 import { Search, X } from 'lucide-react'
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { BookmarkMatch } from '../bookmarks/model'
 import { isKeyboardShortcutMatch } from '../shortcuts/shortcut-preferences'
 import { useShortcutPreferences } from '../shortcuts/use-shortcut-preferences'
 import type { OpenTab, OpenTabWindow } from '../tabs/model'
+import { useTopSites } from '../top-sites/use-top-sites'
+import {
+  getHiddenTopSitesSnapshot,
+  hideTopSite,
+  parseHiddenTopSites,
+  restoreHiddenTopSites,
+  subscribeToHiddenTopSites,
+} from '../top-sites/top-sites-preferences'
 import { searchWithDefaultProvider } from './chrome-search'
 import { buildOmniboxSuggestions } from './omnibox-model'
 import type { OmniboxSuggestion } from './omnibox-model'
@@ -29,6 +44,16 @@ export function BookmarkSearchDialog({
   const shortcutPreferences = useShortcutPreferences()
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
+  const [preferenceError, setPreferenceError] = useState(false)
+  const { state: topSitesState, refresh: refreshTopSites } = useTopSites(isOpen)
+  const hiddenSnapshot = useSyncExternalStore(
+    subscribeToHiddenTopSites,
+    getHiddenTopSitesSnapshot,
+  )
+  const hiddenTopSiteUrls = useMemo(
+    () => parseHiddenTopSites(hiddenSnapshot),
+    [hiddenSnapshot],
+  )
   const inputRef = useRef<HTMLInputElement>(null)
   const listboxId = useId()
   const trimmedQuery = query.trim()
@@ -38,9 +63,18 @@ export function BookmarkSearchDialog({
         bookmarks,
         openTabWindows,
         rawQuery: query,
+        topSites: topSitesState.sites,
+        hiddenTopSiteUrls,
         t,
       }),
-    [bookmarks, openTabWindows, query, t],
+    [
+      bookmarks,
+      openTabWindows,
+      query,
+      t,
+      topSitesState.sites,
+      hiddenTopSiteUrls,
+    ],
   )
   const selectedIndex = Math.min(
     activeIndex,
@@ -102,6 +136,18 @@ export function BookmarkSearchDialog({
     executeSuggestion(suggestions[selectedIndex])
   }
 
+  const updateHiddenSites = (url?: string) => {
+    inputRef.current?.focus()
+    try {
+      if (url) hideTopSite(url)
+      else restoreHiddenTopSites()
+      setPreferenceError(false)
+      setActiveIndex(0)
+    } catch {
+      setPreferenceError(true)
+    }
+  }
+
   const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.nativeEvent.isComposing || !suggestions.length) return
 
@@ -144,6 +190,7 @@ export function BookmarkSearchDialog({
                 placeholder={t('search.dialogTitle')}
                 aria-label={t('search.dialogTitle')}
                 aria-autocomplete="list"
+                aria-haspopup="grid"
                 aria-controls={suggestions.length ? listboxId : undefined}
                 aria-expanded={suggestions.length > 0}
                 aria-activedescendant={activeOptionId}
@@ -164,11 +211,6 @@ export function BookmarkSearchDialog({
             </form>
 
             <div className="search-dialog-results" aria-live="polite">
-              {!trimmedQuery && suggestions.length > 0 ? (
-                <p className="search-section-label">
-                  {t('search.recentTitle')}
-                </p>
-              ) : null}
               {suggestions.length === 0 ? (
                 <div className="search-dialog-hint">
                   <span className="search-dialog-hint-icon">
@@ -184,9 +226,35 @@ export function BookmarkSearchDialog({
                   suggestions={suggestions}
                   onActiveIndexChange={setActiveIndex}
                   onSelect={executeSuggestion}
+                  onHideTopSite={updateHiddenSites}
+                  showSections={!trimmedQuery}
                 />
               )}
             </div>
+
+            {preferenceError ? (
+              <p className="search-top-sites-notice" role="alert">
+                {t('topSites.saveError')}
+              </p>
+            ) : null}
+            {topSitesState.status === 'error' ||
+            hiddenTopSiteUrls.length > 0 ? (
+              <div className="search-top-sites-tools">
+                {topSitesState.status === 'error' ? (
+                  <span role="status">
+                    {t('topSites.error')}
+                    <button type="button" onClick={refreshTopSites}>
+                      {t('topSites.retry')}
+                    </button>
+                  </span>
+                ) : null}
+                {hiddenTopSiteUrls.length > 0 ? (
+                  <button type="button" onClick={() => updateHiddenSites()}>
+                    {t('topSites.restore', { count: hiddenTopSiteUrls.length })}
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
 
             <footer className="search-dialog-footer">
               <span className="search-enter-hint">

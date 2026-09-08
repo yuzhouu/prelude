@@ -4,9 +4,12 @@ import { getRecentBookmarks, searchBookmarks } from '../bookmarks/model.ts'
 import type { BookmarkMatch } from '../bookmarks/model.ts'
 import { filterOpenTabs } from '../tabs/model.ts'
 import type { OpenTab, OpenTabWindow } from '../tabs/model.ts'
+import type { TopSite } from '../top-sites/chrome-top-sites.ts'
+import { normalizeCapturedUrl } from '../capture/model.ts'
 
 const BOOKMARK_RESULT_LIMIT = 8
 const TAB_RESULT_LIMIT = 6
+const DEFAULT_TOP_SITE_RESULT_LIMIT = 3
 const SUPPORTED_EXPLICIT_URL = /^(?:https?:\/\/|chrome:\/\/|file:\/\/)/i
 const LOCAL_URL =
   /^(?:localhost|\d{1,3}(?:\.\d{1,3}){3})(?::\d+)?(?:[/?#].*)?$/i
@@ -16,7 +19,7 @@ const DOMAIN_URL =
 export type OmniboxSuggestion =
   | {
       id: string
-      kind: 'navigate' | 'bookmark'
+      kind: 'navigate' | 'bookmark' | 'top-site'
       title: string
       description: string
       url: string
@@ -65,16 +68,45 @@ export function buildOmniboxSuggestions({
   bookmarks,
   openTabWindows,
   rawQuery,
+  topSites = [],
+  hiddenTopSiteUrls = [],
   t,
 }: {
   bookmarks: Array<BookmarkMatch>
   openTabWindows: Array<OpenTabWindow>
   rawQuery: string
+  topSites?: Array<TopSite>
+  hiddenTopSiteUrls?: Array<string>
   t: TFunction<'translation'>
 }) {
   const query = rawQuery.trim()
+  const hidden = new Set(hiddenTopSiteUrls.map(normalizeCapturedUrl))
+  const seenTopSites = new Set<string>()
+  const topSiteSuggestions = topSites
+    .filter((site) => {
+      const key = normalizeCapturedUrl(site.url)
+      if (hidden.has(key) || seenTopSites.has(key)) return false
+      seenTopSites.add(key)
+      return `${site.title} ${site.url}`
+        .toLocaleLowerCase()
+        .includes(query.toLocaleLowerCase())
+    })
+    .map((site) => ({
+      id: `top-site:${site.url}`,
+      kind: 'top-site' as const,
+      title: site.title,
+      description: site.hostname,
+      url: site.url,
+    }))
   if (!query) {
-    return getRecentBookmarks(bookmarks)
+    const frequent = topSiteSuggestions.slice(0, DEFAULT_TOP_SITE_RESULT_LIMIT)
+    const frequentUrls = new Set(
+      frequent.map((site) => normalizeCapturedUrl(site.url)),
+    )
+    const recent = getRecentBookmarks(bookmarks)
+      .filter(
+        ({ node }) => !frequentUrls.has(normalizeCapturedUrl(node.url ?? '')),
+      )
       .slice(0, 4)
       .map(({ node, path }): OmniboxSuggestion => ({
         id: `bookmark:${node.id}`,
@@ -83,6 +115,7 @@ export function buildOmniboxSuggestions({
         description: path.join(' / ') || getHostname(node.url ?? ''),
         url: node.url ?? '',
       }))
+    return [...frequent, ...recent]
   }
 
   const navigableUrl = getNavigableUrl(query)
@@ -135,7 +168,7 @@ export function buildOmniboxSuggestions({
     const url =
       suggestion.kind === 'tab'
         ? suggestion.tab.url
-        : suggestion.kind === 'bookmark'
+        : 'url' in suggestion
           ? suggestion.url
           : ''
     const host = getHostname(url).toLocaleLowerCase()
@@ -148,11 +181,27 @@ export function buildOmniboxSuggestions({
     return 1
   }
   // Rank before limiting so an exact match later in the tree is not discarded.
-  const localSuggestions = [...bookmarkSuggestions, ...tabSuggestions]
+  const existingUrls = new Set([
+    ...bookmarkSuggestions.flatMap((item) =>
+      'url' in item ? [normalizeCapturedUrl(item.url)] : [],
+    ),
+    ...tabSuggestions.flatMap((item) =>
+      item.kind === 'tab' ? [normalizeCapturedUrl(item.tab.url)] : [],
+    ),
+  ])
+  const uniqueTopSites = topSiteSuggestions.filter(
+    (item) => !existingUrls.has(normalizeCapturedUrl(item.url)),
+  )
+  const sourcePriority = (item: OmniboxSuggestion) =>
+    item.kind === 'tab' ? 2 : item.kind === 'bookmark' ? 1 : 0
+  const localSuggestions = [
+    ...bookmarkSuggestions,
+    ...tabSuggestions,
+    ...uniqueTopSites,
+  ]
     .sort(
       (a, b) =>
-        matchScore(b) - matchScore(a) ||
-        Number(b.kind === 'tab') - Number(a.kind === 'tab'),
+        matchScore(b) - matchScore(a) || sourcePriority(b) - sourcePriority(a),
     )
     .slice(0, BOOKMARK_RESULT_LIMIT + TAB_RESULT_LIMIT)
 

@@ -19,6 +19,7 @@
     "storage",
     "tabGroups",
     "tabs",
+    "topSites",
     "webNavigation"
   ],
   "action": {

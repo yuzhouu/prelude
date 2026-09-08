@@ -33,6 +33,16 @@ export const en = {
     collapseSidebar: 'Collapse sidebar',
     expandSidebar: 'Expand sidebar',
   },
+  topSites: {
+    title: 'Frequently visited',
+    hide: 'Hide “{{title}}”',
+    restore: 'Restore hidden sites ({{count}})',
+    saveError: 'Could not save your hidden-site preference. Please try again.',
+    privacy:
+      'Reads frequently visited site titles and URLs from Chrome for local search. Only hidden URLs are saved; nothing is uploaded.',
+    error: 'Could not load frequently visited sites.',
+    retry: 'Retry',
+  },
   sync: {
     previewLabel: 'Web preview',
     previewTitle:
@@ -219,14 +229,14 @@ export const en = {
     enterAction: 'Enter · {{action}}',
 
     trigger: 'Search',
-    triggerLabel: 'Search bookmarks and tabs',
+    triggerLabel: 'Search bookmarks, tabs, and frequently visited sites',
     dialogTitle: 'Search or enter an address',
     close: 'Close search',
     suggestions: 'Search suggestions',
     hintTitle: 'Search bookmarks, tabs, or the web',
     hintDescription:
       'Enter an address to visit it directly, or search everything else with your default search engine.',
-    sources: 'Bookmarks, tabs, and the Chrome default search engine',
+    sources: 'Bookmarks, tabs, frequent sites, and your default search engine',
     keyboardHelp: '↑↓ Select · Enter Open · Esc Close',
     visitUrl: 'Visit address',
     searchFor: 'Search for “{{query}}”',

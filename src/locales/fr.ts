@@ -33,6 +33,16 @@ export const fr = {
     collapseSidebar: 'Réduire la barre latérale',
     expandSidebar: 'Développer la barre latérale',
   },
+  topSites: {
+    title: 'Sites fréquents',
+    hide: 'Masquer « {{title}} »',
+    restore: 'Restaurer les sites masqués ({{count}})',
+    saveError: 'Impossible d’enregistrer la préférence. Réessayez.',
+    privacy:
+      'Lit les titres et URL des sites fréquents de Chrome pour la recherche locale. Seules les URL masquées sont enregistrées, sans envoi de données.',
+    error: 'Impossible de charger les sites fréquents.',
+    retry: 'Réessayer',
+  },
   sync: {
     previewLabel: 'Aperçu Web',
     previewTitle:
@@ -225,14 +235,15 @@ export const fr = {
     enterAction: 'Entrée · {{action}}',
 
     trigger: 'Rechercher',
-    triggerLabel: 'Rechercher dans les favoris et les onglets',
+    triggerLabel: 'Rechercher des favoris, des onglets et des sites fréquents',
     dialogTitle: 'Rechercher ou saisir une adresse',
     close: 'Fermer la recherche',
     suggestions: 'Suggestions de recherche',
     hintTitle: 'Recherchez dans vos favoris, vos onglets ou sur le Web',
     hintDescription:
       'Saisissez une adresse pour y accéder directement ; le reste sera recherché avec votre moteur par défaut.',
-    sources: 'Favoris, onglets et moteur de recherche par défaut de Chrome',
+    sources:
+      'Favoris, onglets, sites fréquents et moteur de recherche par défaut',
     keyboardHelp: '↑↓ Choisir · Entrée Ouvrir · Échap Fermer',
     visitUrl: 'Accéder à l’adresse',
     searchFor: 'Rechercher « {{query}} »',
