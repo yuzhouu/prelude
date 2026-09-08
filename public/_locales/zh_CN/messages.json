@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "序幕 · Prelude",
+    "message": "序幕 · 新标签页",
     "description": "扩展名称"
   },
   "extensionDescription": {
-    "message": "把 Chrome 书签、当前标签页与待读收集整合进安静的新标签页；书签与标签页数据仅在本地处理。",
+    "message": "一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。",
     "description": "扩展简介"
   },
   "captureActionTitle": {

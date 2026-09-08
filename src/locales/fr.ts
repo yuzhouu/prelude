@@ -4,7 +4,7 @@ export const fr = {
   app: {
     name: 'Prelude',
     description:
-      'Un nouvel onglet apaisé pour favoris, onglets ouverts et À lire plus tard. Les données des favoris et onglets restent locales.',
+      'Un nouvel onglet calme pour organiser les favoris Chrome, les onglets ouverts et À lire plus tard.',
   },
   common: {
     cancel: 'Annuler',

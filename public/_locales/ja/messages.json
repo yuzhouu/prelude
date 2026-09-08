@@ -4,7 +4,7 @@
     "description": "拡張機能名"
   },
   "extensionDescription": {
-    "message": "Chromeのブックマーク、開いているタブ、あとで読む項目を静かな新しいタブで管理。ブックマークとタブのデータは端末内で処理します。",
+    "message": "Chromeのブックマーク、開いているタブ、あとで読む項目を整理するための静かな新しいタブです。",
     "description": "拡張機能の説明"
   },
   "captureActionTitle": {

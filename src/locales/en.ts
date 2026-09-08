@@ -4,7 +4,7 @@ export const en = {
   app: {
     name: 'Prelude',
     description:
-      'A calm new tab for Chrome bookmarks, open tabs, and Read later. Bookmark and tab data stays local.',
+      'A calm new tab for organizing Chrome bookmarks, open tabs, and Read later.',
   },
   common: {
     cancel: 'Cancel',

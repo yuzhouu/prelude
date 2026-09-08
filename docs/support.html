@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="序幕 · Prelude 支持" />
+    <meta
+      name="description"
+      content="序幕新标签页的使用帮助：书签、标签页、待读收集与反馈。"
+    />
+    <link rel="icon" href="./prelude.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./site.css" />
-    <title>支持 · 序幕 Prelude</title>
+    <title>使用帮助 · 序幕 · 新标签页</title>
   </head>
   <body>
     <main>
@@ -14,19 +18,49 @@
         <strong>序幕 · Prelude</strong>
       </a>
       <p class="eyebrow">Support</p>
-      <h1>需要帮助？</h1>
-      <p class="lede">
-        请在提交问题时说明 Chrome 版本、Prelude
-        版本、复现步骤和预期结果。不要附上私人书签、完整浏览记录或其他敏感数据。
-      </p>
+      <h1>让序幕用起来更顺手</h1>
+      <p class="lede">从书签整理到待读收集，这里是一些常见问题的说明。</p>
       <section>
-        <h2>常见检查</h2>
-        <ul>
-          <li>在 <code>chrome://extensions</code> 确认序幕已启用。</li>
-          <li>确认扩展仍拥有书签与标签页权限。</li>
-          <li>更新到最新版后重新打开新标签页。</li>
-          <li>书签由 Chrome 保存；序幕不会建立远程账号或备份。</li>
-        </ul>
+        <h2>日常使用</h2>
+        <h3>需要重新导入书签吗？</h3>
+        <p>
+          不用。序幕直接使用 Chrome
+          现有书签，并保留文件夹层级。你在序幕里新增、编辑、移动或删除的内容，也会体现在
+          Chrome 书签中。
+        </p>
+        <h3>怎样把页面留到稍后再看？</h3>
+        <p>
+          点击扩展工具栏中的序幕图标，或使用页面右键菜单，可以保存当前页面、整个窗口或标签组。默认快捷键
+          <code>Alt + Shift + S</code> 用于把当前页面加入待读；你也可以在 Chrome
+          的扩展快捷键设置中调整它。
+        </p>
+        <h3>保存之后，原来的标签页会关闭吗？</h3>
+        <p>
+          由「保存后关闭」选项决定。开启后只关闭本次成功保存的标签页；跳过的重复页面和保存失败的页面会保留。
+        </p>
+        <h3>搜索会使用哪个搜索引擎？</h3>
+        <p>
+          搜索框会先展示匹配的书签和当前标签页。提交网页搜索时使用 Chrome
+          当前配置的默认搜索引擎；序幕不会更改你的搜索设置。
+        </p>
+        <h3>书签会同步吗？卸载后还在吗？</h3>
+        <p>
+          书签仍由 Chrome 保存和管理，是否同步取决于你自己的 Chrome
+          同步设置。序幕不提供远程账号或备份；卸载序幕后，普通 Chrome
+          书签和文件夹仍会保留。
+        </p>
+      </section>
+      <section>
+        <h2>遇到问题时</h2>
+        <p>
+          先在
+          <code>chrome://extensions</code>
+          确认序幕已启用，并仍拥有所需权限。更新后重新打开一个新标签页，再检查问题是否存在。
+        </p>
+        <p>
+          提交反馈时，请附上 Chrome
+          版本、序幕版本、复现步骤和预期结果。截图前请遮住私人书签、网址和其他敏感信息。
+        </p>
         <div class="actions">
           <a href="https://github.com/yuzhouu/supposed/issues/new">提交问题</a>
           <a href="./privacy.html">隐私政策</a>

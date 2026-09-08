@@ -1,12 +1,17 @@
 @import 'tailwindcss';
 
 :root {
-  --accent: #dc4c3e;
-  --accent-strong: #c63f34;
-  --accent-soft: #fdecea;
-  --accent-action: #dc4c3e;
-  --accent-action-hover: #c63f34;
+  --accent: #b44d3d;
+  --accent-strong: #ac493b;
+  --accent-soft: #faeee9;
+  --accent-action: #bf4d3f;
+  --accent-action-hover: #ad4034;
   --on-accent: #ffffff;
+  --danger: #b9382f;
+  --danger-soft: #fdecea;
+  --danger-action: #c63f34;
+  --danger-action-hover: #b2342b;
+  --on-danger: #ffffff;
   --page: #ffffff;
   --surface: #ffffff;
   --surface-translucent: rgb(255 255 255 / 96%);
@@ -31,7 +36,7 @@
   --control-muted: #f1f0ef;
   --control-muted-text: #66615d;
   --control-hover: #e9e7e5;
-  --focus: #dd695f;
+  --focus: #bf4d3f;
   --sidebar-text: #4f4b47;
   --sidebar-muted: #5f5b57;
   --sidebar-subtle: #6f6b67;
@@ -60,12 +65,17 @@
 }
 
 :root[data-theme='dark'] {
-  --accent: #ff8f85;
-  --accent-strong: #ffaaa3;
-  --accent-soft: #3b2321;
-  --accent-action: #c94f44;
-  --accent-action-hover: #b64036;
+  --accent: #e8a496;
+  --accent-strong: #efaa9e;
+  --accent-soft: #392b28;
+  --accent-action: #bf4d3f;
+  --accent-action-hover: #c05242;
   --on-accent: #ffffff;
+  --danger: #ffaaa3;
+  --danger-soft: #3b2321;
+  --danger-action: #b84238;
+  --danger-action-hover: #a6382f;
+  --on-danger: #ffffff;
   --page: #141312;
   --surface: #1b1a19;
   --surface-translucent: rgb(27 26 25 / 96%);
@@ -90,7 +100,7 @@
   --control-muted: #2b2826;
   --control-muted-text: #c3bcb7;
   --control-hover: #34302d;
-  --focus: #ff8f85;
+  --focus: #e8a496;
   --sidebar-text: #e6e1de;
   --sidebar-muted: #c2bbb6;
   --sidebar-subtle: #98918c;
@@ -818,7 +828,7 @@ summary:focus-visible {
 
 .settings-shortcut-error {
   margin: -7px 0 0 50px;
-  color: var(--accent-strong);
+  color: var(--danger);
   font-size: 11.5px;
   line-height: 1.45;
 }
@@ -1343,8 +1353,8 @@ summary:focus-visible {
 }
 
 .folder-delete-button:hover:not(:disabled) {
-  background: var(--accent-soft);
-  color: var(--accent-strong);
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .folder-delete-button:disabled {
@@ -1762,7 +1772,7 @@ summary:focus-visible {
 }
 
 .capture-dialog-status > span.is-error {
-  color: var(--accent-strong);
+  color: var(--danger);
 }
 
 .capture-dialog-status svg {
@@ -2053,7 +2063,7 @@ summary:focus-visible {
 }
 
 .folder-quick-add-actions > span.is-error {
-  color: var(--accent-strong);
+  color: var(--danger);
 }
 
 @media (hover: none) {
@@ -2149,11 +2159,11 @@ summary:focus-visible {
   bottom: 24px;
   max-width: min(360px, calc(100vw - 48px));
   margin: 0;
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--line));
   border-radius: 8px;
   background: var(--surface);
   padding: 10px 12px;
-  color: var(--accent-strong);
+  color: var(--danger);
   box-shadow: 0 12px 28px rgb(32 27 25 / 16%);
   font-size: 12.5px;
 }
@@ -2258,7 +2268,7 @@ summary:focus-visible {
 }
 
 .bookmark-quick-add-actions > span.is-error {
-  color: var(--accent-strong);
+  color: var(--danger);
 }
 
 .bookmark-main-link {
@@ -2401,8 +2411,8 @@ summary:focus-visible {
 }
 
 .bookmark-delete-action:hover:not(:disabled) {
-  background: var(--accent-soft);
-  color: var(--accent-strong);
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .bookmark-dialog-backdrop {
@@ -2479,7 +2489,7 @@ summary:focus-visible {
 
 .bookmark-dialog-error {
   margin: 12px 0 0;
-  color: var(--accent-strong);
+  color: var(--danger);
   font-size: 12px;
 }
 
@@ -2520,8 +2530,7 @@ summary:focus-visible {
   color: var(--on-accent);
 }
 
-.bookmark-dialog-actions button.is-primary,
-.bookmark-dialog-actions button.is-danger {
+.bookmark-dialog-actions button.is-primary {
   border-color: var(--accent-action);
   background: var(--accent-action);
   color: var(--on-accent);
@@ -2532,10 +2541,20 @@ summary:focus-visible {
 }
 
 .bookmark-dialog-actions button[type='submit']:hover:not(:disabled),
-.bookmark-dialog-actions button.is-primary:hover:not(:disabled),
-.bookmark-dialog-actions button.is-danger:hover:not(:disabled) {
+.bookmark-dialog-actions button.is-primary:hover:not(:disabled) {
   border-color: var(--accent-action-hover);
   background: var(--accent-action-hover);
+}
+
+.bookmark-dialog-actions button.is-danger {
+  border-color: var(--danger-action);
+  background: var(--danger-action);
+  color: var(--on-danger);
+}
+
+.bookmark-dialog-actions button.is-danger:hover:not(:disabled) {
+  border-color: var(--danger-action-hover);
+  background: var(--danger-action-hover);
 }
 
 .bookmark-dialog-actions button:disabled {
@@ -2992,7 +3011,7 @@ summary:focus-visible {
 .open-tab-close-action:hover:not(:disabled),
 .open-tab-close-action.is-error {
   background: var(--control-hover);
-  color: var(--accent-strong);
+  color: var(--danger);
 }
 
 .open-tab-capture-action.is-saved,
@@ -3001,7 +3020,7 @@ summary:focus-visible {
 }
 
 .open-tab-capture-action.is-error {
-  color: var(--accent-strong);
+  color: var(--danger);
 }
 
 .open-tab-capture-action:disabled,
@@ -3049,7 +3068,7 @@ summary:focus-visible {
 
 .open-tab-sort-error {
   margin: 12px 8px 0;
-  color: var(--danger, #b42318);
+  color: var(--danger);
   font-size: 12px;
 }
 
@@ -3234,7 +3253,7 @@ summary:focus-visible {
 }
 
 .default-folders-error {
-  color: var(--accent-strong);
+  color: var(--danger);
 }
 
 @keyframes default-folders-spin {

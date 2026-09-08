@@ -1,19 +1,44 @@
 {
   "schemaVersion": 1,
   "product": "序幕 · Prelude",
-  "generatedAt": "2026-08-31",
+  "publicTitle": "序幕 · 新标签页",
+  "slogan": "一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。",
+  "generatedAt": "2026-09-08",
   "provenance": {
-    "screenshots": "Captured from the real Vite-rendered product at http://127.0.0.1:3000 using the built-in demo bookmark and tab data. No interface elements were invented or composited into screenshots.",
-    "promotionalImages": "Deterministically rendered from the SVG sources in ./source using the approved Prelude logo, exact copy, and the real bookmark screenshot.",
-    "privacyScreenshot": "Shows the production Settings disclosure implemented in src/features/settings/settings-dialog.tsx."
+    "screenshots": "Captured at 1280×800 CSS pixels and 1× pixel ratio from the actual Vite-rendered product at http://127.0.0.1:4318 using the existing repository demo bookmarks and open tabs. No user browser data, fabricated interface elements, or compositing. Bookmark names remain as defined in the demo dataset in both interface languages.",
+    "promotionalImages": "Rendered in headless Google Chrome from the SVG sources in ./source, the approved vermilion folder SVG at public/icons/prelude.svg, the unchanged slogan, and the Chinese bookmark screenshot. Fonts and referenced images were loaded before export.",
+    "privacyScreenshot": "The actual Settings dialog with Data and privacy expanded; demonstrates the UI disclosure, not live extension permission behavior.",
+    "homepageScreenshot": "Exact copy of screenshots/zh-CN/01-bookmarks-1280x800.png. Stored within docs/ so the public site works independently.",
+    "iconSourceSha256": "813efdb4b591a1aed1e83f131b29940a563632b23321bdaca183d79501c1fcae"
   },
   "assets": [
+    {
+      "path": "../../public/icons/prelude-16.png",
+      "role": "extension-icon",
+      "width": 16,
+      "height": 16,
+      "sha256": "c82d35b4b7aae4ea511d030c614e37d37fc4a4715627c5ecb1d921a76b159155"
+    },
+    {
+      "path": "../../public/icons/prelude-32.png",
+      "role": "extension-icon",
+      "width": 32,
+      "height": 32,
+      "sha256": "358c86959ace79c4131296773bf80d01c37c42f96e0faa93092d87df71d40c9f"
+    },
+    {
+      "path": "../../public/icons/prelude-48.png",
+      "role": "extension-icon",
+      "width": 48,
+      "height": 48,
+      "sha256": "97f4cc9139026a757ed90c4b2f9fb7b8c21a3fa40f23e64c64ad82d04ebeb0d3"
+    },
     {
       "path": "../../public/icons/prelude-128.png",
       "role": "store-icon",
       "width": 128,
       "height": 128,
-      "sha256": "26bb6cbf84b49c3970e6203c726143240ab6ea71edaad6a08c308345c2e31243"
+      "sha256": "f26b9f223703345d24c4cd9c4591a67f03e01d40322d3b8a10ff335d29c42699"
     },
     {
       "path": "screenshots/zh-CN/01-bookmarks-1280x800.png",
@@ -22,7 +47,7 @@
       "state": "All bookmarks",
       "width": 1280,
       "height": 800,
-      "sha256": "5889e3ab9394d5f122b5ca5c4d367bd2534fa008cce18721c8445a7bfea66ad0"
+      "sha256": "4567e737194fd6ff4d35dd33223261a456c67d9771908a98b084198271480fa7"
     },
     {
       "path": "screenshots/zh-CN/02-open-tabs-1280x800.png",
@@ -31,25 +56,25 @@
       "state": "Open tabs",
       "width": 1280,
       "height": 800,
-      "sha256": "7bf6e3570d74bbf372e1655718e8db1745e75db4f9e59d74f59ff78599daf080"
+      "sha256": "0101c95cab2e415300b2e3a579c60ffd6cb12a7bc1eab98a13c44909229c32b4"
     },
     {
       "path": "screenshots/zh-CN/03-search-1280x800.png",
       "role": "screenshot",
       "locale": "zh-CN",
-      "state": "Search results",
+      "state": "Search results for Linear",
       "width": 1280,
       "height": 800,
-      "sha256": "f41caf3607be43531f1108ad2ab9a24c2109d486d6f258663b3830f5b36d8168"
+      "sha256": "676389976c8816a8a5ab2bb7dc8a8d0b9c1e4e1b1db329734a207617cfc891d2"
     },
     {
       "path": "screenshots/zh-CN/04-privacy-settings-1280x800.png",
       "role": "screenshot",
       "locale": "zh-CN",
-      "state": "Data and privacy disclosure",
+      "state": "Settings with expanded data and privacy disclosure",
       "width": 1280,
       "height": 800,
-      "sha256": "26ce84ebb4302a97467e56945a3f85f9254bf98a41dd8cac110e4d1ee0b3c7de"
+      "sha256": "fd1bb95096f4de4c7aab97d087a869e336d4dacb749b85153f7814fb6a9efcef"
     },
     {
       "path": "screenshots/zh-CN/05-recent-1280x800.png",
@@ -58,23 +83,80 @@
       "state": "Recently added",
       "width": 1280,
       "height": 800,
-      "sha256": "de4f04ccc599e50e8a91219a9a937f9565e85f9d959d48c26fbd35058c592b1e"
+      "sha256": "88507d7f06c6e5d6d7ae1ac1e325c20dd876f3d34ca532967c34903f4e005189"
+    },
+    {
+      "path": "screenshots/en/01-bookmarks-1280x800.png",
+      "role": "screenshot",
+      "locale": "en",
+      "state": "All bookmarks",
+      "width": 1280,
+      "height": 800,
+      "sha256": "9e8e7b986e0cfd7f715cfc775dad8d6a30da733841b5d2fe7206c93efd05f0de"
+    },
+    {
+      "path": "screenshots/en/02-open-tabs-1280x800.png",
+      "role": "screenshot",
+      "locale": "en",
+      "state": "Open tabs",
+      "width": 1280,
+      "height": 800,
+      "sha256": "9f3bcccfe6926cadfcb270f6b0a4e5624e7012549276fc8875119aaefa1ea58a"
+    },
+    {
+      "path": "screenshots/en/03-search-1280x800.png",
+      "role": "screenshot",
+      "locale": "en",
+      "state": "Search results for Linear",
+      "width": 1280,
+      "height": 800,
+      "sha256": "dfdb078a55fb13ec46ab219195c89940579fbac26fd087a18dea11377c3d8c28"
+    },
+    {
+      "path": "screenshots/en/04-privacy-settings-1280x800.png",
+      "role": "screenshot",
+      "locale": "en",
+      "state": "Settings with expanded data and privacy disclosure",
+      "width": 1280,
+      "height": 800,
+      "sha256": "28a131b282fc1a2d1f6b77ea34ab2530173ff79004a51375bfedab99a3ea306e"
+    },
+    {
+      "path": "screenshots/en/05-recent-1280x800.png",
+      "role": "screenshot",
+      "locale": "en",
+      "state": "Recently added",
+      "width": 1280,
+      "height": 800,
+      "sha256": "c051435ea0c43a72b7448786eb0fe15da02365689417c4ee7da40fad6204c38e"
     },
     {
       "path": "promo-small-440x280.png",
-      "source": "source/promo-small-440x280.svg",
       "role": "small-promo-tile",
+      "source": "source/promo-small-440x280.svg",
+      "sourceSha256": "b6a39d09032687fe7dde10de973f8540e46e6528b51d12558710653afeb25cb2",
+      "locale": "zh-CN",
       "width": 440,
       "height": 280,
-      "sha256": "c8da56d0e0db304e87248f60749194c50d7910f1d75859142be14f46aaf37121"
+      "sha256": "42e696db9779f47d2d2bd8a8812d896b318a3c5430ce685257c8c8fca681beda"
     },
     {
       "path": "promo-marquee-1400x560.png",
-      "source": "source/promo-marquee-1400x560.svg",
       "role": "marquee-promo-tile",
+      "source": "source/promo-marquee-1400x560.svg",
+      "sourceSha256": "bf8afb0deb78f4e5bd61022e4f8197eb4152bfadd1cedbc01dfcc7d4a0e1c0c6",
+      "locale": "zh-CN",
       "width": 1400,
       "height": 560,
-      "sha256": "e3b5c5e441df02a3bf3937a9c934c6b26744fcf35be13d166fbcd63a8a534245"
+      "sha256": "047455911ae5afcfde77b1aac7e22f694d0505e6e2bad8a0c99d9b63a51b39b7"
+    },
+    {
+      "path": "../../docs/assets/bookmarks-1280x800.png",
+      "role": "homepage-screenshot",
+      "locale": "zh-CN",
+      "width": 1280,
+      "height": 800,
+      "sha256": "4567e737194fd6ff4d35dd33223261a456c67d9771908a98b084198271480fa7"
     }
   ]
 }

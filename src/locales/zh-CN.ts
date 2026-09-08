@@ -2,7 +2,7 @@ export const zhCN = {
   app: {
     name: '序幕 · Prelude',
     description:
-      '把 Chrome 书签、当前标签页与待读收集整合进安静的新标签页；书签与标签页数据仅在本地处理。',
+      '一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。',
   },
   common: {
     cancel: '取消',
@@ -118,7 +118,7 @@ export const zhCN = {
     },
   },
   about: {
-    title: '关于 Prelude',
+    title: '关于序幕',
     introduction:
       '一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。',
     privacyTitle: '属于你的浏览空间',

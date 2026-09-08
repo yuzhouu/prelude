@@ -4,7 +4,7 @@ export const es = {
   app: {
     name: 'Prelude',
     description:
-      'Una nueva pestaña para marcadores, pestañas abiertas y Leer más tarde. Sus datos permanecen en local.',
+      'Una nueva pestaña tranquila para organizar los marcadores de Chrome, las pestañas abiertas y Leer más tarde.',
   },
   common: {
     cancel: 'Cancelar',

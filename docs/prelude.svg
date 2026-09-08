@@ -1,5 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 395 450" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
   <title id="title">序幕 · Prelude</title>
-  <path fill="#dc4c3e" fill-rule="evenodd" d="M28 28L227 28L242 30L264 36L290 48L301 55L329 80L348 107L358 129L363 145L367 167L367 201L365 215L355 248L346 266L332 286L319 300L317 300L302 314L276 329L257 336L222 342L150 342L150 409L142 419L136 422L126 422L126 323L28 323ZM141 111L141 259L145 259L149 254L161 246L193 218L200 220L245 259L248 259L249 128L246 120L243 118L243 116L234 111Z" />
-  <path fill="#202020" fill-rule="evenodd" paint-order="stroke fill" stroke="#faf9f8" stroke-linejoin="round" stroke-width="7" d="M30 334L116 334L116 421L32 338Z" />
+  <defs>
+    <linearGradient id="back" x1="10" y1="16" x2="110" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#edc4b5" />
+      <stop offset="1" stop-color="#f1d2c5" />
+    </linearGradient>
+    <linearGradient id="front" x1="8" y1="28" x2="120" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#cd604b" />
+      <stop offset="1" stop-color="#bf4d3f" />
+    </linearGradient>
+  </defs>
+  <path fill="url(#back)" d="M16 16H50C56 16 56 24 62 24H106A8 8 0 0 1 114 32V96A8 8 0 0 1 106 104H16A8 8 0 0 1 8 96V24A8 8 0 0 1 16 16Z" />
+  <path fill="url(#front)" d="M16 28H50C56 28 56 36 62 36H112A8 8 0 0 1 120 44V104A8 8 0 0 1 112 112H16A8 8 0 0 1 8 104V36A8 8 0 0 1 16 28Z" />
+  <path fill="none" stroke="#fff" stroke-linecap="round" stroke-width="11" d="M64 60V89M49.5 74.5H78.5" />
 </svg>

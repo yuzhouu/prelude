@@ -1,49 +1,53 @@
-# Prelude logo design QA
+# Prelude brand and release-material QA
 
-- Source visual truth: `/Users/yuzhou/.codex/generated_images/01a0556e-176d-7510-ab15-44d418390cfa/exec-978fa80a-fd49-490c-b26c-7f0762b76145.png`
-- Implementation screenshots: `/tmp/prelude-logo-desktop-final.png`, `/tmp/prelude-logo-mobile.png`, `/tmp/prelude-logo-mobile-dark-fixed.png`
-- Focused comparison: `/tmp/prelude-logo-comparison.png`
-- Viewports: desktop `1440 x 900` CSS px; mobile `390 x 844` CSS px
-- Pixel density: browser captures matched the CSS viewport at `1x`; source board is `1254 x 1254` px and its logo region was normalized from a `395 x 450` px crop
-- State: light desktop sidebar; open light mobile sidebar; open dark mobile sidebar
+Reviewed: 2026-09-08.
 
-## Full-view comparison evidence
+## Approved identity
 
-The selected generated mark, the production vector render, and the rendered desktop brand region were combined in `/tmp/prelude-logo-comparison.png`. The implementation preserves the red `P`, centered bookmark cut, black folded corner, and the source's light separator around the fold. The surrounding product screen remains on the existing layout and tokens because the selected visual target only changes the logo.
+The brand remains **序幕 · Prelude**. Chinese public headings and the extension listing use **序幕 · 新标签页**. The original slogan is preserved verbatim:
 
-## Focused region comparison evidence
+> 一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。
 
-The focused comparison checks the mark independently at large size and in the real `32 x 32` sidebar slot. The SVG keeps a clean silhouette without raster halos, while the generated source's soft tonal variation is intentionally normalized to the existing product accent `#dc4c3e` for reliable small-size rendering. The `16`, `32`, `48`, and `128` px manifest PNGs were rendered from the same SVG.
+The current icon is a vermilion stack of folders with a white rounded plus. Its upper-left tab, short shoulder, and vertical sides follow the approved folder silhouette. `public/icons/prelude.svg` is the vector source; the website copy and all four extension PNG sizes come from that source. This review supersedes the earlier red P/bookmark design review.
 
-## Required fidelity surfaces
+## Visual review
 
-- Fonts and typography: unchanged; the existing brand name weight, size, line height, and bilingual copy remain intact.
-- Spacing and layout rhythm: the mark occupies the existing `32 x 32` logo slot and preserves the existing `8px` identity gap and sidebar header alignment.
-- Colors and visual tokens: main mark `#dc4c3e`, folded corner `#202020`, separator `#faf9f8`; light and dark themes were inspected.
-- Image quality and asset fidelity: the selected generated mark was traced into a scalable external SVG, not redrawn as an inline UI shape. Transparent PNG extension sizes are produced from that SVG and have exact dimensions.
-- Copy and content: the current brand is `序幕 · Prelude`; the logo mark and sync-status copy remain unchanged.
+- Product: white and warm-gray surfaces with vermilion selection, focus, links, and primary actions. Destructive actions and validation errors retain separate red tokens.
+- Themes: light, dark, and system appearance; desktop at 1280×800 and narrow-screen checks at 390×844.
+- Website: desktop and mobile, light and dark; loaded directly from `docs/` to verify its independent stylesheet, icon, and screenshot references.
+- Screenshots: actual rendered product UI with existing repository demo bookmarks and tabs, in Chinese and English. No private browser data or fabricated UI.
+- Promotional tiles: 440×280 and 1400×560 PNGs. Both show the vermilion icon, public title, and full original slogan. The larger tile includes the actual Chinese bookmark screenshot.
 
-## Findings
+Reviewable assets:
 
-No actionable P0, P1, or P2 findings remain.
+- [Chinese screenshots](./store/assets/screenshots/zh-CN/)
+- [English screenshots](./store/assets/screenshots/en/)
+- [Small promo tile](./store/assets/promo-small-440x280.png)
+- [Marquee promo tile](./store/assets/promo-marquee-1400x560.png)
+- [Asset dimensions, source hashes, and provenance](./store/assets/manifest.json)
+- [Naming, color, and copy reference](./store/brand.md)
 
-### Comparison history
+## Verification
 
-1. Initial dark-mode check found a P2 contrast issue: the black folded corner blended into the dark sidebar because the source's light separator had become transparent.
-2. The SVG fold received the source-consistent `#faf9f8` separator stroke, all PNG sizes were regenerated, and the mobile dark screenshot was recaptured.
-3. Post-fix evidence in `/tmp/prelude-logo-mobile-dark-fixed.png` shows the folded corner remains identifiable without changing the requested black fold.
+The browser material checks passed 29 assertions covering language, vermilion selection, expanded privacy disclosure, the unchanged About slogan, text bounds in both SVGs, responsive overflow, image loading, feature anchors, and support/privacy navigation. Product pages and standalone documentation had no runtime or console errors.
 
-## Interaction and runtime checks
+Opening the small promotional SVG as a standalone browser document also triggers an automatic request for an absent `/favicon.ico`. This export-only 404 was recorded separately; the SVG icon and product image load, and the exported artwork is complete.
 
-- Page identity: `http://127.0.0.1:4173/`, title `序幕 · Prelude`.
-- Meaningful content rendered with no framework error overlay.
-- Sidebar logo loaded from `/icons/prelude.svg` and was visible.
-- Search trigger opened the search dialog; Escape closed it.
-- Browser console warnings/errors: none.
-- Production build, ESLint, Prettier, manifest JSON parsing, and manifest icon-file presence checks passed.
+The 23 theme checks verified readable primary/selected text, theme persistence, search, settings validation, bookmark edit and delete dialogs, mobile navigation, the capture popup, and privacy pages. Primary actions are vermilion; errors and deletion controls remain red.
 
-## Residual test gap
+Additional checks passed:
 
-The built extension was not installed into Chrome during this run, so Chrome's extension-management surface was not visually inspected. The production `dist/manifest.json` references all four generated icon files and each file is present.
+- Production Vite build and ESLint for the changed locale files.
+- Formatting for changed supported text files and `git diff --check`.
+- PNG dimensions, SVG XML parsing, and SHA-256 asset records.
+- Matching source/built icons and Chrome locale messages.
+- Matching product/website SVGs and public/website stylesheets.
+- Matching homepage screenshot and its Chinese source capture.
+- Six-language agreement between About copy, app descriptions, extension descriptions, and store summaries.
+- Local README links and extension name/description length bounds.
 
-final result: passed
+## Known limits
+
+Full-project TypeScript checking reports two existing errors: a possibly null `regular` in `src/features/tabs/tab-drag.test.ts:169`, and the `mode` union property in `src/features/tabs/tab-sortable-windows.tsx:155`. Both reproduce in an unchanged HEAD checkout. This branding change does not modify those files.
+
+The browser captures exercise the preview and its existing demonstration dataset. They do not establish live Chrome extension API behavior or Chrome Web Store approval. Japanese, Spanish, French, and Russian descriptions are included, but screenshots are provided only in Chinese and English. No site, extension, or store listing has been published by this update.

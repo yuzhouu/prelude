@@ -1,33 +1,31 @@
-# Prelude
+# Prelude · New Tab
 
 [English](./README.md) · [简体中文](./README.zh-CN.md)
 
-> A calm starting point for everything you want to keep, revisit, or finish on the web.
+> A calm new tab for organizing Chrome bookmarks, open tabs, and Read later.
 
-Prelude is a Chrome new-tab extension that brings bookmarks, open tabs, and Read later into one focused workspace. It works with the Chrome data you already have, preserves your bookmark hierarchy, and keeps your browsing data in your browser.
+Prelude makes your Chrome new-tab page a home for the pages you use every day. Open a bookmark, find a tab from another window, or pick up something you saved for later. It works directly with your existing Chrome bookmarks, so your folders stay familiar.
 
-![Prelude bookmark workspace](./store/assets/screenshots/zh-CN/01-bookmarks-1280x800.png)
+![Prelude new-tab page showing bookmarks](./store/assets/screenshots/en/01-bookmarks-1280x800.png)
 
-## Start each session with a clear view
+## Your bookmarks, ready when you are
 
-Your saved pages and open tabs should feel useful, not buried. Prelude gives them a quiet, structured home:
+Keep your Chrome bookmark folders and organize them right from a new tab. Add, edit, delete, or reorder pages without maintaining a second collection. **Today** brings Pinned, Read later, and Favorites together; **Recently added** helps you find a page you just saved.
 
-- **Today** brings Pinned, Read later, and Favorites together for a focused daily view.
-- **Bookmarks** keep their existing Chrome folder hierarchy and can be added, edited, deleted, or reordered directly.
-- **Current tabs** shows tabs across browser windows, lets you switch or close them, and supports drag-and-drop reordering between windows.
-- **Recently added** makes it easy to return to pages you just saved.
-- **Unified search** finds bookmarks and open tabs, opens addresses, and sends other queries to Chrome's default search engine.
+## Pick up where you left off
 
-## Collect now, decide later
+See open tabs across your browser windows. Switch to a page, close a finished tab, or drag tabs into a different order or window. Search bookmarks and open tabs together; enter an address to open it, or submit a query to Chrome's default search engine.
 
-Save the current page, an entire window, or a tab group to Read later from the toolbar, the page context menu, or the `Alt + Shift + S` shortcut. Prelude preserves tab order, checks for duplicate URLs, and can close only the tabs that were successfully saved.
+## Save it for later
 
-Missing bookmark titles are completed automatically when possible. Titles you enter or edit yourself are always preserved.
+Save the current page, an entire window, or a tab group to **Read later** from the toolbar or page context menu. The default `Alt + Shift + S` shortcut saves the current page. Prelude preserves tab order and checks for duplicate URLs. Turn on **Close after saving** to clear the tabs that were successfully saved.
+
+Missing bookmark titles are completed automatically when possible, while titles you enter yourself are preserved.
 
 ## Made to stay out of the way
 
-Prelude supports light, dark, and system themes, a compact responsive sidebar, and interfaces in Simplified Chinese, English, Japanese, Spanish, French, and Russian.
+Choose a light, dark, or system theme. The sidebar adapts to smaller windows, and the interface is available in Simplified Chinese, English, Japanese, Spanish, French, and Russian.
 
-There is no Prelude account, remote service, analytics, or advertising. Bookmark and tab data stays in your browser. Bookmarks remain ordinary Chrome bookmarks and continue to follow your own Chrome Sync settings. Only a web search you submit is passed by Chrome to your configured default search provider.
+No account to create, no ads, and no analytics. Prelude processes bookmark and tab data locally. Your bookmarks remain ordinary Chrome bookmarks and follow your own Chrome Sync settings. Web searches you submit are passed by Chrome to your configured default search provider.
 
-[Privacy policy](./PRIVACY.md) · [Support and feedback](https://github.com/yuzhouu/supposed/issues)
+[中文产品介绍](./README.zh-CN.md) · [Privacy policy](./PRIVACY.md) · [Support and feedback](https://github.com/yuzhouu/supposed/issues)
