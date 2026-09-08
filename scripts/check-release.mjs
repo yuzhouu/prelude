@@ -49,9 +49,10 @@ for (const asset of assets.assets) {
   assert.equal(data.readUInt32BE(20), asset.height, `${asset.path}: height`)
 }
 
-// The two policies differ only in their navigation and packaged icon path.
+// Ignore only the website controls, navigation, and packaged icon path; policy copy must match.
 const normalizePolicy = (html) =>
   html
+    .replace(/\s*<script type="module" src="\.\/site\.mjs"><\/script>/, '')
     .replaceAll('./icons/prelude.svg', './prelude.svg')
     .replaceAll(
       'href="./support.html"',

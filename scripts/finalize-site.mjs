@@ -8,6 +8,21 @@ import {
 } from 'node:fs'
 import { join, resolve, sep } from 'node:path'
 import { listFiles, localReferences, readJson, root } from './release-utils.mjs'
+import { messages } from '../docs/site-messages.mjs'
+
+const translationKeys = Object.keys(messages.en).sort()
+for (const language of ['en', 'ja', 'es', 'fr', 'ru']) {
+  assert.deepEqual(
+    Object.keys(messages[language]).sort(),
+    translationKeys,
+    `${language}: incomplete website translations`,
+  )
+  for (const key of translationKeys)
+    assert.ok(
+      messages[language][key].trim(),
+      `${language}: empty translation ${key}`,
+    )
+}
 
 const site = join(root, 'dist-site')
 const { version } = readJson(join(root, 'public/manifest.json'))
@@ -29,6 +44,14 @@ for (const filename of listFiles(site).filter((file) =>
   file.endsWith('.html'),
 )) {
   const html = readFileSync(join(site, filename), 'utf8')
+  for (const [, key] of html.matchAll(
+    /data-i18n(?:-alt|-aria-label)?="([^"]+)"/g,
+  )) {
+    assert.ok(
+      translationKeys.includes(key),
+      `${filename}: missing translation ${key}`,
+    )
+  }
   for (const reference of localReferences(html, filename)) {
     const target = resolve(site, reference)
     assert.ok(

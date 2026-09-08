@@ -9,103 +9,119 @@
     />
     <link rel="icon" href="./prelude.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./site.css" />
+    <script type="module" src="./site.mjs"></script>
     <title>使用帮助 · 序幕 · 新标签页</title>
   </head>
   <body>
     <main>
       <a class="brand" href="./index.html">
         <img src="./prelude.svg" alt="" />
-        <strong>序幕 · Prelude</strong>
+        <strong data-i18n="brand">序幕 · Prelude</strong>
       </a>
-      <p class="eyebrow">Support</p>
-      <h1>让序幕用起来更顺手</h1>
-      <p class="lede">从书签整理到待读收集，这里是一些常见问题的说明。</p>
+      <p class="eyebrow" data-i18n="support">使用帮助</p>
+      <h1 data-i18n="supportTitle">让序幕用起来更顺手</h1>
+      <p class="lede" data-i18n="supportIntro">
+        从书签整理到待读收集，这里是一些常见问题的说明。
+      </p>
       <section id="install">
-        <h2>获取与安装</h2>
-        <p>
+        <h2 data-i18n="installHeading">获取与安装</h2>
+        <p data-i18n="installPackage">
           当前提供 Chrome 扩展安装包。下载后解压到一个固定位置，再由 Chrome
           加载；这不是 Chrome Web Store 的一键安装。
         </p>
         <div class="actions">
-          <a href="./downloads/prelude-chrome-extension.zip" download
+          <a
+            data-i18n="download"
+            href="./downloads/prelude-chrome-extension.zip"
+            download
             >下载扩展 ZIP</a
           >
-          <a href="./downloads/prelude-chrome-extension.zip.sha256" download
+          <a
+            data-i18n="checksum"
+            href="./downloads/prelude-chrome-extension.zip.sha256"
+            download
             >SHA-256 校验值</a
           >
         </div>
         <ol>
-          <li>
+          <li data-i18n="step1">
             下载并解压 ZIP，确认解压后的文件夹内有 <code>manifest.json</code>。
           </li>
-          <li>
+          <li data-i18n="step2">
             在 Chrome 地址栏输入
             <code>chrome://extensions</code>，打开右上角「开发者模式」。
           </li>
-          <li>点击「加载已解压的扩展程序」，选择刚才解压的文件夹。</li>
-          <li>
+          <li data-i18n="step3">
+            点击「加载已解压的扩展程序」，选择刚才解压的文件夹。
+          </li>
+          <li data-i18n="step4">
             打开新标签页即可使用序幕，也可以将工具栏中的序幕图标固定以方便收集页面。
           </li>
         </ol>
-        <p>
+        <p data-i18n="update">
           更新时，用新安装包替换原文件夹内容，再在扩展管理页点击「重新加载」。保留原文件夹路径，避免卸载导致偏好设置丢失。
         </p>
       </section>
       <section>
-        <h2>日常使用</h2>
-        <h3>需要重新导入书签吗？</h3>
-        <p>
+        <h2 data-i18n="daily">日常使用</h2>
+        <h3 data-i18n="importQuestion">需要重新导入书签吗？</h3>
+        <p data-i18n="importAnswer">
           不用。序幕直接使用 Chrome
           现有书签，并保留文件夹层级。你在序幕里新增、编辑、移动或删除的内容，也会体现在
           Chrome 书签中。
         </p>
-        <h3>怎样把页面留到稍后再看？</h3>
-        <p>
+        <h3 data-i18n="captureQuestion">怎样把页面留到稍后再看？</h3>
+        <p data-i18n="captureAnswer">
           点击扩展工具栏中的序幕图标，或使用页面右键菜单，可以保存当前页面、整个窗口或标签组。默认快捷键
           <code>Alt + Shift + S</code> 用于把当前页面加入待读；你也可以在 Chrome
           的扩展快捷键设置中调整它。
         </p>
-        <h3>保存之后，原来的标签页会关闭吗？</h3>
-        <p>
+        <h3 data-i18n="closeQuestion">保存之后，原来的标签页会关闭吗？</h3>
+        <p data-i18n="closeAnswer">
           由「保存后关闭」选项决定。开启后只关闭本次成功保存的标签页；跳过的重复页面和保存失败的页面会保留。
         </p>
-        <h3>搜索会使用哪个搜索引擎？</h3>
-        <p>
+        <h3 data-i18n="searchQuestion">搜索会使用哪个搜索引擎？</h3>
+        <p data-i18n="searchAnswer">
           搜索框会先展示匹配的书签和当前标签页。提交网页搜索时使用 Chrome
           当前配置的默认搜索引擎；序幕不会更改你的搜索设置。
         </p>
-        <h3>如何显示或关闭常用网站？</h3>
-        <p>
+        <h3 data-i18n="sitesQuestion">如何显示或关闭常用网站？</h3>
+        <p data-i18n="sitesAnswer">
           在设置中打开「常用网站」，并在 Chrome
           提示中允许访问，即可在侧边栏和搜索框查看。它默认关闭；拒绝授权不会影响书签和标签页功能。
         </p>
-        <p>
+        <p data-i18n="sitesRetention">
           关闭开关会停止读取和展示，但保留 Chrome
           已授予的权限。隐藏的网站可在搜索框中恢复。序幕不读取完整浏览历史，也不自行统计访问次数。
         </p>
-        <h3>书签会同步吗？卸载后还在吗？</h3>
-        <p>
+        <h3 data-i18n="syncQuestion">书签会同步吗？卸载后还在吗？</h3>
+        <p data-i18n="syncAnswer">
           书签仍由 Chrome 保存和管理，是否同步取决于你自己的 Chrome
           同步设置。序幕不提供远程账号或备份；卸载序幕后，普通 Chrome
           书签和文件夹仍会保留。
         </p>
       </section>
       <section>
-        <h2>遇到问题时</h2>
-        <p>
+        <h2 data-i18n="troubleHeading">遇到问题时</h2>
+        <p data-i18n="troubleFirst">
           先在
           <code>chrome://extensions</code>
           确认序幕已启用，并仍拥有所需权限。更新后重新打开一个新标签页，再检查问题是否存在。
         </p>
-        <p>
+        <p data-i18n="troubleReport">
           提交反馈时，请附上 Chrome
           版本、序幕版本、复现步骤和预期结果。截图前请遮住私人书签、网址和其他敏感信息。
         </p>
         <div class="actions">
-          <a href="https://github.com/yuzhouu/prelude/issues/new">提交问题</a>
-          <a href="./privacy.html">隐私政策</a>
+          <a
+            data-i18n="reportIssue"
+            href="https://github.com/yuzhouu/prelude/issues/new"
+            >提交问题</a
+          >
+          <a data-i18n="policy" href="./privacy.html">隐私政策</a>
         </div>
       </section>
+      <div class="site-preferences" data-site-preferences hidden></div>
     </main>
   </body>
 </html>

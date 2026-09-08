@@ -16,19 +16,29 @@
     <link rel="icon" href="./prelude.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./site.css" />
     <link rel="stylesheet" href="./landing.css" />
+    <script type="module" src="./site.mjs"></script>
     <title>序幕 · 新标签页</title>
   </head>
   <body class="landing-body">
-    <a class="skip-link" href="#main">跳到主要内容</a>
+    <a data-i18n="skip" class="skip-link" href="#main">跳到主要内容</a>
     <header class="site-header site-container">
-      <a class="brand" href="./index.html" aria-label="序幕首页">
+      <a
+        class="brand"
+        href="./index.html"
+        data-i18n-aria-label="homeLabel"
+        aria-label="序幕首页"
+      >
         <img src="./prelude.svg" alt="" width="36" height="36" />
-        <strong>序幕 · Prelude</strong>
+        <strong data-i18n="brand">序幕 · Prelude</strong>
       </a>
-      <nav class="site-nav" aria-label="网站导航">
-        <a href="#features">功能</a>
-        <a href="#privacy">隐私</a>
-        <a href="./support.html">使用帮助</a>
+      <nav
+        class="site-nav"
+        data-i18n-aria-label="navigation"
+        aria-label="网站导航"
+      >
+        <a href="#features" data-i18n="features">功能</a>
+        <a href="#privacy" data-i18n="privacy">隐私</a>
+        <a href="./support.html" data-i18n="support">使用帮助</a>
         <a href="https://github.com/yuzhouu/prelude"
           >GitHub <span aria-hidden="true">↗</span></a
         >
@@ -36,14 +46,21 @@
     </header>
     <main id="main" class="site-main site-container">
       <div class="site-hero">
-        <h1>序幕 · 新标签页</h1>
-        <p class="site-slogan">
+        <h1 data-i18n="homeTitle">序幕 · 新标签页</h1>
+        <p class="site-slogan" data-i18n="slogan">
           一个安静的新标签页，用来整理
           <span class="keep-together">Chrome 书签</span>、当前标签页和待读内容。
         </p>
         <div class="actions hero-actions">
-          <a href="./support.html#install">获取扩展</a>
-          <a href="#features">了解功能 <span aria-hidden="true">↓</span></a>
+          <a
+            href="./downloads/prelude-chrome-extension.zip"
+            download
+            data-i18n="getExtension"
+            >获取扩展</a
+          >
+          <a href="#install" data-i18n="installHelp"
+            >安装说明 <span aria-hidden="true">↓</span></a
+          >
         </div>
       </div>
       <figure class="site-preview">
@@ -51,10 +68,11 @@
           src="./assets/bookmarks-1280x800.png"
           width="1280"
           height="800"
+          data-i18n-alt="previewAlt"
           alt="序幕书签视图：左侧按文件夹导航，右侧直接展示 Chrome 书签层级，可添加、编辑和整理书签。"
           fetchpriority="high"
         />
-        <figcaption>
+        <figcaption data-i18n="caption">
           直接使用你的 Chrome 书签，无需重新导入。图中为演示数据。
         </figcaption>
       </figure>
@@ -64,26 +82,30 @@
         aria-labelledby="features-title"
       >
         <div class="section-intro">
-          <h2 id="features-title">常用的、打开的，<br />都在眼前。</h2>
-          <p>从找到网页，到整理好它。<br />日常浏览，在一页里自然接上。</p>
+          <h2 id="features-title" data-i18n="featuresTitle">
+            常用的、打开的，<br />都在眼前。
+          </h2>
+          <p data-i18n="featuresIntro">
+            从找到网页，到整理好它。<br />日常浏览，在一页里自然接上。
+          </p>
         </div>
         <div class="feature-list">
           <article>
-            <h3>书签，还是熟悉的样子</h3>
-            <p>
+            <h3 data-i18n="bookmarksTitle">书签，还是熟悉的样子</h3>
+            <p data-i18n="bookmarksBody">
               沿用 Chrome
               文件夹，在新标签页里新增、编辑、拖动整理。今日与最近添加，让常用内容更好找。
             </p>
           </article>
           <article>
-            <h3>多个窗口，一起看清</h3>
-            <p>
+            <h3 data-i18n="tabsTitle">多个窗口，一起看清</h3>
+            <p data-i18n="tabsBody">
               查找打开的标签页，切换、排序或移到其他窗口。开启并授权常用网站后，也可以在侧边栏和搜索框找到经常访问的页面。
             </p>
           </article>
           <article>
-            <h3>现在没空，先放进待读</h3>
-            <p>
+            <h3 data-i18n="laterTitle">现在没空，先放进待读</h3>
+            <p data-i18n="laterBody">
               从工具栏或右键菜单收集页面、窗口与标签组。自动检查重复；开启「保存后关闭」时，只关闭成功保存的标签页。
             </p>
           </article>
@@ -94,31 +116,73 @@
         class="site-privacy"
         aria-labelledby="privacy-title"
       >
-        <h2 id="privacy-title">你的浏览空间，<br />由你自己掌握。</h2>
-        <p>
+        <h2 id="privacy-title" data-i18n="privacyTitle">
+          你的浏览空间，<br />由你自己掌握。
+        </h2>
+        <p data-i18n="privacyBody">
           无需账号，没有广告和分析工具。书签、标签页与常用网站在本机处理；只有你主动提交的网页搜索会交给
           Chrome 默认搜索引擎。
         </p>
-        <a class="site-text-link" href="./privacy.html"
+        <a data-i18n="privacyLink" class="site-text-link" href="./privacy.html"
           >了解数据如何使用 <span aria-hidden="true">↗</span></a
         >
       </section>
-      <div class="site-preferences" aria-label="支持的主题与界面语言">
-        <p>浅色 <span>/</span> 深色 <span>/</span> 跟随系统</p>
-        <p>
-          简体中文 <span>/</span> English <span>/</span> 日本語
-          <span>/</span> Español <span>/</span> Français <span>/</span> Русский
-        </p>
-      </div>
+      <section
+        id="install"
+        class="site-install"
+        aria-labelledby="install-title"
+      >
+        <div>
+          <h2 id="install-title" data-i18n="installTitle">
+            把序幕放进你的 Chrome
+          </h2>
+          <p data-i18n="installIntro">
+            下载扩展安装包，解压后即可加载到 Chrome。目前通过开发者模式安装。
+          </p>
+          <div class="actions">
+            <a
+              href="./downloads/prelude-chrome-extension.zip"
+              download
+              data-i18n="download"
+              >下载扩展 ZIP</a
+            >
+            <a
+              href="./downloads/prelude-chrome-extension.zip.sha256"
+              download
+              data-i18n="checksum"
+              >SHA-256 校验值</a
+            >
+          </div>
+        </div>
+        <ol class="install-steps">
+          <li data-i18n="step1">
+            下载并解压 ZIP，确认文件夹内有 <code>manifest.json</code>。
+          </li>
+          <li data-i18n="step2">
+            打开 <code>chrome://extensions</code>，开启「开发者模式」。
+          </li>
+          <li data-i18n="step3">
+            点击「加载已解压的扩展程序」，选择解压后的文件夹。
+          </li>
+          <li data-i18n="step4">
+            打开新标签页即可使用序幕，也可以固定工具栏图标以方便收集页面。
+          </li>
+        </ol>
+      </section>
+      <div class="site-preferences" data-site-preferences hidden></div>
     </main>
     <footer class="site-footer site-container">
       <a class="brand" href="./index.html">
         <img src="./prelude.svg" alt="" width="28" height="28" />
-        <strong>序幕 · Prelude</strong>
+        <strong data-i18n="brand">序幕 · Prelude</strong>
       </a>
-      <nav class="site-nav" aria-label="相关链接">
-        <a href="./support.html">使用帮助</a>
-        <a href="./privacy.html">隐私政策</a>
+      <nav
+        class="site-nav"
+        data-i18n-aria-label="related"
+        aria-label="相关链接"
+      >
+        <a href="./support.html" data-i18n="support">使用帮助</a>
+        <a href="./privacy.html" data-i18n="policy">隐私政策</a>
         <a href="https://github.com/yuzhouu/prelude"
           >GitHub <span aria-hidden="true">↗</span></a
         >
