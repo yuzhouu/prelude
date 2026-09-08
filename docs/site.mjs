@@ -19,6 +19,13 @@ const page = location.pathname.endsWith('/privacy.html')
     : 'home'
 const systemTheme = matchMedia('(prefers-color-scheme: dark)')
 
+for (const link of document.querySelectorAll('.site-nav a')) {
+  const url = new URL(link.href)
+  if (url.origin === location.origin && url.pathname === location.pathname) {
+    link.setAttribute('aria-current', 'page')
+  }
+}
+
 function readPreference(key, choices, fallback) {
   try {
     const value = localStorage.getItem(key)
@@ -61,7 +68,6 @@ function resolveLanguage() {
 // as the extension. Bind its translated view without changing that source.
 if (page === 'policy') {
   const bindings = {
-    '.brand strong': 'brand',
     '.eyebrow': 'policy',
     h1: 'policy',
     '.lede': 'policyIntro',
@@ -101,12 +107,7 @@ if (page === 'policy') {
   })
 }
 
-let preferences = document.querySelector('[data-site-preferences]')
-if (!preferences) {
-  preferences = document.createElement('div')
-  preferences.className = 'site-preferences'
-  document.querySelector('main').append(preferences)
-}
+const preferences = document.querySelector('[data-site-preferences]')
 preferences.hidden = false
 preferences.innerHTML = `
   <fieldset class="preference-group">

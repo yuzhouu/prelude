@@ -49,15 +49,19 @@ for (const asset of assets.assets) {
   assert.equal(data.readUInt32BE(20), asset.height, `${asset.path}: height`)
 }
 
-// Ignore only the website controls, navigation, and packaged icon path; policy copy must match.
-const normalizePolicy = (html) =>
-  html
-    .replace(/\s*<script type="module" src="\.\/site\.mjs"><\/script>/, '')
-    .replaceAll('./icons/prelude.svg', './prelude.svg')
+// Compare the complete policy body independently of website/extension chrome.
+const normalizePolicy = (html) => {
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)
+  assert.ok(main, 'Privacy policy must contain a main document')
+  return main[1]
+    .replace(/^\s*<a class="brand"[^>]*>[\s\S]*?<\/a>/, '')
     .replaceAll(
       'href="./support.html"',
       'href="https://github.com/yuzhouu/prelude/issues"',
     )
+    .replace(/\s+/g, ' ')
+    .trim()
+}
 assert.equal(
   normalizePolicy(readFileSync(join(root, 'docs/privacy.html'), 'utf8')),
   normalizePolicy(readFileSync(join(dist, 'privacy.html'), 'utf8')),

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 
@@ -8,6 +9,23 @@ export default defineConfig({
   root: fromRoot('./docs'),
   base: './',
   publicDir: false,
+  plugins: [
+    {
+      name: 'prelude-shared-layout',
+      transformIndexHtml: {
+        order: 'pre',
+        handler(html) {
+          for (const part of ['header', 'footer']) {
+            html = html.replace(
+              `<!-- site-${part} -->`,
+              readFileSync(fromRoot(`./docs/partials/${part}.html`), 'utf8'),
+            )
+          }
+          return html
+        },
+      },
+    },
+  ],
   build: {
     outDir: fromRoot('./dist-site'),
     emptyOutDir: true,

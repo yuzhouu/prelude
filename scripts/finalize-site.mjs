@@ -44,6 +44,21 @@ for (const filename of listFiles(site).filter((file) =>
   file.endsWith('.html'),
 )) {
   const html = readFileSync(join(site, filename), 'utf8')
+  assert.equal(
+    (html.match(/<header\b/g) ?? []).length,
+    1,
+    `${filename}: missing shared header`,
+  )
+  assert.equal(
+    (html.match(/<footer\b/g) ?? []).length,
+    1,
+    `${filename}: missing shared footer`,
+  )
+  assert.equal(
+    (html.match(/data-site-preferences/g) ?? []).length,
+    1,
+    `${filename}: duplicate or missing preferences`,
+  )
   for (const [, key] of html.matchAll(
     /data-i18n(?:-alt|-aria-label)?="([^"]+)"/g,
   )) {
