@@ -44,7 +44,7 @@ export const zhCN = {
       title: '当前 Chrome 版本未提供全部书签的同步状态',
     },
     synced: {
-      label: '全部已同步',
+      label: '已全部同步',
       title: '全部书签均使用 Chrome 账号同步',
     },
     partial: {
