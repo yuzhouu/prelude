@@ -497,7 +497,9 @@ input:focus-visible {
 .settings-open-button {
   width: 32px;
   height: 32px;
+  border-color: transparent;
   border-radius: 7px;
+  background: transparent;
 }
 
 .settings-open-button:hover,
