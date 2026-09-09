@@ -32,7 +32,7 @@ import { countOpenTabs } from '../features/tabs/model'
 
 export const Route = createFileRoute('/about')({ component: About })
 
-const PRELUDE_VERSION = '1.0.0'
+const PRELUDE_VERSION = '1.0.1'
 
 function GitHubIcon() {
   return (

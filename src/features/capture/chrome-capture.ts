@@ -3,7 +3,7 @@ import {
   READ_LATER_FOLDER_STORAGE_KEY,
   isCaptureableUrl,
   normalizeCapturedUrl,
-} from './model'
+} from './model.ts'
 import type {
   CaptureKind,
   CapturePlan,
@@ -12,7 +12,7 @@ import type {
   CaptureSnapshot,
   CaptureTab,
   DuplicatePolicy,
-} from './model'
+} from './model.ts'
 
 interface BookmarkNode {
   id: string

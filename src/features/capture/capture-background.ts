@@ -3,9 +3,30 @@ import {
   getCloseAfterCapturePreference,
   prepareCapture,
   setCloseAfterCapturePreference,
-} from './chrome-capture'
-import { CLOSE_AFTER_CAPTURE_STORAGE_KEY } from './model'
-import type { CaptureKind, CaptureResult } from './model'
+} from './chrome-capture.ts'
+import { CLOSE_AFTER_CAPTURE_STORAGE_KEY } from './model.ts'
+import type { CaptureKind, CaptureResult } from './model.ts'
+
+type MenuContext =
+  | 'action'
+  | 'page'
+  | 'frame'
+  | 'selection'
+  | 'link'
+  | 'editable'
+  | 'image'
+  | 'video'
+  | 'audio'
+  | 'tab'
+
+interface MenuDetails {
+  checked?: boolean
+  contexts: Array<MenuContext>
+  id: string
+  parentId?: string
+  title?: string
+  type?: 'checkbox' | 'normal' | 'separator'
+}
 
 interface ChromeApi {
   commands: {
@@ -14,14 +35,8 @@ interface ChromeApi {
     }
   }
   contextMenus: {
-    create: (details: {
-      checked?: boolean
-      contexts?: Array<'action' | 'page' | 'tab'>
-      id: string
-      parentId?: string
-      title?: string
-      type?: 'checkbox' | 'normal' | 'separator'
-    }) => void
+    ContextType?: { TAB?: 'tab' }
+    create: (details: MenuDetails, callback: () => void) => void
     onClicked: {
       addListener: (
         callback: (info: {
@@ -51,6 +66,7 @@ interface ChromeApi {
     }) => Promise<string>
   }
   runtime: {
+    lastError?: { message?: string }
     getURL: (path: string) => string
     onInstalled: {
       addListener: (callback: () => void) => void
@@ -161,56 +177,101 @@ async function capture(chromeApi: ChromeApi, kind: CaptureKind) {
 }
 
 async function installContextMenus(chromeApi: ChromeApi) {
+  const checked = await getCloseAfterCapturePreference()
   await chromeApi.contextMenus.removeAll()
-  const contexts = ['page', 'tab', 'action'] as const
-  chromeApi.contextMenus.create({
+  const contexts: Array<MenuContext> = [
+    'page',
+    'frame',
+    'selection',
+    'link',
+    'editable',
+    'image',
+    'video',
+    'audio',
+    'action',
+  ]
+  if (chromeApi.contextMenus.ContextType?.TAB) contexts.push('tab')
+
+  await createContextMenu(chromeApi, {
     id: MENU_ROOT,
     title: getMessage(chromeApi, 'captureContextRoot'),
     contexts: [...contexts],
   })
-  chromeApi.contextMenus.create({
+  await createContextMenu(chromeApi, {
     id: MENU_PAGE,
     parentId: MENU_ROOT,
     title: getMessage(chromeApi, 'captureContextPage'),
     contexts: [...contexts],
   })
-  chromeApi.contextMenus.create({
+  await createContextMenu(chromeApi, {
     id: MENU_WINDOW,
     parentId: MENU_ROOT,
     title: getMessage(chromeApi, 'captureContextWindow'),
     contexts: [...contexts],
   })
-  chromeApi.contextMenus.create({
+  await createContextMenu(chromeApi, {
     id: MENU_GROUP,
     parentId: MENU_ROOT,
     title: getMessage(chromeApi, 'captureContextGroup'),
     contexts: [...contexts],
   })
-  chromeApi.contextMenus.create({
+  await createContextMenu(chromeApi, {
     id: 'prelude-capture-separator',
     parentId: MENU_ROOT,
     type: 'separator',
     contexts: [...contexts],
   })
-  chromeApi.contextMenus.create({
+  await createContextMenu(chromeApi, {
     id: MENU_CLOSE,
     parentId: MENU_ROOT,
     type: 'checkbox',
     title: getMessage(chromeApi, 'captureContextClose'),
     contexts: [...contexts],
-    checked: await getCloseAfterCapturePreference(),
+    checked,
+  })
+}
+
+function createContextMenu(chromeApi: ChromeApi, details: MenuDetails) {
+  return new Promise<void>((resolve, reject) => {
+    chromeApi.contextMenus.create(details, () => {
+      const error = chromeApi.runtime.lastError
+      if (error)
+        reject(new Error(error.message || 'Context menu creation failed'))
+      else resolve()
+    })
   })
 }
 
 export function setupCaptureBackground() {
   const chromeApi = (globalThis as typeof globalThis & { chrome: ChromeApi })
     .chrome
-  const refreshContextMenus = () => {
-    void installContextMenus(chromeApi).catch(() => undefined)
+  let menuRegistration = Promise.resolve()
+  const refreshContextMenus = (rebuild = false) => {
+    menuRegistration = menuRegistration
+      .then(async () => {
+        if (!rebuild) {
+          try {
+            await chromeApi.contextMenus.update(MENU_CLOSE, {
+              checked: await getCloseAfterCapturePreference(),
+            })
+            return
+          } catch {
+            // Repair missing menus when the worker wakes after a failed install.
+          }
+        }
+        await installContextMenus(chromeApi)
+      })
+      .catch((error: unknown) => {
+        console.error(
+          'Prelude could not register capture context menus.',
+          error,
+        )
+      })
   }
 
-  chromeApi.runtime.onInstalled.addListener(refreshContextMenus)
-  chromeApi.runtime.onStartup.addListener(refreshContextMenus)
+  chromeApi.runtime.onInstalled.addListener(() => refreshContextMenus(true))
+  chromeApi.runtime.onStartup.addListener(() => refreshContextMenus(true))
+  refreshContextMenus()
 
   chromeApi.commands.onCommand.addListener((command) => {
     if (command === 'capture-current-tab') {
@@ -235,6 +296,6 @@ export function setupCaptureBackground() {
       .update(MENU_CLOSE, {
         checked: preferenceChange.newValue === true,
       })
-      .catch(() => undefined)
+      .catch(() => refreshContextMenus())
   })
 }
