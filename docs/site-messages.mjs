@@ -26,9 +26,9 @@ export const messages = {
       'Works directly with your Chrome bookmarks. No import needed. Demo data shown.',
     previewAlt:
       'Prelude bookmarks view: folders on the left and the Chrome bookmark hierarchy on the right, with controls to add, edit, and organize.',
-    featuresTitle: 'Your favorites and open tabs,<br>all in view.',
+    featuresTitle: 'Your favorites and open tabs, all in view.',
     featuresIntro:
-      'From finding a page to putting it in order.<br>Keep everyday browsing connected.',
+      'From finding a page to putting it in order. Keep everyday browsing connected.',
     bookmarksTitle: 'Bookmarks, just as you know them',
     bookmarksBody:
       'Keep your Chrome folders. Add, edit, and drag bookmarks in your new tab. Today and Recently added help you find what matters.',
@@ -38,7 +38,7 @@ export const messages = {
     laterTitle: 'No time now? Save it for later',
     laterBody:
       'Collect pages, windows, and tab groups from the toolbar or context menu. Duplicates are checked automatically. With Close after saving enabled, only successfully saved tabs close.',
-    privacyTitle: 'Your browsing space,<br>in your hands.',
+    privacyTitle: 'Your browsing space, in your hands.',
     privacyBody:
       'No account, ads, or analytics. Bookmarks, tabs, and frequently visited sites are handled locally. Only web searches you submit go to Chrome’s default search provider.',
     privacyLink: 'Learn how your data is used ↗',
@@ -149,9 +149,9 @@ export const messages = {
       'Chrome のブックマークをそのまま使用。再インポートは不要です。画像はデモデータです。',
     previewAlt:
       'Prelude のブックマーク画面。左にフォルダ、右に Chrome のブックマーク階層と追加・編集・整理の操作を表示。',
-    featuresTitle: 'よく使うページも、開いたタブも、<br>ひと目で。',
+    featuresTitle: 'よく使うページも、開いたタブも、ひと目で。',
     featuresIntro:
-      'ページを見つけて、整理するまで。<br>日々のブラウジングを自然につなぎます。',
+      'ページを見つけて、整理するまで。日々のブラウジングを自然につなぎます。',
     bookmarksTitle: 'ブックマークは、いつものまま',
     bookmarksBody:
       'Chrome のフォルダを使って、新しいタブから追加・編集・ドラッグで整理。「今日」と「最近追加」で必要なページが見つかります。',
@@ -161,7 +161,7 @@ export const messages = {
     laterTitle: '今は時間がない？ あとで読むへ',
     laterBody:
       'ツールバーや右クリックメニューからページ、ウィンドウ、タブグループを保存。重複を自動確認し、「保存後に閉じる」が有効な場合は、保存に成功したタブだけを閉じます。',
-    privacyTitle: 'あなたのブラウジング空間を、<br>あなたの手で。',
+    privacyTitle: 'あなたのブラウジング空間を、あなたの手で。',
     privacyBody:
       'アカウント、広告、アクセス解析はありません。ブックマーク、タブ、よくアクセスするサイトは端末内で処理します。明示的に送信したウェブ検索だけが Chrome の既定の検索エンジンに渡されます。',
     privacyLink: 'データの取り扱いを見る ↗',
@@ -272,9 +272,9 @@ export const messages = {
       'Usa directamente tus marcadores de Chrome, sin importarlos de nuevo. La imagen muestra datos de demostración.',
     previewAlt:
       'Vista de marcadores de Prelude: carpetas a la izquierda y la jerarquía de marcadores de Chrome a la derecha, con opciones para añadir, editar y organizar.',
-    featuresTitle: 'Tus favoritos y pestañas abiertas,<br>a la vista.',
+    featuresTitle: 'Tus favoritos y pestañas abiertas, a la vista.',
     featuresIntro:
-      'De encontrar una página a ponerla en orden.<br>Conecta tu navegación diaria.',
+      'De encontrar una página a ponerla en orden. Conecta tu navegación diaria.',
     bookmarksTitle: 'Tus marcadores, como siempre',
     bookmarksBody:
       'Conserva tus carpetas de Chrome. Añade, edita y arrastra marcadores desde la nueva pestaña. Hoy y Añadidos recientemente te ayudan a encontrar lo importante.',
@@ -284,7 +284,7 @@ export const messages = {
     laterTitle: '¿Sin tiempo? Guárdalo para después',
     laterBody:
       'Guarda páginas, ventanas y grupos de pestañas desde la barra de herramientas o el menú contextual. Los duplicados se comprueban automáticamente. Con Cerrar después de guardar activado, solo se cierran las pestañas guardadas correctamente.',
-    privacyTitle: 'Tu espacio de navegación,<br>en tus manos.',
+    privacyTitle: 'Tu espacio de navegación, en tus manos.',
     privacyBody:
       'Sin cuenta, anuncios ni analítica. Los marcadores, las pestañas y los sitios frecuentes se procesan localmente. Solo las búsquedas web que envías se pasan al buscador predeterminado de Chrome.',
     privacyLink: 'Cómo se utilizan tus datos ↗',
@@ -395,9 +395,9 @@ export const messages = {
       'Utilise directement vos favoris Chrome, sans nouvel import. L’image présente des données de démonstration.',
     previewAlt:
       'Vue des favoris de Prelude : dossiers à gauche, arborescence des favoris Chrome à droite, avec des commandes pour ajouter, modifier et organiser.',
-    featuresTitle: 'Vos favoris et onglets ouverts,<br>sous les yeux.',
+    featuresTitle: 'Vos favoris et onglets ouverts, sous les yeux.',
     featuresIntro:
-      'De la découverte d’une page à son rangement.<br>Retrouvez le fil de votre navigation.',
+      'De la découverte d’une page à son rangement. Retrouvez le fil de votre navigation.',
     bookmarksTitle: 'Vos favoris, comme d’habitude',
     bookmarksBody:
       'Conservez vos dossiers Chrome. Ajoutez, modifiez et déplacez vos favoris dans le nouvel onglet. Aujourd’hui et Ajouts récents vous aident à retrouver l’essentiel.',
@@ -407,7 +407,7 @@ export const messages = {
     laterTitle: 'Pas le temps ? Gardez-le pour plus tard',
     laterBody:
       'Enregistrez des pages, fenêtres et groupes d’onglets depuis la barre d’outils ou le menu contextuel. Les doublons sont vérifiés automatiquement. Avec Fermer après l’enregistrement, seuls les onglets enregistrés avec succès se ferment.',
-    privacyTitle: 'Votre espace de navigation,<br>entre vos mains.',
+    privacyTitle: 'Votre espace de navigation, entre vos mains.',
     privacyBody:
       'Sans compte, publicité ni outil d’analyse. Favoris, onglets et sites fréquents sont traités localement. Seules les recherches web que vous envoyez sont transmises au moteur de recherche par défaut de Chrome.',
     privacyLink: 'Comprendre l’utilisation des données ↗',
@@ -519,9 +519,9 @@ export const messages = {
       'Работает прямо с закладками Chrome, без повторного импорта. На изображении — демонстрационные данные.',
     previewAlt:
       'Закладки в Prelude: папки слева, дерево закладок Chrome справа, действия для добавления, редактирования и упорядочивания.',
-    featuresTitle: 'Любимые страницы и открытые вкладки —<br>перед глазами.',
+    featuresTitle: 'Любимые страницы и открытые вкладки — перед глазами.',
     featuresIntro:
-      'От поиска страницы до порядка в закладках.<br>Всё для повседневной работы в браузере.',
+      'От поиска страницы до порядка в закладках. Всё для повседневной работы в браузере.',
     bookmarksTitle: 'Привычные закладки',
     bookmarksBody:
       'Сохраняйте папки Chrome. Добавляйте, редактируйте и перетаскивайте закладки на новой вкладке. Разделы «Сегодня» и «Недавно добавленные» помогают найти нужное.',
@@ -531,7 +531,7 @@ export const messages = {
     laterTitle: 'Нет времени? Оставьте на потом',
     laterBody:
       'Сохраняйте страницы, окна и группы вкладок через панель инструментов или контекстное меню. Дубликаты проверяются автоматически. При включённом закрытии после сохранения закрываются только успешно сохранённые вкладки.',
-    privacyTitle: 'Ваше пространство в браузере —<br>под вашим контролем.',
+    privacyTitle: 'Ваше пространство в браузере — под вашим контролем.',
     privacyBody:
       'Без аккаунтов, рекламы и аналитики. Закладки, вкладки и часто посещаемые сайты обрабатываются локально. Только отправленные вами веб-запросы передаются поисковой системе Chrome по умолчанию.',
     privacyLink: 'Как используются данные ↗',
