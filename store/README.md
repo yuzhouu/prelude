@@ -8,6 +8,7 @@ The Chinese public title is **序幕 · 新标签页**. The brand remains **序�
 
 ## Dashboard values
 
+- Published listing: [序幕 · 新标签页 on Chrome Web Store](https://chromewebstore.google.com/detail/%E5%BA%8F%E5%B9%95-%C2%B7-%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5/pacjcbmbngfbbdomkmfkcdikdlhdjhom)
 - Primary language: `zh_CN`
 - Primary category: `Productivity`
 - Homepage URL: `https://yuzhouu.github.io/prelude/`

@@ -2,7 +2,9 @@
 
 [English](./README.md) · [简体中文](./README.zh-CN.md)
 
-[Website](https://yuzhouu.github.io/prelude/) · [Get Prelude](https://yuzhouu.github.io/prelude/support.html#install)
+[Website](https://yuzhouu.github.io/prelude/) · [Add to Chrome](https://chromewebstore.google.com/detail/%E5%BA%8F%E5%B9%95-%C2%B7-%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5/pacjcbmbngfbbdomkmfkcdikdlhdjhom)
+
+Now available on the Chrome Web Store.
 
 > A calm new tab for organizing Chrome bookmarks, open tabs, and Read later.
 

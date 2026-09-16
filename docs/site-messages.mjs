@@ -20,7 +20,7 @@ export const messages = {
     homeTitle: 'Prelude · New tab',
     slogan:
       'A quiet new tab for organizing Chrome bookmarks, open tabs, and things to read later.',
-    getExtension: 'Get the extension',
+    getExtension: 'Add to Chrome',
     installHelp: 'Installation guide ↓',
     caption:
       'Works directly with your Chrome bookmarks. No import needed. Demo data shown.',
@@ -44,7 +44,13 @@ export const messages = {
     privacyLink: 'Learn how your data is used ↗',
     installTitle: 'Make room for Prelude in Chrome',
     installIntro:
-      'Download and extract the extension, then load it into Chrome. Installation currently uses developer mode.',
+      'Prelude is now on the Chrome Web Store. Add it to Chrome and open a new tab to get started.',
+    storeStep1: 'Open Prelude’s Chrome Web Store page in Chrome.',
+    storeStep2:
+      'Click <strong>Add to Chrome</strong>, then confirm with <strong>Add extension</strong> when prompted.',
+    manualInstall: 'Manual installation (ZIP)',
+    manualIntro:
+      'For manual installation, download the ZIP, extract it to a permanent folder, and load it using Chrome’s developer mode.',
     download: 'Download extension ZIP',
     checksum: 'SHA-256 checksum',
     step1:
@@ -60,7 +66,7 @@ export const messages = {
       'Help with bookmarks, tabs, Read later, and everyday browsing.',
     installHeading: 'Download and install',
     installPackage:
-      'A Chrome extension ZIP is available. Extract it to a permanent folder and load it into Chrome. This is not a one-click Chrome Web Store installation.',
+      'Prelude is now on the Chrome Web Store. Install from the store for automatic updates through Chrome.',
     update:
       'To update, replace the contents of the original folder with the new package and click Reload on Chrome’s extensions page. Keep the folder path so you do not need to uninstall and lose preferences.',
     daily: 'Everyday use',
@@ -143,7 +149,7 @@ export const messages = {
     homeTitle: 'Prelude · 新しいタブ',
     slogan:
       'Chrome のブックマーク、開いているタブ、あとで読むページを整理する、静かな新しいタブ。',
-    getExtension: '拡張機能を入手',
+    getExtension: 'Chrome に追加',
     installHelp: 'インストール方法 ↓',
     caption:
       'Chrome のブックマークをそのまま使用。再インポートは不要です。画像はデモデータです。',
@@ -167,7 +173,13 @@ export const messages = {
     privacyLink: 'データの取り扱いを見る ↗',
     installTitle: 'Chrome に Prelude を追加',
     installIntro:
-      '拡張機能をダウンロードして解凍し、Chrome に読み込みます。現在はデベロッパーモードでインストールします。',
+      'Prelude が Chrome ウェブストアで公開されました。Chrome に追加して、新しいタブを開くだけで使えます。',
+    storeStep1: 'Chrome で Prelude の Chrome ウェブストアページを開きます。',
+    storeStep2:
+      '<strong>Chrome に追加</strong>をクリックし、確認画面で<strong>拡張機能を追加</strong>を選びます。',
+    manualInstall: '手動インストール（ZIP）',
+    manualIntro:
+      '手動でインストールする場合は、ZIP をダウンロードして固定の場所に解凍し、Chrome のデベロッパーモードで読み込みます。',
     download: '拡張機能の ZIP をダウンロード',
     checksum: 'SHA-256 チェックサム',
     step1:
@@ -183,7 +195,7 @@ export const messages = {
       'ブックマーク、タブ、あとで読む、日々の使い方についてのヘルプです。',
     installHeading: '入手とインストール',
     installPackage:
-      'Chrome 拡張機能の ZIP を提供しています。固定の場所に解凍して Chrome に読み込んでください。Chrome ウェブストアのワンクリックインストールではありません。',
+      'Prelude が Chrome ウェブストアで公開されました。ストアからインストールすると、Chrome が自動的に更新します。',
     update:
       '更新時は元のフォルダの内容を新しいパッケージに置き換え、拡張機能の管理画面で「再読み込み」を押してください。フォルダの場所を変えずに更新すると、アンインストールによる設定の消失を避けられます。',
     daily: '日常の使い方',
@@ -266,7 +278,7 @@ export const messages = {
     homeTitle: 'Prelude · Nueva pestaña',
     slogan:
       'Una nueva pestaña tranquila para organizar los marcadores de Chrome, las pestañas abiertas y lo que quieres leer más tarde.',
-    getExtension: 'Obtener la extensión',
+    getExtension: 'Añadir a Chrome',
     installHelp: 'Cómo instalar ↓',
     caption:
       'Usa directamente tus marcadores de Chrome, sin importarlos de nuevo. La imagen muestra datos de demostración.',
@@ -290,7 +302,13 @@ export const messages = {
     privacyLink: 'Cómo se utilizan tus datos ↗',
     installTitle: 'Añade Prelude a Chrome',
     installIntro:
-      'Descarga y descomprime la extensión y cárgala en Chrome. Por ahora, se instala mediante el modo de desarrollador.',
+      'Prelude ya está en Chrome Web Store. Añádelo a Chrome y abre una nueva pestaña para empezar.',
+    storeStep1: 'Abre la página de Prelude en Chrome Web Store desde Chrome.',
+    storeStep2:
+      'Pulsa <strong>Añadir a Chrome</strong> y confirma con <strong>Añadir extensión</strong> cuando se te solicite.',
+    manualInstall: 'Instalación manual (ZIP)',
+    manualIntro:
+      'Para instalarlo manualmente, descarga el ZIP, extráelo a una carpeta permanente y cárgalo con el modo de desarrollador de Chrome.',
     download: 'Descargar ZIP de la extensión',
     checksum: 'Suma de verificación SHA-256',
     step1:
@@ -306,7 +324,7 @@ export const messages = {
       'Ayuda con marcadores, pestañas, Leer más tarde y la navegación diaria.',
     installHeading: 'Descarga e instalación',
     installPackage:
-      'La extensión de Chrome está disponible en un ZIP. Extráelo a una carpeta permanente y cárgalo en Chrome. No es una instalación con un clic desde Chrome Web Store.',
+      'Prelude ya está en Chrome Web Store. Instálalo desde la tienda para recibir actualizaciones automáticas a través de Chrome.',
     update:
       'Para actualizar, sustituye el contenido de la carpeta original por el nuevo paquete y pulsa Recargar en la página de extensiones de Chrome. Conserva la ruta para evitar desinstalar y perder preferencias.',
     daily: 'Uso diario',
@@ -389,7 +407,7 @@ export const messages = {
     homeTitle: 'Prelude · Nouvel onglet',
     slogan:
       'Un nouvel onglet paisible pour organiser les favoris Chrome, les onglets ouverts et vos lectures à venir.',
-    getExtension: 'Obtenir l’extension',
+    getExtension: 'Ajouter à Chrome',
     installHelp: 'Guide d’installation ↓',
     caption:
       'Utilise directement vos favoris Chrome, sans nouvel import. L’image présente des données de démonstration.',
@@ -413,7 +431,14 @@ export const messages = {
     privacyLink: 'Comprendre l’utilisation des données ↗',
     installTitle: 'Installez Prelude dans Chrome',
     installIntro:
-      'Téléchargez et décompressez l’extension, puis chargez-la dans Chrome. L’installation utilise actuellement le mode développeur.',
+      'Prelude est maintenant disponible sur le Chrome Web Store. Ajoutez-le à Chrome et ouvrez un nouvel onglet pour commencer.',
+    storeStep1:
+      'Ouvrez la page de Prelude sur le Chrome Web Store dans Chrome.',
+    storeStep2:
+      'Cliquez sur <strong>Ajouter à Chrome</strong>, puis confirmez avec <strong>Ajouter l’extension</strong>.',
+    manualInstall: 'Installation manuelle (ZIP)',
+    manualIntro:
+      'Pour une installation manuelle, téléchargez le ZIP, décompressez-le dans un dossier permanent et chargez-le avec le mode développeur de Chrome.',
     download: 'Télécharger le ZIP de l’extension',
     checksum: 'Somme de contrôle SHA-256',
     step1:
@@ -429,7 +454,7 @@ export const messages = {
       'De l’aide pour les favoris, les onglets, À lire plus tard et la navigation quotidienne.',
     installHeading: 'Téléchargement et installation',
     installPackage:
-      'L’extension Chrome est disponible au format ZIP. Décompressez-la dans un dossier permanent, puis chargez-la dans Chrome. Il ne s’agit pas d’une installation en un clic depuis le Chrome Web Store.',
+      'Prelude est maintenant disponible sur le Chrome Web Store. Installez-le depuis la boutique pour bénéficier des mises à jour automatiques de Chrome.',
     update:
       'Pour mettre à jour, remplacez le contenu du dossier d’origine par le nouveau paquet et cliquez sur Actualiser sur la page des extensions Chrome. Conservez le même chemin pour éviter une désinstallation qui effacerait vos préférences.',
     daily: 'Au quotidien',
@@ -513,7 +538,7 @@ export const messages = {
     homeTitle: 'Prelude · Новая вкладка',
     slogan:
       'Спокойная новая вкладка для порядка в закладках Chrome, открытых вкладках и материалах на потом.',
-    getExtension: 'Скачать расширение',
+    getExtension: 'Добавить в Chrome',
     installHelp: 'Как установить ↓',
     caption:
       'Работает прямо с закладками Chrome, без повторного импорта. На изображении — демонстрационные данные.',
@@ -537,7 +562,14 @@ export const messages = {
     privacyLink: 'Как используются данные ↗',
     installTitle: 'Добавьте Prelude в Chrome',
     installIntro:
-      'Скачайте и распакуйте расширение, затем загрузите его в Chrome. Пока установка выполняется в режиме разработчика.',
+      'Prelude теперь доступен в Интернет-магазине Chrome. Добавьте его в Chrome и откройте новую вкладку, чтобы начать.',
+    storeStep1:
+      'Откройте страницу Prelude в Интернет-магазине Chrome через Chrome.',
+    storeStep2:
+      'Нажмите <strong>Добавить в Chrome</strong> и подтвердите установку расширения в появившемся окне.',
+    manualInstall: 'Ручная установка (ZIP)',
+    manualIntro:
+      'Для ручной установки скачайте ZIP, распакуйте его в постоянную папку и загрузите через режим разработчика Chrome.',
     download: 'Скачать ZIP расширения',
     checksum: 'Контрольная сумма SHA-256',
     step1:
@@ -553,7 +585,7 @@ export const messages = {
       'Помощь с закладками, вкладками, списком «Прочитать позже» и повседневной работой.',
     installHeading: 'Скачивание и установка',
     installPackage:
-      'Расширение Chrome доступно в ZIP-архиве. Распакуйте его в постоянную папку и загрузите в Chrome. Это не установка одним нажатием из Интернет-магазина Chrome.',
+      'Prelude теперь доступен в Интернет-магазине Chrome. Установите его из магазина, чтобы получать автоматические обновления через Chrome.',
     update:
       'Для обновления замените содержимое исходной папки новым пакетом и нажмите «Обновить» на странице расширений Chrome. Сохраните путь к папке, чтобы не удалять расширение и не терять настройки.',
     daily: 'Повседневное использование',

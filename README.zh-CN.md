@@ -1,8 +1,10 @@
 # 序幕 · 新标签页
 
-[项目官网](https://yuzhouu.github.io/prelude/) · [获取序幕](https://yuzhouu.github.io/prelude/support.html#install)
+[项目官网](https://yuzhouu.github.io/prelude/) · [添加至 Chrome](https://chromewebstore.google.com/detail/%E5%BA%8F%E5%B9%95-%C2%B7-%E6%96%B0%E6%A0%87%E7%AD%BE%E9%A1%B5/pacjcbmbngfbbdomkmfkcdikdlhdjhom)
 
 [English](./README.md) · [简体中文](./README.zh-CN.md)
+
+序幕已上架 Chrome 应用商店。
 
 > 一个安静的新标签页，用来整理 Chrome 书签、当前标签页和待读内容。
 
